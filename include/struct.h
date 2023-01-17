@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-smet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/18 00:39:11 by ede-smet         ###   ########.fr       */
+/*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
+/*   Updated: 2023/01/18 00:38:57 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
-# include "../lib/libft/libft.h"
-# include "struct.h"
+#ifndef STRUCT_H
+# define STRUCT_H
 
 #endif

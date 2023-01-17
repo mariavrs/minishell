@@ -6,7 +6,7 @@
 #    By: ede-smet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/01/18 00:30:47 by ede-smet         ###   ########.fr        #
+#    Updated: 2023/01/18 00:39:19 by ede-smet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ OBJ_DIR = obj
 DEPS_DIR = include
 
 SRC_LIST = minishell.c
-DEPS_LIST = header.h
+DEPS_LIST = header.h struct.h
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_LIST))
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_LIST:.c=.o))
