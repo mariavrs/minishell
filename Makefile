@@ -6,7 +6,7 @@
 #    By: ede-smet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/01/18 00:18:48 by ede-smet         ###   ########.fr        #
+#    Updated: 2023/01/18 00:30:47 by ede-smet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,8 @@ DEPS = $(addprefix $(DEPS_DIR)/, $(DEPS_LIST))
 LFT = lib/libft
 
 CC = cc -g3
-CFLAGS = -Wall -Wextra -Werror
-LFLAGS = -L$(LFT) -lft
+CFLAGS = -Wall -Wextra -Werror -fsanitize=leak
+LFLAGS = -L$(LFT) -lft -fsanitize=leak
 NOCOLOR    = \033[0m
 RED     = \033[1;31m
 GREEN     = \033[1;32m
