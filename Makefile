@@ -6,7 +6,7 @@
 #    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/01/22 14:44:20 by mvorslov         ###   ########.fr        #
+#    Updated: 2023/01/22 17:34:01 by mvorslov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ LFT = lib/libft
 
 CC = cc -g3
 CFLAGS = -Wall -Wextra -Werror
-LFLAGS = -L$(LFT) -lft -fsanitize=leak
+LFLAGS = -L$(LFT) -lft -lreadline -fsanitize=leak
 
 NOCOLOR	= \033[0m
 RED 	= \033[1;31m
@@ -60,7 +60,7 @@ lib_clean:
 
 clean: lib_clean
 	@rm -rf $(OBJ_DIR)
-	@rm -f .out.gch	
+	@rm -f *.out *.gch	
 	@rm -f *.o
 	@echo "$(RED)$(NAME) objects deleted$(NOCOLOR)"
 
@@ -73,7 +73,7 @@ re: fclean all
 
 mfclean:
 	@rm -rf $(OBJ_DIR)
-	@rm -f .out.gch
+	@rm -f *.out *.gch
 	@rm -f *.o
 	@echo "$(RED)$(NAME) objects deleted$(NOCOLOR)"
 	@rm -f $(NAME)
