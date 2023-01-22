@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
+#    By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/01/22 14:44:20 by mvorslov         ###   ########.fr        #
+#    Updated: 2023/01/22 17:25:18 by ede-smet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,11 @@ NAME = minishell
 SRC_DIR = src
 OBJ_DIR = obj
 DEPS_DIR = include
+BUILT_DIR = builtins/
 
-SRC_LIST = minishell.c
+SRC_LIST = minishell.c \
+	$(BUILT_DIR)ft_echo.c $(BUILT_DIR)ft_cd.c $(BUILT_DIR)ft_pwd.c $(BUILT_DIR)ft_export.c \
+	$(BUILT_DIR)ft_unset.c $(BUILT_DIR)ft_env.c $(BUILT_DIR)ft_exit.c
 DEPS_LIST = mini_fun.h mini_struct.h
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_LIST))
@@ -45,7 +48,7 @@ lib:
 
 $(OBJ_DIR):
 	@echo "$(YELLOW)$(NAME) compilation$(NOCOLOR)"
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR) $(OBJ_DIR)/$(BUILT_DIR)
 
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
@@ -73,8 +76,7 @@ re: fclean all
 
 mfclean:
 	@rm -rf $(OBJ_DIR)
-	@rm -f .out.gch
-	@rm -f *.o
+	@rm -f *.out *.o *.gch
 	@echo "$(RED)$(NAME) objects deleted$(NOCOLOR)"
 	@rm -f $(NAME)
 	@echo "$(RED)Executable deleted$(NOCOLOR)"

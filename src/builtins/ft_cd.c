@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mini_fun.h                                         :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/22 17:28:01 by ede-smet         ###   ########.fr       */
+/*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
+/*   Updated: 2023/01/22 17:22:59 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINI_FUN_H
-# define MINI_FUN_H
-# include "../lib/libft/libft.h"
-# include "mini_struct.h"
+#include "../../include/mini_fun.h"
 
-// Builtins prototypes
-void	ft_echo(void);
-void	ft_cd(void);
-void	ft_pwd(void);
-void	ft_export(void);
-void	ft_unset(void);
-void	ft_env(void);
-void	ft_exit(void);
-
-#endif
+void	ft_cd(void)
+{
+	printf("Hey! Im Cd, nice to meet you ! (>.o)\n");
+}
