@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   mini_struct.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/18 00:39:11 by ede-smet         ###   ########.fr       */
+/*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
+/*   Updated: 2023/01/22 14:19:17 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
-# include "../lib/libft/libft.h"
-# include "struct.h"
+#ifndef MINI_STRUCT_H
+# define MINI_STRUCT_H
 
 #endif

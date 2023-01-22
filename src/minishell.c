@@ -6,13 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/21 19:07:42 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/22 14:40:21 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/header.h"
+#include "../include/mini_fun.h"
 
-int	main(int argc, char **argv)
+int	main(void)
 {
 	ft_putstr_fd("Hello minishell !\n", 1);
 	return (0);

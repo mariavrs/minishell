@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ede-smet <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/01/18 00:39:19 by ede-smet         ###   ########.fr        #
+#    Updated: 2023/01/22 14:44:20 by mvorslov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ OBJ_DIR = obj
 DEPS_DIR = include
 
 SRC_LIST = minishell.c
-DEPS_LIST = header.h struct.h
+DEPS_LIST = mini_fun.h mini_struct.h
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_LIST))
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_LIST:.c=.o))
@@ -26,13 +26,16 @@ DEPS = $(addprefix $(DEPS_DIR)/, $(DEPS_LIST))
 LFT = lib/libft
 
 CC = cc -g3
-CFLAGS = -Wall -Wextra -Werror -fsanitize=leak
+CFLAGS = -Wall -Wextra -Werror
 LFLAGS = -L$(LFT) -lft -fsanitize=leak
-NOCOLOR    = \033[0m
-RED     = \033[1;31m
-GREEN     = \033[1;32m
-YELLOW    = \033[1;33m
-BLUE    = \033[1;34m
+
+NOCOLOR	= \033[0m
+RED 	= \033[1;31m
+GREEN 	= \033[1;32m
+YELLOW	= \033[1;33m
+BLUE	= \033[1;34m
+PURPLE	= \033[1;35m
+CYAN	= \033[1;36m
 
 all: lib $(OBJ_DIR) $(NAME)
 
@@ -53,18 +56,18 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS)
 
 lib_clean:
 	@make --no-print-directory clean -C $(LFT)
-	@echo "$(BLUE)Libft objects deleted$(NOCOLOR)"
+	@echo "$(RED)Libft objects deleted$(NOCOLOR)"
 
 clean: lib_clean
 	@rm -rf $(OBJ_DIR)
 	@rm -f .out.gch	
 	@rm -f *.o
-	@echo "$(BLUE)$(NAME) objects deleted$(NOCOLOR)"
+	@echo "$(RED)$(NAME) objects deleted$(NOCOLOR)"
 
 fclean: clean
 	@rm -f $(NAME)
 	@rm -f $(LFT)/libft.a
-	@echo "$(BLUE)Executable deleted$(NOCOLOR)"
+	@echo "$(RED)Executable deleted$(NOCOLOR)"
 
 re: fclean all
 
@@ -72,9 +75,9 @@ mfclean:
 	@rm -rf $(OBJ_DIR)
 	@rm -f .out.gch
 	@rm -f *.o
-	@echo "$(BLUE)$(NAME) objects deleted$(NOCOLOR)"
+	@echo "$(RED)$(NAME) objects deleted$(NOCOLOR)"
 	@rm -f $(NAME)
-	@echo "$(BLUE)Executable deleted$(NOCOLOR)"
+	@echo "$(RED)Executable deleted$(NOCOLOR)"
 
 mre: mfclean $(OBJ_DIR) $(NAME)
 
