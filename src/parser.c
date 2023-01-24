@@ -6,20 +6,43 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/24 18:06:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 20:27:30 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-t_cmd	*parse_exec()
+t_cmd	*parse_exec(char *line, char *eline)
 {
 	t_exec	*cmd;
+	int		i;
+
+	i = -1;
+	cmd = malloc(sizeof(t_exec));
+	cmd->type = EXEC_CDM;
+	cmd->argv = malloc(sizeof(char *) * (words_counter(line, eline) + 1));
+	while (*line && check_whitespace(*line))
+		line++;
+	while (*line)
+	{
+		cmd->argv[++i] = line;
+		while (*line && !check_whitespace(*line))
+			line++;
+		while (*line && check_whitespace(*line))
+		{
+			*line = '\0';
+			line++;
+		}
+	}
+	return ((t_cmd *)cmd);
 }
 
 t_cmd	*parse_redir(char *line, char *eline)
 {
 	t_redir	*cmd;
+
+	(void)cmd;
+	return(parse_exec(line, eline));
 }
 
 t_cmd	*parse_pipe(char *line, char *eline)
