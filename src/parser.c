@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/24 21:56:53 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 23:11:00 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@ t_cmd	*parse_exec(char *line, char *eline)
 
 	i = -1;
 	cmd = malloc(sizeof(t_exec));
+	if (!cmd)
+		printf("malloc error\n"); //modify after
 	cmd->type = EXEC_CMD;
+	cmd->argv = NULL;
 	cmd->argv = malloc(sizeof(char *) * (words_counter(line, eline) + 1));
+	if (!cmd->argv)
+		printf("malloc error\n"); //modify after
 	while (*line && check_whitespace(*line))
 		line++;
 	while (*line)
@@ -59,6 +64,8 @@ t_cmd	*parse_pipe(char *line, char *eline)
 		return (parse_redir(line, eline));
 	edel = del + 1;
 	cmd = malloc(sizeof(t_pipe));
+	if (!cmd)
+		printf("malloc error\n"); //modify after
 	cmd->type = PIPE_CMD;
 	cmd->left = parse_pipe(line, del);
 	cmd->right = parse_pipe(edel, eline);
@@ -74,7 +81,10 @@ t_cmd	*parse_list(char *line, char *eline)
 	trim_whitespaces(&line, &eline);
 	if(list_delim_locator(line, eline, &del, &edel) == 1) //there is only one pipeline
 		return (parse_pipe(line, eline));
-	cmd = malloc(sizeof(t_list));
+	cmd = NULL;
+	cmd = malloc(sizeof(t_lol));
+	if (!cmd)
+		printf("malloc error\n"); //modify after
 	cmd->type = LIST_CMD;
 	if (*del == '&')
 		cmd->mode = 0;

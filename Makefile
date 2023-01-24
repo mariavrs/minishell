@@ -6,7 +6,7 @@
 #    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/01/24 22:02:19 by mvorslov         ###   ########.fr        #
+#    Updated: 2023/01/24 22:15:01 by mvorslov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ LFT = lib/libft
 
 CC = cc -g3
 CFLAGS = -Wall -Wextra -Werror
-LFLAGS = -L$(LFT) -lft -lreadline -fsanitize=leak
+LFLAGS = -L$(LFT) -lft -lreadline #-fsanitize=leak
 
 NOCOLOR	= \033[0m
 RED 	= \033[1;31m
