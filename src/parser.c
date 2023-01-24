@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/24 20:27:30 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 20:37:02 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_cmd	*parse_exec(char *line, char *eline)
 
 	i = -1;
 	cmd = malloc(sizeof(t_exec));
-	cmd->type = EXEC_CDM;
+	cmd->type = EXEC_CMD;
 	cmd->argv = malloc(sizeof(char *) * (words_counter(line, eline) + 1));
 	while (*line && check_whitespace(*line))
 		line++;
@@ -59,7 +59,7 @@ t_cmd	*parse_pipe(char *line, char *eline)
 		return (parse_redir(line, eline));
 	edel = del + 1;
 	cmd = malloc(sizeof(t_pipe));
-	cmd->type = PIPE_CDM;
+	cmd->type = PIPE_CMD;
 	cmd->left = parse_pipe(line, del);
 	cmd->right = parse_pipe(edel, eline);
 	return ((t_cmd *)cmd);
@@ -75,7 +75,7 @@ t_cmd	*parse_list(char *line, char *eline)
 	if(list_delim_locator(line, eline, &del, &edel) == 1) //there is only one pipeline
 		return (parse_pipe(line, eline));
 	cmd = malloc(sizeof(t_list));
-	cmd->type = LIST_CDM;
+	cmd->type = LIST_CMD;
 	if (*del == '&')
 		cmd->mode = 0;
 	else

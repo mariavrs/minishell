@@ -6,17 +6,17 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/24 18:23:41 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 20:37:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_STRUCT_H
 # define MINI_STRUCT_H
 
-# define EXEC_CDM 1
-# define REDIR_CDM 2
-# define PIPE_CDM 3
-# define LIST_CDM 4
+# define EXEC_CMD 1
+# define REDIR_CMD 2
+# define PIPE_CMD 3
+# define LIST_CMD 4
 
 //# define MAXARGC 10
 
