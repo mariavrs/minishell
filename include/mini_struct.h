@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/24 20:37:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 21:56:12 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_cmd
 	int		type;
 }	t_cmd;
 
-typedef struct s_execcmd
+typedef struct s_exec_cmd
 {
 	int		type;
 /* 	char	*argv[MAXARGC];
@@ -34,7 +34,7 @@ typedef struct s_execcmd
 	char	**eargv;
 }	t_exec;
 
-typedef struct s_redircmd
+typedef struct s_redir_cmd
 {
 	int		type;
 	t_cmd	*cmd;
@@ -44,19 +44,19 @@ typedef struct s_redircmd
 	int		fd;
 }	t_redir;
 
-typedef struct s_pipecmd
+typedef struct s_pipe_cmd
 {
 	int		type;
 	t_cmd	*left;
 	t_cmd	*right;
 }	t_pipe;
 
-typedef struct s_listcmd
+typedef struct s_logical_list_cmd
 {
 	int		type;
 	int		mode;
 	t_cmd	*left;
 	t_cmd	*right;
-}	t_list;
+}	t_lol;
 
 #endif

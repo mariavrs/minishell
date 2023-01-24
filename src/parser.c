@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/24 20:37:02 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 21:56:53 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_cmd	*parse_pipe(char *line, char *eline)
 
 t_cmd	*parse_list(char *line, char *eline)
 {
-	t_list	*cmd;
+	t_lol	*cmd;
 	char	*del;
 	char	*edel;
 

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/24 21:42:32 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 21:56:15 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_exec_tree(t_cmd *cmd, int exit_status)
 	else if (cmd->type == PIPE_CMD)
 		run_pipe((t_pipe *)cmd, exit_status);
 	else if (cmd->type == LIST_CMD)
-		run_list((t_list *)cmd, exit_status);
+		run_list((t_lol *)cmd, exit_status);
 	return (0);
 }
 

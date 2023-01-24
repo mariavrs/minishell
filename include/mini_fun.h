@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/24 21:26:20 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 21:57:20 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,6 @@ void	ft_exec_tree(t_cmd *cmd, int exit_status);
 void	run_exec(t_exec *cmd, int exit_status);
 void	run_redir(t_redir *cmd, int exit_status);
 void	run_pipe(t_pipe *cmd, int exit_status);
-void	run_list(t_list *cmd, int exit_status);
+void	run_list(t_lol *cmd, int exit_status);
 
 #endif
