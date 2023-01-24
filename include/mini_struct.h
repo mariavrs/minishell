@@ -6,11 +6,54 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/22 14:19:17 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 01:06:16 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_STRUCT_H
 # define MINI_STRUCT_H
+
+# define EXEC_CDM 1
+# define REDIR_CDM 2
+# define PIPE_CDM 3
+# define LIST_CDM 4
+
+# define MAXARGC 10
+
+typedef struct s_cmd
+{
+	int		type;
+}	t_cmd;
+
+typedef struct s_execcmd
+{
+	int		type;
+	char	*argv[MAXARGC];
+	char	*eargv[MAXARGC];
+}	t_exec;
+
+typedef struct s_redircmd
+{
+	int		type;
+	t_cmd	*cmd;
+	char	*file;
+	char	*efile;
+	int		mode;
+	int		fd;
+}	t_redir;
+
+typedef struct s_pipecmd
+{
+	int		type;
+	t_cmd	*left;
+	t_cmd	*right;
+}	t_pipe;
+
+typedef struct s_listcmd
+{
+	int		type;
+	t_cmd	*left;
+	t_cmd	*right;
+}	t_list;
 
 #endif
