@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/24 01:06:16 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 18:23:41 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define PIPE_CDM 3
 # define LIST_CDM 4
 
-# define MAXARGC 10
+//# define MAXARGC 10
 
 typedef struct s_cmd
 {
@@ -28,8 +28,10 @@ typedef struct s_cmd
 typedef struct s_execcmd
 {
 	int		type;
-	char	*argv[MAXARGC];
-	char	*eargv[MAXARGC];
+/* 	char	*argv[MAXARGC];
+	char	*eargv[MAXARGC]; */
+	char	**argv;
+	char	**eargv;
 }	t_exec;
 
 typedef struct s_redircmd
@@ -52,6 +54,7 @@ typedef struct s_pipecmd
 typedef struct s_listcmd
 {
 	int		type;
+	int		mode;
 	t_cmd	*left;
 	t_cmd	*right;
 }	t_list;
