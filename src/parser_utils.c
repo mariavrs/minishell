@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 16:18:32 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/24 21:42:19 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 22:13:18 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ int	check_whitespace(char c)
 
 void	trim_whitespaces(char **line, char **eline)
 {
-	while (check_whitespace(*line))
-		line++;
-	while (check_whitespace(*eline))
-		eline--;
-	if (*line == '(' && *eline == ')')
+	while (check_whitespace(**line))
+		*line = *line + 1;
+	while (check_whitespace(**eline))
+		*eline = *eline - 1;
+	if (**line == '(' && **eline == ')')
 	{
-		line++;
-		eline--;
+		*line = *line + 1;
+		*eline = *eline - 1;
 	}
 }
 
@@ -39,13 +39,13 @@ int	words_counter(char *line, char *eline)
 
 	counter = 0;
 	cursor = line;
-	while (cursor < eline);
+	while (cursor < eline)
 	{
-		while (cursor < eline && check_whitespaces(*cursor))
+		while (cursor < eline && check_whitespace(*cursor))
 			cursor++;
-		if (cursor < eline && !check_whitespaces(*cursor))
+		if (cursor < eline && !check_whitespace(*cursor))
 			counter++;
-		while (cursor < eline && !check_whitespaces(*cursor))
+		while (cursor < eline && !check_whitespace(*cursor))
 			cursor++;
 	}
 	return (counter);
@@ -56,6 +56,7 @@ int	list_delim_locator(char *line, char *eline, char **del, char **edel)
 	int	block_check;
 
 	block_check = 0;
+	*del = eline;
 	while (*del > line && !(block_check == 0
 		&& ((**del == '&' && *(*del - 1) == '&')
 			|| (**del == '|' && *(*del - 1) == '|'))))
@@ -66,11 +67,11 @@ int	list_delim_locator(char *line, char *eline, char **del, char **edel)
 			block_check--;
 /* 		else if (*del == '(')
 			panic syntax error; */
-		*del--;
+		*del = *del - 1;
 	}
 	if (*del == line)
 		return (1);
 	*edel = *del + 1;
-	*del--;
-
+	*del = *del - 1;
+	return (0);
 }
