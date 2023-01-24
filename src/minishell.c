@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/24 01:15:50 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/24 15:19:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_cmd	*ft_parse(char *line)
 	char	*eline;
 
 	eline = line + ft_strlen(line);
+	ret = parse_list(line, eline);
 	return (ret);
 }
 
