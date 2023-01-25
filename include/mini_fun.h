@@ -34,7 +34,7 @@ t_cmd	*parse_redir(char *line, char *eline);
 t_cmd	*parse_pipe(char *line, char *eline);
 t_cmd	*parse_list(char *line, char *eline);
 
-int		list_delim_locator(char *line, char *eline, char **del, char **edel);
+int		list_delim_locator(char *line, char *eline, char **del);
 int		words_counter(char *line, char *eline);
 void	trim_whitespaces(char **line, char **eline);
 int		check_whitespace(char c);

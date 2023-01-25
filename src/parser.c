@@ -26,14 +26,14 @@ t_cmd	*parse_exec(char *line, char *eline)
 	cmd->argv = malloc(sizeof(char *) * (words_counter(line, eline) + 1));
 	if (!cmd->argv)
 		printf("malloc error\n"); //modify after
-	while (*line && check_whitespace(*line))
+	while (line <= eline && check_whitespace(*line))
 		line++;
-	while (*line)
+	while (line <= eline)
 	{
 		cmd->argv[++i] = line;
-		while (*line && !check_whitespace(*line))
+		while (line <= eline && !check_whitespace(*line))
 			line++;
-		while (*line && check_whitespace(*line))
+		while (line <= eline && check_whitespace(*line))
 		{
 			*line = '\0';
 			line++;
@@ -54,21 +54,21 @@ t_cmd	*parse_pipe(char *line, char *eline)
 {
 	t_pipe	*cmd;
 	char	*del;
-	char	*edel;
 
 	trim_whitespaces(&line, &eline);
+/* 	if (*eline == '|' || *line == '|')
+		panic syntax error, stop here, execute nothing at all */
 	del = eline;
 	while (del > line && *del != '|')
 		del--;
 	if (del == line)
 		return (parse_redir(line, eline));
-	edel = del + 1;
 	cmd = malloc(sizeof(t_pipe));
 	if (!cmd)
 		printf("malloc error\n"); //modify after
 	cmd->type = PIPE_CMD;
 	cmd->left = parse_pipe(line, del);
-	cmd->right = parse_pipe(edel, eline);
+	cmd->right = parse_pipe(del + 1, eline);
 	return ((t_cmd *)cmd);
 }
 
@@ -76,10 +76,9 @@ t_cmd	*parse_list(char *line, char *eline)
 {
 	t_lol	*cmd;
 	char	*del;
-	char	*edel;
 
 	trim_whitespaces(&line, &eline);
-	if(list_delim_locator(line, eline, &del, &edel) == 1) //there is only one pipeline
+	if(list_delim_locator(line, eline, &del) == 1) //there is only one pipeline
 		return (parse_pipe(line, eline));
 	cmd = NULL;
 	cmd = malloc(sizeof(t_lol));
@@ -91,6 +90,6 @@ t_cmd	*parse_list(char *line, char *eline)
 	else
 		cmd->mode = 1;
 	cmd->left = parse_list(line, del);
-	cmd->right = parse_list(edel, eline);
+	cmd->right = parse_list(del + 2, eline);
 	return ((t_cmd *)cmd);
 }

@@ -39,19 +39,19 @@ int	words_counter(char *line, char *eline)
 
 	counter = 0;
 	cursor = line;
-	while (cursor < eline)
+	while (cursor <= eline)
 	{
-		while (cursor < eline && check_whitespace(*cursor))
+		while (cursor <= eline && check_whitespace(*cursor))
 			cursor++;
-		if (cursor < eline && !check_whitespace(*cursor))
+		if (cursor <= eline && !check_whitespace(*cursor))
 			counter++;
-		while (cursor < eline && !check_whitespace(*cursor))
+		while (cursor <= eline && !check_whitespace(*cursor))
 			cursor++;
 	}
 	return (counter);
 }
 
-int	list_delim_locator(char *line, char *eline, char **del, char **edel)
+int	list_delim_locator(char *line, char *eline, char **del)
 {
 	int	block_check;
 
@@ -71,7 +71,13 @@ int	list_delim_locator(char *line, char *eline, char **del, char **edel)
 	}
 	if (*del == line)
 		return (1);
-	*edel = *del + 1;
+/*	----- ^^^ -----
+	if "&&" or "||" is in the begining of the line
+	this will return too. should it be like that? 
+	we will have to decide. or maybe it'll be ok because of the line below
+	hm hm hmmm */
 	*del = *del - 1;
+/* 	if (del == line || del + 1 == eline)
+		panic syntax error stop everything */
 	return (0);
 }

@@ -31,7 +31,7 @@ t_cmd	*ft_parse(char *line)
 	t_cmd	*ret;
 	char	*eline;
 
-	eline = line + ft_strlen(line);
+	eline = line + ft_strlen(line) - 1;
 	ret = parse_list(line, eline);
 	return (ret);
 }

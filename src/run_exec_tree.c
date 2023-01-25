@@ -30,7 +30,7 @@ void	run_exec(t_exec *cmd, int exit_status)
 	else if (!ft_strncmp(cmd->argv[0], "unset", 5))
 		ft_unset();
 	else
-		printf("[minishell]: unknown function %s\n", cmd->argv[0]);
+		printf("minishell: %s: command not found :(\n", cmd->argv[0]);
 }
 
 void	run_redir(t_redir *cmd, int exit_status)
