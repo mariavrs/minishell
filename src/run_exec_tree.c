@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:26:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 20:01:24 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:46:35 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,27 @@
 void	run_exec(t_exec *cmd, int *exit_status)
 {
 	*exit_status = 0;
-	if (!ft_strncmp(cmd->argv[0], "cd", 2))
+	if (!ft_strncmp(cmd->argv[0], "cd", 3))
 		ft_cd();
-	else if (!ft_strncmp(cmd->argv[0], "echo", 4))
+	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
 		ft_echo();
-	else if (!ft_strncmp(cmd->argv[0], "env", 3))
+	else if (!ft_strncmp(cmd->argv[0], "env", 4))
 		ft_env();
-	else if (!ft_strncmp(cmd->argv[0], "exit", 4))
+	else if (!ft_strncmp(cmd->argv[0], "exit", 5))
 		ft_exit();
-	else if (!ft_strncmp(cmd->argv[0], "export", 6))
+	else if (!ft_strncmp(cmd->argv[0], "export", 7))
 		ft_export();
-	else if (!ft_strncmp(cmd->argv[0], "pwd", 3))
+	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
 		ft_pwd();
-	else if (!ft_strncmp(cmd->argv[0], "unset", 5))
+	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
 		ft_unset();
 	else
 	{
 		printf("minishell: %s: command not found :(\n", cmd->argv[0]);
 		*exit_status = 127;
 	}
+	while (*(cmd->argv))
+		printf("%s\n", *(cmd->argv)++);
 }
 
 void	run_redir(t_redir *cmd, int *exit_status)

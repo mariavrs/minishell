@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 20:03:37 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:43:37 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ t_cmd	*parse_exec(char *line, char *eline)
 	int		i;
 
 	i = -1;
+	cmd = NULL;
+	if (trim_whitespaces(&line, &eline))
+		return (NULL);
 	cmd = malloc(sizeof(t_exec));
 	if (!cmd)
 		printf("malloc error\n"); //modify after
@@ -26,8 +29,6 @@ t_cmd	*parse_exec(char *line, char *eline)
 	cmd->argv = malloc(sizeof(char *) * (words_counter(line, eline) + 1));
 	if (!cmd->argv)
 		printf("malloc error\n"); //modify after
-	while (line <= eline && check_whitespace(*line))
-		line++;
 	while (line <= eline)
 	{
 		cmd->argv[++i] = line;
@@ -39,6 +40,7 @@ t_cmd	*parse_exec(char *line, char *eline)
 			line++;
 		}
 	}
+	cmd->argv[++i] = NULL;
 	return ((t_cmd *)cmd);
 }
 
