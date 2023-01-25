@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 16:18:32 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/24 22:13:18 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:20:14 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,20 @@ int	brackets_check(char *line, char *eline)
 	return (1);
 }
 
-void	trim_whitespaces(char **line, char **eline)
+int	trim_whitespaces(char **line, char **eline)
 {
-	while (check_whitespace(**line))
+	while (*line < *eline && check_whitespace(**line))
 		*line = *line + 1;
-	while (check_whitespace(**eline))
+	while (*eline >= *line && check_whitespace(**eline))
 		*eline = *eline - 1;
+	if (*line > *eline)
+		return (1);
 	if (**line == '(' && **eline == ')' && !brackets_check(*line + 1, *eline - 1))
 	{
 		*line = *line + 1;
 		*eline = *eline - 1;
 	}
+	return (0);
 }
 
 int	words_counter(char *line, char *eline)

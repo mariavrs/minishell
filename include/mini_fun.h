@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/24 22:08:22 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:35:50 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	ft_env(void);
 void	ft_exit(void);
 
 // Minishell
-t_cmd	*ft_parse(char *line);
 t_cmd	*parse_exec(char *line, char *eline);
 t_cmd	*parse_redir(char *line, char *eline);
 t_cmd	*parse_pipe(char *line, char *eline);
@@ -36,8 +35,9 @@ t_cmd	*parse_list(char *line, char *eline);
 
 int		list_delim_locator(char *line, char *eline, char **del);
 int		words_counter(char *line, char *eline);
-void	trim_whitespaces(char **line, char **eline);
+int		trim_whitespaces(char **line, char **eline);
 int		check_whitespace(char c);
+int		brackets_check(char *line, char *eline);
 
 void	ft_exec_tree(t_cmd *cmd, int exit_status);
 void	run_exec(t_exec *cmd, int exit_status);
