@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 19:15:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:03:37 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,7 @@ t_cmd	*parse_list(char *line, char *eline)
 	char	*del;
 
 	trim_whitespaces(&line, &eline);
-	if (trim_brackets(&line, &eline))
-		return (printf("minishell: syntax error: '%c'\n", *eline), NULL);
+	trim_brackets(&line, &eline);
 	if(list_delim_locator(line, eline, &del) == 1)
 		return (parse_pipe(line, eline));
 	if (del == line || del + 1 == eline)
@@ -99,10 +98,7 @@ t_cmd	*parse_list(char *line, char *eline)
 	if (!cmd)
 		printf("malloc error\n"); //modify after
 	cmd->type = LIST_CMD;
-	if (*del == '&')
-		cmd->mode = 0;
-	else
-		cmd->mode = 1;
+	cmd->mode = *del;
 	cmd->left = parse_list(line, del - 1);
 	if (cmd->left)
 		cmd->right = parse_list(del + 2, eline);

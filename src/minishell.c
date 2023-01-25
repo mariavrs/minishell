@@ -6,13 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 19:21:26 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:50:18 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-void	ft_exec_tree(t_cmd *cmd, int exit_status)
+void	ft_exec_tree(t_cmd *cmd, int *exit_status)
 {
 	if (!cmd)
 		return ;
@@ -43,7 +43,7 @@ void	exec_prep(char *sline)
 		{
 			ret = parse_list(line, eline);
 			if (ret)
-				ft_exec_tree(ret, exit_status);
+				ft_exec_tree(ret, &exit_status);
 			else
 				exit_status = 2;//syntax error
 		}

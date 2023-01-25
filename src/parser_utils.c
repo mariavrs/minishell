@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 16:18:32 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 19:07:38 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:58:36 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	brackets_check(char *line, char *eline)
 
 int	trim_brackets(char **line, char **eline)
 {
-	while (*line + 1 < *eline && **line == '(' && **eline == ')' && !brackets_check(*line + 1, *eline - 1))
+	if (*line + 1 < *eline && **line == '(' && **eline == ')' && !brackets_check(*line + 1, *eline - 1))
 	{
 		*line = *line + 1;
 		*eline = *eline - 1;

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 14:34:26 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:42:08 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_pipe_cmd
 typedef struct s_logical_list_cmd
 {
 	int		type;
-	int		mode;
+	char	mode;
 	t_cmd	*left;
 	t_cmd	*right;
 }	t_lol;

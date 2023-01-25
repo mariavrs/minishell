@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 16:46:38 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:53:04 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int		trim_whitespaces(char **line, char **eline);
 int		check_whitespace(char c);
 int		brackets_check(char *line, char *eline);
 
-void	ft_exec_tree(t_cmd *cmd, int exit_status);
-void	run_exec(t_exec *cmd, int exit_status);
-void	run_redir(t_redir *cmd, int exit_status);
-void	run_pipe(t_pipe *cmd, int exit_status);
-void	run_list(t_lol *cmd, int exit_status);
+void	ft_exec_tree(t_cmd *cmd, int *exit_status);
+void	run_exec(t_exec *cmd, int *exit_status);
+void	run_redir(t_redir *cmd, int *exit_status);
+void	run_pipe(t_pipe *cmd, int *exit_status);
+void	run_list(t_lol *cmd, int *exit_status);
 
 #endif
