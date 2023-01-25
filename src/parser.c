@@ -55,7 +55,6 @@ t_cmd	*parse_pipe(char *line, char *eline)
 	t_pipe	*cmd;
 	char	*del;
 
-	printf("parsing pipes\n");
 	trim_whitespaces(&line, &eline);
 /* 	if (*eline == '|' || *line == '|')
 		panic syntax error, stop here, execute nothing at all */
