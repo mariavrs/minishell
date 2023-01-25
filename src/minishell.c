@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 15:59:01 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:21:26 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,11 @@ void	exec_prep(char *sline)
 			else
 				exit_status = 2;//syntax error
 		}
-/* 		else
-			panic_runaway(); */
+ 		else
+		{
+			printf("minishell: syntax error: unexpected symbol '(' or ')'\n");
+			exit_status = 2;
+		}
 	}
 }
 
