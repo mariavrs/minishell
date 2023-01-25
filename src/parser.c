@@ -55,6 +55,7 @@ t_cmd	*parse_pipe(char *line, char *eline)
 	t_pipe	*cmd;
 	char	*del;
 
+	printf("parsing pipes\n");
 	trim_whitespaces(&line, &eline);
 /* 	if (*eline == '|' || *line == '|')
 		panic syntax error, stop here, execute nothing at all */
@@ -89,7 +90,7 @@ t_cmd	*parse_list(char *line, char *eline)
 		cmd->mode = 0;
 	else
 		cmd->mode = 1;
-	cmd->left = parse_list(line, del);
+	cmd->left = parse_list(line, del - 1);
 	cmd->right = parse_list(del + 2, eline);
 	return ((t_cmd *)cmd);
 }

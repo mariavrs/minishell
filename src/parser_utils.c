@@ -19,13 +19,33 @@ int	check_whitespace(char c)
 	return (0);
 }
 
+int	brackets_check(char *line, char *eline)
+{
+	int		check;
+	char	*cursor;
+
+	check = 0;
+	cursor = line;
+	while (cursor <= eline && check >= 0)
+	{
+		if (*cursor == '(')
+			check++;
+		else if (*cursor == ')')
+			check--;
+		cursor++;
+	}
+	if (!check)
+		return (0);
+	return (1);
+}
+
 void	trim_whitespaces(char **line, char **eline)
 {
 	while (check_whitespace(**line))
 		*line = *line + 1;
 	while (check_whitespace(**eline))
 		*eline = *eline - 1;
-	if (**line == '(' && **eline == ')')
+	if (**line == '(' && **eline == ')' && !brackets_check(*line + 1, *eline - 1))
 	{
 		*line = *line + 1;
 		*eline = *eline - 1;
@@ -63,10 +83,8 @@ int	list_delim_locator(char *line, char *eline, char **del)
 	{
 		if (**del == ')')
 			block_check++;
-		else if (**del == '(' && block_check > 0)
+		else if (**del == '(')
 			block_check--;
-/* 		else if (*del == '(')
-			panic syntax error; */
 		*del = *del - 1;
 	}
 	if (*del == line)

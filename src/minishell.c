@@ -32,6 +32,8 @@ t_cmd	*ft_parse(char *line)
 	char	*eline;
 
 	eline = line + ft_strlen(line) - 1;
+/* 	if (brackets_check(line, eline))
+		panic syntax error stop everything */
 	ret = parse_list(line, eline);
 	return (ret);
 }
