@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 14:35:50 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:46:38 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_cmd	*parse_list(char *line, char *eline);
 
 int		list_delim_locator(char *line, char *eline, char **del);
 int		words_counter(char *line, char *eline);
+int		trim_brackets(char **line, char **eline);
 int		trim_whitespaces(char **line, char **eline);
 int		check_whitespace(char c);
 int		brackets_check(char *line, char *eline);

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 16:18:32 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 14:20:14 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 17:23:16 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,20 @@ int	brackets_check(char *line, char *eline)
 	return (1);
 }
 
+int	trim_brackets(char **line, char **eline)
+{
+	while (*line + 1 < *eline && **line == '(' && **eline == ')' && !brackets_check(*line + 1, *eline - 1))
+	{
+		*line = *line + 1;
+		*eline = *eline - 1;
+		if (trim_whitespaces(line, eline))
+			return (1);
+	}
+	if (**line == '(' && **eline == ')')
+		return (1);
+	return (0);
+}
+
 int	trim_whitespaces(char **line, char **eline)
 {
 	while (*line < *eline && check_whitespace(**line))
@@ -47,11 +61,6 @@ int	trim_whitespaces(char **line, char **eline)
 		*eline = *eline - 1;
 	if (*line > *eline)
 		return (1);
-	if (**line == '(' && **eline == ')' && !brackets_check(*line + 1, *eline - 1))
-	{
-		*line = *line + 1;
-		*eline = *eline - 1;
-	}
 	return (0);
 }
 
@@ -92,13 +101,6 @@ int	list_delim_locator(char *line, char *eline, char **del)
 	}
 	if (*del == line)
 		return (1);
-/*	----- ^^^ -----
-	if "&&" or "||" is in the begining of the line
-	this will return too. should it be like that? 
-	we will have to decide. or maybe it'll be ok because of the line below
-	hm hm hmmm */
 	*del = *del - 1;
-/* 	if (del == line || del + 1 == eline)
-		panic syntax error stop everything */
 	return (0);
 }

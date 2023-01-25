@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 14:47:28 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 15:59:01 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,35 @@ void	ft_exec_tree(t_cmd *cmd, int exit_status)
 		run_list((t_lol *)cmd, exit_status);
 }
 
-int	main(void)
+void	exec_prep(char *sline)
 {
+	t_cmd		*ret;
 	char		*line;
-	char		*sline;
 	char		*eline;
 	static int	exit_status;
+
+	line = sline;
+	eline = line + ft_strlen(line) - 1;
+	if (!trim_whitespaces(&line, &eline))
+	{
+		if (!check_whitespace(*sline))
+			add_history(sline);
+		if (!brackets_check(line, eline))
+		{
+			ret = parse_list(line, eline);
+			if (ret)
+				ft_exec_tree(ret, exit_status);
+			else
+				exit_status = 2;//syntax error
+		}
+/* 		else
+			panic_runaway(); */
+	}
+}
+
+int	main(void)
+{
+	char		*sline;
 
 	while (1)
 	{
@@ -40,19 +63,7 @@ int	main(void)
 		if (sline)
 		{
 			if (ft_strlen(sline) != 0)
-			{
-				line = sline;
-				eline = line + ft_strlen(line) - 1;
-				if (!trim_whitespaces(&line, &eline))
-				{
-					if (sline == line)
-						add_history(sline);
-					if (!brackets_check(line, eline))
-						ft_exec_tree(parse_list(line, eline), exit_status);
-	/* 				else
-						panic_runaway(); */
-				}
-			}
+				exec_prep(sline);
 			free(sline);
 		}
 	}

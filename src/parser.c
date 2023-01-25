@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 15:05:25 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:51:36 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ t_cmd	*parse_pipe(char *line, char *eline)
 	char	*del;
 
 	trim_whitespaces(&line, &eline);
-/* 	if (*eline == '|' || *line == '|')
-		return (NULL); //panic syntax error, stop here, execute nothing at all
- */	del = eline;
+	if (*eline == '|' || *line == '|')
+		return (printf("minishell: syntax error: '%c'\n", '|'), NULL); //panic syntax error, stop here, execute nothing at all
+	del = eline;
 	while (del > line && *del != '|')
 		del--;
 	if (del == line)
@@ -67,8 +67,15 @@ t_cmd	*parse_pipe(char *line, char *eline)
 	if (!cmd)
 		printf("malloc error\n"); //modify after
 	cmd->type = PIPE_CMD;
-	cmd->left = parse_pipe(line, del);
-	cmd->right = parse_pipe(del + 1, eline);
+	cmd->left = parse_pipe(line, del - 1);
+	if (cmd->left)
+		cmd->right = parse_pipe(del + 1, eline);
+	if (!cmd->right)
+	{
+		if (cmd->left)
+			free(cmd->left);
+		free(cmd);
+	}
 	return ((t_cmd *)cmd);
 }
 
@@ -78,11 +85,13 @@ t_cmd	*parse_list(char *line, char *eline)
 	char	*del;
 
 	trim_whitespaces(&line, &eline);
+	if (trim_brackets(&line, &eline))
+		return (printf("minishell: syntax error: '%c'\n", *eline), NULL);
 	if(list_delim_locator(line, eline, &del) == 1)
 		return (parse_pipe(line, eline));
-/* 	if (del == line || del + 1 == eline)
-		return (NULL); //panic syntax error, stop here, execute nothing at all
- */	cmd = NULL;
+	if (del == line || del + 1 == eline)
+		return (printf("minishell: syntax error: '%c'\n", *del), NULL); //panic syntax error, stop here, execute nothing at all
+	cmd = NULL;
 	cmd = malloc(sizeof(t_lol));
 	if (!cmd)
 		printf("malloc error\n"); //modify after
@@ -92,6 +101,13 @@ t_cmd	*parse_list(char *line, char *eline)
 	else
 		cmd->mode = 1;
 	cmd->left = parse_list(line, del - 1);
-	cmd->right = parse_list(del + 2, eline);
+	if (cmd->left)
+		cmd->right = parse_list(del + 2, eline);
+	if (!cmd->right)
+	{
+		if (cmd->left)
+			free(cmd->left);
+		free(cmd);
+	}
 	return ((t_cmd *)cmd);
 }
