@@ -3,17 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/22 14:40:21 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/26 20:49:23 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	main(void)
+int	main(int argc, char *argv[])
 {
-	ft_putstr_fd("Hello minishell !\n", 1);
+	(void)argc;
+	printf("############ Calling of echo ############\n");
+	ft_echo(argv);
+	printf("############ Calling of pwd ############\n");
+	ft_pwd();
 	return (0);
 }
