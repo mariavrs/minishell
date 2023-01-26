@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:26:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 20:46:35 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/26 21:04:38 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,38 @@ void	run_pipe(t_pipe *cmd, int *exit_status)
 {
 	(void)cmd;
 	(void)exit_status;
+/* 	int		fd[2];
+	pid_t	id[2];
+
+	pipe(fd);
+	//if (pipe(fd) == -1)
+		//stop everything, pipe didn't work
+	id[0] = fork();
+	if (id[0] == 0)
+	{
+		close(1);
+		dup(fd[1]);
+		close(fd[0]);
+		close(fd[1]);
+		ft_exec_tree(cmd->left, exit_status);
+	}
+	else
+	{
+		id[1] = fork();
+		if (id[1] == 0)
+		{
+			close(0);
+			dup(fd[0]);
+			close(fd[0]);
+			close(fd[1]);
+			ft_exec_tree(cmd->right, exit_status);
+		}
+		else
+		{
+			waitpid(id[0], exit_status, 0); //modify the option later
+			waitpid(id[1], exit_status, 0);
+		}
+	} */
 }
 
 void	run_list(t_lol *cmd, int *exit_status)

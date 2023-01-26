@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 20:43:37 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/26 20:59:15 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ t_cmd	*parse_pipe(char *line, char *eline)
 	t_pipe	*cmd;
 	char	*del;
 
+	cmd = NULL;
 	trim_whitespaces(&line, &eline);
 	if (*eline == '|' || *line == '|')
 		return (printf("minishell: syntax error: '%c'\n", '|'), NULL); //panic syntax error, stop here, execute nothing at all
@@ -68,7 +69,6 @@ t_cmd	*parse_pipe(char *line, char *eline)
 	else if (*del != '|')
 		return (printf("minishell: syntax error: unexpected symbol '%c'\n", *del), NULL);
 	cmd = malloc(sizeof(t_pipe));
-	cmd = NULL;
 	if (!cmd)
 		printf("malloc error\n"); //modify after
 	cmd->type = PIPE_CMD;

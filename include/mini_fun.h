@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 19:53:04 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/26 20:51:32 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 # include "../lib/libft/libft.h"
 # include "mini_struct.h"
 # include <stdio.h>
+# include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
 
 // Builtins prototypes
 void	ft_echo(void);
