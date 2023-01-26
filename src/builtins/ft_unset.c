@@ -6,13 +6,14 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/22 17:24:24 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/01/26 20:25:18 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-void	ft_unset(void)
+int	ft_unset(void)
 {
 	printf("Hey! Im Unset, nice to meet you ! (>.o)\n");
+	return (0);
 }

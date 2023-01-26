@@ -6,13 +6,14 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/22 17:23:52 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/01/26 20:25:01 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-void	ft_exit(void)
+int	ft_exit(void)
 {
 	printf("Hey! Im Exit, nice to meet you ! (>.o)\n");
+	return (0);
 }
