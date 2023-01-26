@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/22 17:24:40 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/01/26 20:10:22 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 void	ft_pwd(void)
 {
-	printf("Hey! Im Pwd, nice to meet you ! (>.o)\n");
+	printf("%s\n", getenv("PWD"));
 }
