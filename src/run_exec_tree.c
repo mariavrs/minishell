@@ -6,11 +6,43 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:26:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/27 13:05:58 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:43:52 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+void	run_exec_bin(char **argv, int *exit_status)
+{
+	char	*full_fun_name;
+
+	full_fun_name = ft_strjoin("/usr/bin/", *argv);
+	if (fork() == 0)
+		execve(full_fun_name, argv, 0);
+	else
+		wait(exit_status);
+	free(full_fun_name);
+}
+
+int	run_search_bin(char **argv, int *exit_status)
+{
+	DIR	*bin_lib;
+	struct dirent *bin_lib_obj;
+
+	bin_lib = NULL;
+	bin_lib = opendir("/usr/bin");
+/* 	if (!bin_lib)
+		panic open didn't work, quit everything */
+	bin_lib_obj = readdir(bin_lib);
+	while (bin_lib_obj && ft_strncmp(bin_lib_obj->d_name, *argv, ft_strlen(*argv) + 1))
+		bin_lib_obj = readdir(bin_lib);
+	closedir(bin_lib);
+	if (bin_lib_obj) // I'm not sure if we have to check the type
+		run_exec_bin(argv, exit_status);
+	else
+		return (1);
+	return (0);
+}
 
 void	run_exec(t_exec *cmd, int *exit_status)
 {
@@ -29,7 +61,7 @@ void	run_exec(t_exec *cmd, int *exit_status)
 		ft_pwd();
 	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
 		ft_unset();
-	else
+	else if (run_search_bin(cmd->argv, exit_status))
 	{
 		printf("minishell: %s: command not found :(\n", cmd->argv[0]);
 		*exit_status = 127;
