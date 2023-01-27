@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/26 20:22:10 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:13:40 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	ft_pwd(void)
 {
-	printf("%s\n", getenv("PWD"));
+	char	dir[1000];
+
+	printf("%s\n",getcwd(dir,1000));
 	return (0);
 }
