@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 16:18:32 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/25 19:58:36 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/27 12:13:08 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	brackets_check(char *line, char *eline)
 
 	check = 0;
 	cursor = line;
-	while (cursor <= eline && check >= 0)
+	while (cursor < eline && check >= 0)
 	{
 		if (*cursor == '(')
 			check++;
@@ -41,14 +41,14 @@ int	brackets_check(char *line, char *eline)
 
 int	trim_brackets(char **line, char **eline)
 {
-	if (*line + 1 < *eline && **line == '(' && **eline == ')' && !brackets_check(*line + 1, *eline - 1))
+	if (*line + 1 < *eline && **line == '(' && *(*eline - 1) == ')' && !brackets_check(*line + 1, *eline - 1))
 	{
 		*line = *line + 1;
 		*eline = *eline - 1;
 		if (trim_whitespaces(line, eline))
 			return (1);
 	}
-	if (**line == '(' && **eline == ')')
+	if (**line == '(' && *(*eline - 1) == ')')
 		return (1);
 	return (0);
 }
@@ -57,9 +57,9 @@ int	trim_whitespaces(char **line, char **eline)
 {
 	while (*line < *eline && check_whitespace(**line))
 		*line = *line + 1;
-	while (*eline >= *line && check_whitespace(**eline))
+	while (*eline > *line && check_whitespace(*(*eline - 1)))
 		*eline = *eline - 1;
-	if (*line > *eline)
+	if (*line == *eline)
 		return (1);
 	return (0);
 }
@@ -88,7 +88,7 @@ int	list_delim_locator(char *line, char *eline, char **del)
 	int	block_check;
 
 	block_check = 0;
-	*del = eline;
+	*del = eline - 1;
 	while (*del > line && !(block_check == 0
 		&& ((**del == '&' && *(*del - 1) == '&')
 			|| (**del == '|' && *(*del - 1) == '|'))))

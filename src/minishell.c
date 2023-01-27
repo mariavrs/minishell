@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 19:50:18 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/27 12:47:33 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	exec_prep(char *sline)
 	static int	exit_status;
 
 	line = sline;
-	eline = line + ft_strlen(line) - 1;
+	eline = line + ft_strlen(line);
 	if (!trim_whitespaces(&line, &eline))
 	{
 		if (!check_whitespace(*sline))
@@ -49,7 +49,7 @@ void	exec_prep(char *sline)
 		}
  		else
 		{
-			printf("minishell: syntax error: unexpected symbol '(' or ')'\n");
+			printf("minishell: syntax error: incorrect usage of parentheses\n");
 			exit_status = 2;
 		}
 	}

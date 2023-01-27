@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:26:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/26 21:04:38 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/27 12:41:20 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	run_exec(t_exec *cmd, int *exit_status)
 		printf("minishell: %s: command not found :(\n", cmd->argv[0]);
 		*exit_status = 127;
 	}
-	while (*(cmd->argv))
-		printf("%s\n", *(cmd->argv)++);
+/* 	while (*(cmd->argv))
+		printf("%s\n", *(cmd->argv)++); */
 }
 
 void	run_redir(t_redir *cmd, int *exit_status)
