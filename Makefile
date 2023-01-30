@@ -6,7 +6,7 @@
 #    By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/01/22 17:25:18 by ede-smet         ###   ########.fr        #
+#    Updated: 2023/01/30 21:16:10 by ede-smet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ LFT = lib/libft
 
 CC = cc -g3
 CFLAGS = -Wall -Wextra -Werror
-LFLAGS = -L$(LFT) -lft -fsanitize=leak
+LFLAGS = -L$(LFT) -lft
 
 NOCOLOR	= \033[0m
 RED 	= \033[1;31m
