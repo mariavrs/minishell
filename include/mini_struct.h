@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/25 19:42:08 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/31 15:30:53 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,27 @@ typedef struct s_cmd
 	int		type;
 }	t_cmd;
 
-typedef struct s_exec_cmd
+typedef struct s_redir
+{
+	char	*file;
+	char	mode;
+	int		fd;
+}	t_redir;
+
+typedef struct s_simple_cmd
 {
 	int		type;
-/* 	char	*argv[MAXARGC];
-	char	*eargv[MAXARGC]; */
+	int		argc;
+	char	**argv;
+	int		redir_counter;
+	t_redir	*redir;
+}	t_spl_cmd;
+
+/* typedef struct s_exec_cmd
+{
+	int		type;
+// 	char	*argv[MAXARGC];
+//	char	*eargv[MAXARGC];
 	char	**argv;
 	char	**eargv;
 }	t_exec;
@@ -42,7 +58,7 @@ typedef struct s_redir_cmd
 	char	*efile;
 	int		mode;
 	int		fd;
-}	t_redir;
+}	t_redir; */
 
 typedef struct s_pipe_cmd
 {

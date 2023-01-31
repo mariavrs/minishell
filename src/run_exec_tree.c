@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:26:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/27 15:37:42 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/30 22:17:45 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	run_search_bin(char **argv, int *exit_status, char **envp)
 	return (0);
 }
 
-void	run_exec(t_exec *cmd, int *exit_status, char **envp)
+void	run_spl_cmd(t_spl_cmd *cmd, int *exit_status, char **envp)
 {
 	*exit_status = 0;
 	if (!ft_strncmp(cmd->argv[0], "cd", 3))

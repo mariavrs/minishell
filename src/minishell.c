@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/27 16:10:34 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/01/31 15:22:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	ft_exec_tree(t_cmd *cmd, int *exit_status, char **envp)
 	if (!cmd)
 		return ;
 	else if (cmd->type == EXEC_CMD)
-		run_exec((t_exec *)cmd, exit_status, envp);
-	else if (cmd->type == REDIR_CMD)
-		run_redir((t_redir *)cmd, exit_status, envp);
+		run_spl_cmd((t_spl_cmd *)cmd, exit_status, envp);
+/* 	else if (cmd->type == REDIR_CMD)
+		run_redir((t_redir *)cmd, exit_status, envp); */
 	else if (cmd->type == PIPE_CMD)
 		run_pipe((t_pipe *)cmd, exit_status, envp);
 	else if (cmd->type == LIST_CMD)
