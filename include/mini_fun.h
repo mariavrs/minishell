@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/30 21:16:40 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/01 09:53:09 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ int		ft_exit(void);
 // Environment functions
 int		ft_env(char **env);
 char	**ft_parent_env_cpy(char **envp);
+int		env_edit(char **env, char *var, char *value);
 
 #endif

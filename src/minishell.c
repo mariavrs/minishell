@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/30 21:16:24 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/01 09:54:23 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,12 @@ int	main(int argc, char *argv[], char *envp[])
 	ft_pwd();
 	printf("############ Calling of cd ############\n");
 	if (ft_cd(argv) == 1)
-		printf("J'encule des mouches !\n");
+		printf("Path invalid !\n");
 	ft_pwd();
 	printf("############ Calling of env ############\n");
+	ft_env(env);
+	printf("############ Edit de TERM ############\n");
+	env_edit(env, "TERM", "HELLO");
 	ft_env(env);
 	return (0);
 }
