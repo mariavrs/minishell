@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/31 17:13:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/01 18:16:54 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ t_spl_cmd	*ft_malloc_spl_cmd(char *line, char *eline)
 	cmd->redir = NULL;
 	if (words_counter(line, eline, cmd))
 		return (ft_free_spl_cmd(cmd), NULL);
-	printf("cmd words: %d    redir words: %d\n", cmd->argc, cmd->redir_counter);
 	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
 	cmd->redir = malloc(sizeof(t_redir) * (cmd->redir_counter));
 	if (!cmd->argv || !cmd->redir)

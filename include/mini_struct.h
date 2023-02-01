@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/31 15:30:53 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/01 17:58:13 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define MINI_STRUCT_H
 
 # define EXEC_CMD 1
-# define REDIR_CMD 2
+//# define REDIR_CMD 2
 # define PIPE_CMD 3
 # define LIST_CMD 4
 

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:26:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/30 22:17:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/01 18:15:30 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,7 @@ void	run_redir(t_redir *cmd, int *exit_status, char **envp)
 
 void	run_pipe(t_pipe *cmd, int *exit_status, char **envp)
 {
-/* 	(void)cmd;
-	(void)exit_status;
- */	int		fd[2];
+	int		fd[2];
 	pid_t	id[2];
 
 	pipe(fd);
@@ -109,27 +107,27 @@ void	run_pipe(t_pipe *cmd, int *exit_status, char **envp)
 	id[0] = fork();
 	if (id[0] == 0)
 	{
-		close(1);
-		dup(fd[1]);
+		dup2(fd[1], STDOUT_FILENO);
+//		close(1);
 		close(fd[0]);
 		close(fd[1]);
 		ft_exec_tree(cmd->left, exit_status, envp);
 		exit(*exit_status);
 	}
-	else
-		waitpid(id[0], exit_status, 0); //modify the option later
 	id[1] = fork();
 	if (id[1] == 0)
 	{
-		close(0);
-		dup(fd[0]);
+		dup2(fd[0], STDIN_FILENO);
+//		close(0);
 		close(fd[0]);
 		close(fd[1]);
 		ft_exec_tree(cmd->right, exit_status, envp);
 		exit(*exit_status);
 	}
-	else
-		waitpid(id[1], exit_status, 0); //modify the option later
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(id[0], exit_status, 0); //modify the option later
+	waitpid(id[1], exit_status, 0); //modify the option later
 }
 
 void	run_list(t_lol *cmd, int *exit_status, char **envp)
