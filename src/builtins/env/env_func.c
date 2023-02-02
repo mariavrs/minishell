@@ -86,8 +86,32 @@ int	env_add(char ***env, char *value)
 	(*env)[++i] = NULL;
 	return (free_table(env_tmp), 0);
 }
-/* 
-int	env_del(char **env, char *var, char *value)
+
+int	env_del(char ***env, char *var)
 {
-	return (0);
-} */
+	char	**env_tmp;
+	char	**split_tmp;
+	int		i;
+	int		k;
+
+	k = 0;
+	i = -1;
+	ft_parent_env_cpy(&env_tmp, *env);
+	free_table(*env);
+	*env = malloc (ft_count_elem(env_tmp) * sizeof(char *));
+	if (!(*env))
+		return (free_table(env_tmp), 1);
+	while (env_tmp[++i])
+	{
+		split_tmp = ft_split(env_tmp[i], '=');
+		if (ft_strncmp(split_tmp[0], var, ft_strlen(var) + 1) != 0)
+		{
+			(*env)[k] = malloc ((ft_strlen(env_tmp[i]) + 1) * sizeof(char));
+			if (!(*env))
+				return (free_table(env_tmp), 1);
+			ft_strlcpy((*env)[k++], env_tmp[i], ft_strlen(env_tmp[i]) + 1);
+		}
+		free_table(split_tmp);
+	}
+	return ((*env)[k] = NULL, free_table(env_tmp), 0);
+}
