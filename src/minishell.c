@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/02 12:43:51 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/02 16:09:26 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ int	main(int argc, char *argv[], char *envp[])
 	ft_pwd(env);
 	printf("############ Calling of env ############\n");
 	ft_env(env);
-	printf("############ add var in env ############\n");
+	printf("############ add NTM in env ############\n");
 	env_add(&env, "NTM=lol");
+	ft_env(env);
+	printf("############ del TERM from env ############\n");
+	env_del(&env, "TERM");
 	ft_env(env);
 	return (free_table(env), 0);
 }
