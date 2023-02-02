@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/30 21:17:01 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/01 13:10:23 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,25 @@ static int	ft_count_elem(char **envp)
 	return (i);
 }
 
-char	**ft_parent_env_cpy(char **envp)
+void	ft_parent_env_cpy(t_env *env, char **envp)
 {
 	int		nb_env;
-	char	**env;
 	int		i;
 
 	i = -1;
-	env = NULL;
 	nb_env = ft_count_elem(envp);
-	env = malloc((nb_env + 1) * sizeof(char *));
+	env->env_cp = malloc((nb_env + 1) * sizeof(char *));
 	if (!env)
-		return (NULL);
+		return ;
 	while (envp[++i])
 	{
-		env[i] = malloc ((ft_strlen(envp[i])) * sizeof(char));
-		ft_strlcpy(env[i], envp[i], ft_strlen(envp[i]) + 1);
+		env->env_cp[i] = NULL;
+		env->env_cp[i] = malloc ((ft_strlen(envp[i]) + 1) * sizeof(char));
+		if (!env->env_cp[i])
+			return ;
+		ft_strlcpy(env->env_cp[i], envp[i], ft_strlen(envp[i]) + 1);
 	}
-	env[++i] = "\0";
-	return (env);
+	env->env_cp[i++] = NULL;
 }
 
 int	ft_env(char **env)
