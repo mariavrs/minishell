@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/02 13:29:38 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/02 15:40:49 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ int		ft_env(char **env);
 // Environment extra functions
 void	ft_fill_env(char *env, char *var, char *value);
 int		ft_count_elem(char **envp);
-int	ft_parent_env_cpy(char ***env, char **envp);
+int		ft_parent_env_cpy(char ***env, char **envp);
 int		env_edit(char ***env, char *var, char *value);
 char	*env_get(char **env, char *var);
 int		env_add(char ***env, char *value);
+int		env_del(char ***env, char *var);
 
 // Generic functions
 void	free_table(char **table);
