@@ -12,56 +12,25 @@
 
 #include "../../../include/mini_fun.h"
 
-void	ft_fill_env(char *env, char *var, char *value)
-{
-	int	i;
-	int	k;
-
-	i = -1;
-	k = -1;
-	while (++k < (int)ft_strlen(var))
-		env[++i] = var[k];
-	env[++i] = '=';
-	k = -1;
-	while (++k < (int)ft_strlen(value))
-		env[++i] = value[k];
-	env[++i] = '\0';
-}
-
-void	free_table(char **table)
-{
-	int	i;
-
-	i = 0;
-	if (!table)
-		return ;
-	while (table[i])
-	{
-		free(table[i]);
-		i++;
-	}
-	free(table);
-}
-
-int	env_edit(t_env *env, char *var, char *value)
+int	env_edit(char ***env, char *var, char *value)
 {
 	int		i;
 	char	**tmp;
 
 	i = -1;
 	tmp = NULL;
-	while (env->env_cp[++i])
+	while ((*env)[++i])
 	{
-		tmp = ft_split(env->env_cp[i], '=');
+		tmp = ft_split((*env)[i], '=');
 		if (ft_strncmp(tmp[0], var, ft_strlen(var) + 1) == 0)
 		{
-			free(env->env_cp[i]);
-			env->env_cp[i] = NULL;
-			env->env_cp[i] = malloc((ft_strlen(tmp[0]) + ft_strlen(value) + 2)
+			free((*env)[i]);
+			(*env)[i] = NULL;
+			(*env)[i] = malloc((ft_strlen(tmp[0]) + ft_strlen(value) + 2)
 					* sizeof(char));
-			if (!env->env_cp[i])
+			if (!(*env)[i])
 				return (free_table(tmp), 1);
-			ft_fill_env(env->env_cp[i], tmp[0], value);
+			ft_fill_env((*env)[i], tmp[0], value);
 		}
 		free_table(tmp);
 	}
@@ -91,12 +60,33 @@ char	*env_get(char **env, char *var)
 	}
 	return (value);
 }
-/* 
-int	env_add(char **env, char *var, char *value)
-{
-	return (0);
-}
 
+int	env_add(char ***env, char *value)
+{
+	char	**env_tmp;
+	int		i;
+
+	i = -1;
+	ft_parent_env_cpy(&env_tmp, *env);
+	free_table(*env);
+	*env = malloc ((ft_count_elem(env_tmp) + 2) * sizeof(char *));
+	if (!(*env))
+		return (free_table(env_tmp), 1);
+	while (env_tmp[++i])
+	{
+		(*env)[i] = malloc ((ft_strlen(env_tmp[i]) + 1) * sizeof(char));
+		if (!(*env))
+			return (free_table(env_tmp), 1);
+		ft_strlcpy((*env)[i], env_tmp[i], ft_strlen(env_tmp[i]) + 1);
+	}
+	(*env)[i] = malloc ((ft_strlen(value) + 1) * sizeof(char));
+	if (!(*env))
+		return (free_table(env_tmp), 1);
+	ft_strlcpy((*env)[i], value, ft_strlen(value) + 1);
+	(*env)[++i] = NULL;
+	return (free_table(env_tmp), 0);
+}
+/* 
 int	env_del(char **env, char *var, char *value)
 {
 	return (0);
