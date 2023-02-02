@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/01 09:54:23 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/02 10:28:43 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,20 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	char	**env;
+	t_env	env;
 
 	(void)argc;
-	env = ft_parent_env_cpy(envp);
+	ft_parent_env_cpy(&env, envp);
 	printf("############ Calling of echo ############\n");
 	ft_echo(argv);
 	printf("############ Calling of pwd ############\n");
-	ft_pwd();
+	ft_pwd(env.env_cp);
 	printf("############ Calling of cd ############\n");
-	if (ft_cd(argv) == 1)
+	if (ft_cd(argv, &env) == 1)
 		printf("Path invalid !\n");
-	ft_pwd();
+	ft_pwd(env.env_cp);
 	printf("############ Calling of env ############\n");
-	ft_env(env);
-	printf("############ Edit de TERM ############\n");
-	env_edit(env, "TERM", "HELLO");
-	ft_env(env);
+	ft_env(env.env_cp);
+	free_table(env.env_cp);
 	return (0);
 }
