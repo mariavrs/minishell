@@ -3,19 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/27 14:13:40 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/02 10:27:21 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-int	ft_pwd(void)
+int	ft_pwd(char **env)
 {
-	char	dir[1000];
+	char *path;
 
-	printf("%s\n",getcwd(dir,1000));
-	return (0);
+	path = NULL;
+	path = env_get(env, "PWD");
+	if (!path)
+		return (1);
+	printf("%s\n", path);
+	return (free(path), 0);
 }
