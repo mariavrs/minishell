@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/10 23:26:31 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/11 00:21:25 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	redir_out(t_spl_cmd *cmd, int i)
 	if (!cmd->stdout_cpy)
 		cmd->stdout_cpy = dup(STDOUT_FILENO);
 	if (cmd->redir[i].mode == '>')
-		cmd->redir[i].fd = open(cmd->redir[i].file, O_CREAT | O_WRONLY, 0664);
+		cmd->redir[i].fd = open(cmd->redir[i].file, O_CREAT | O_RDWR | O_TRUNC, 0664);
 	else if (cmd->redir[i].mode == '+')
-		cmd->redir[i].fd = open(cmd->redir[i].file, O_CREAT | O_APPEND | O_WRONLY, 0664);
+		cmd->redir[i].fd = open(cmd->redir[i].file, O_CREAT | O_RDWR | O_APPEND, 0664);
 	dup2(cmd->redir[i].fd, STDOUT_FILENO);
 }
 
