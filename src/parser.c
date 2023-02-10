@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/01 18:16:54 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/10 23:11:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ t_spl_cmd	*ft_malloc_spl_cmd(char *line, char *eline)
 	if (!cmd->argv || !cmd->redir)
 		return(ft_free_spl_cmd(cmd), printf("malloc error\n"), NULL); //modify after
 	cmd->argv[cmd->argc] = NULL;
+	cmd->stdin_cpy = 0;
+	cmd->stdout_cpy = 0;
 	return (cmd);
 }
 

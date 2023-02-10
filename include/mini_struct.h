@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/01 17:58:13 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/10 23:10:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ typedef struct s_simple_cmd
 	int		argc;
 	char	**argv;
 	int		redir_counter;
+	int		stdin_cpy;
+	int		stdout_cpy;
 	t_redir	*redir;
 }	t_spl_cmd;
 

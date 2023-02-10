@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/31 16:14:22 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/10 23:33:34 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <dirent.h>
+# include <fcntl.h>
 
 // Builtins prototypes
 void	ft_echo(void);
@@ -45,8 +46,13 @@ int		brackets_check(char *line, char *eline);
 
 void	ft_exec_tree(t_cmd *cmd, int *exit_status, char **envp);
 void	run_spl_cmd(t_spl_cmd *cmd, int *exit_status, char **envp);
-void	run_redir(t_redir *cmd, int *exit_status, char **envp);
 void	run_pipe(t_pipe *cmd, int *exit_status, char **envp);
 void	run_list(t_lol *cmd, int *exit_status, char **envp);
+
+void	run_exec(t_spl_cmd *cmd, int *exit_status, char **envp);
+
+void	redir_in(t_spl_cmd *cmd, int i);
+void	redir_out(t_spl_cmd *cmd, int i);
+void	redir_clean(t_spl_cmd *cmd);
 
 #endif
