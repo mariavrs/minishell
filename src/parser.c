@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/10 23:11:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/11 00:17:52 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_cmd	*parse_simple_cmd(char *line, char *eline)
 		if (*line == '<' || *line == '>')
 		{
 			i_redir++;
-			if (*line != *line + 1)
+			if (*line != *(line + 1))
 				cmd->redir[i_redir].mode = *line;
 			else if (*line == '>')
 				cmd->redir[i_redir].mode = '+';
