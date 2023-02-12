@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/02 16:10:53 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/12 20:31:58 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,14 @@ void	free_table(char **table)
 		i++;
 	}
 	free(table);
+}
+
+int	env_exist(char **env, char *var)
+{
+	char	*value;
+
+	value = env_get(env, var);
+	if (!value)
+		return (free(value), 1);
+	return (free(value), 0);
 }
