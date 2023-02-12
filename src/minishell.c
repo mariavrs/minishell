@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/02 16:09:26 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/12 20:19:47 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,16 @@ int	main(int argc, char *argv[], char *envp[])
 	printf("############ Calling of echo ############\n");
 	ft_echo(argv);
 	printf("############ Calling of pwd ############\n");
-	ft_pwd(env);
+	ft_pwd();
+	printf("############ Calling of env ############\n");
+	ft_env(env);
 	printf("############ Calling of cd ############\n");
-	if (ft_cd(argv, &env) == 1)
-		printf("Path invalid !\n");
-	ft_pwd(env);
+	env_del(&env, "PWD");
+	env_del(&env, "PWD");
+	env_del(&env, "OLDPWD");
+	env_del(&env, "HOME");
+	ft_cd(argv, &env);
+	ft_pwd();
 	printf("############ Calling of env ############\n");
 	ft_env(env);
 	printf("############ add NTM in env ############\n");
