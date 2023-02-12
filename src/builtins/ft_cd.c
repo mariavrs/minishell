@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/02 13:33:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/12 19:58:53 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,22 @@
 
 int	ft_cd(char **input, char ***env)
 {
-	char	tmp_dir[1000];
+	char	current_dir[PATH_MAX];
 	char	*home;
 
-	getcwd(tmp_dir, 1000);
-	env_edit(env, "OLDPWD", tmp_dir);
+	getcwd(current_dir, PATH_MAX);
 	home = env_get(*env, "HOME");
-	if ((!input || !input[1]) && chdir(home) == 0)
-		return (env_edit(env, "PWD", home), free(home), 0);
+	if (!home && !input[1])
+		return (free(home), write(2, "cd: HOME not set\n", 17), 1);
+	if (!input[1])
+		input[1] = home;
+	env_edit(env, "OLDPWD", current_dir);
 	if (chdir(input[1]) == 0)
 	{
-		getcwd(tmp_dir, 1000);
-		env_edit(env, "PWD", tmp_dir);
+		getcwd(current_dir, PATH_MAX);
+		env_edit(env, "PWD", current_dir);
 		return (free(home), 0);
 	}
-	return (free(home), 1);
+	else
+		return (perror("cd"), free(home), 1);
 }
