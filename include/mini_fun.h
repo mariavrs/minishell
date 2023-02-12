@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/02 15:40:49 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/12 19:52:46 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // Builtins prototypes
 int		ft_echo(char *input[]);
 int		ft_cd(char **input, char ***env);
-int		ft_pwd(char **env);
+int		ft_pwd(void);
 int		ft_export(void);
 int		ft_unset(void);
 int		ft_exit(void);
