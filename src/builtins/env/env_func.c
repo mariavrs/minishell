@@ -44,6 +44,7 @@ char	*env_get(char **env, char *var)
 	int		i;
 
 	i = -1;
+	value = NULL;
 	while (env[++i])
 	{
 		tmp = ft_split(env[i], '=');
