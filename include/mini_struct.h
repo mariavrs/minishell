@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/10 23:10:31 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/12 21:32:24 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # define PIPE_CMD 3
 # define LIST_CMD 4
 
+# define STR_WHSPACE " \t\n\r\v"
+# define STR_REDIRSIGN "<>"
+# define STR_QUOTE "\'\""
 //# define MAXARGC 10
 
 typedef struct s_cmd

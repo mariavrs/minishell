@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 16:18:32 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/01/31 17:13:28 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/13 00:03:20 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	trim_whitespaces(char **line, char **eline)
 	return (0);
 }
 
-int	words_counter(char *line, char *eline, t_spl_cmd *cmd)
+/* int	words_counter(char *line, char *eline, t_spl_cmd *cmd)
 {
 	char	*cursor;
 
@@ -107,7 +107,7 @@ int	words_counter(char *line, char *eline, t_spl_cmd *cmd)
 		}
 	}
 	return (0);
-}
+} */
 
 /* void	words_counter(char *line, char *eline, t_spl_cmd *cmd)
 {
@@ -135,20 +135,37 @@ int	words_counter(char *line, char *eline, t_spl_cmd *cmd)
 	cmd->argc -= cmd->redir_counter;
 } */
 
+int	quo_check(char del, int quo_flag)
+{
+	if (!quo_flag && del == '\'')
+		quo_flag = 1;
+	else if (!quo_flag && del == '\"')
+		quo_flag = 2;
+	else if (quo_flag == 1 && del == '\'')
+		quo_flag = 0;
+	else if (quo_flag == 2 && del == '\"')
+		quo_flag = 0;
+	return (quo_flag);
+}
+
 int	list_delim_locator(char *line, char *eline, char **del)
 {
 	int	block_check;
+	int	quo_flag;
 
 	block_check = 0;
+	quo_flag = 0;
 	*del = eline - 1;
-	while (*del > line && !(block_check == 0
+	while (*del > line && !(!block_check && !quo_flag
 		&& ((**del == '&' && *(*del - 1) == '&')
 			|| (**del == '|' && *(*del - 1) == '|'))))
 	{
-		if (**del == ')')
+		if (**del == ')' && !quo_flag)
 			block_check++;
-		else if (**del == '(')
+		else if (**del == '(' && !quo_flag)
 			block_check--;
+		else
+			quo_flag = quo_check(**del, quo_flag);
 		*del = *del - 1;
 	}
 	if (*del == line)
