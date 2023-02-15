@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/14 13:22:17 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/15 15:21:07 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void	ft_env(void);
 void	ft_exit(void);
 
 // Minishell
-t_cmd	*parse_simple_cmd(char *line, char *eline);
-t_cmd	*parse_pipe(char *line, char *eline);
-t_cmd	*parse_list(char *line, char *eline);
+int	parse_simple_cmd(t_cmd **res, char *line, char *eline);
+int	parse_pipe(t_cmd **res, char *line, char *eline);
+int	parse_list(t_cmd **res, char *line, char *eline);
 
 int		quo_check(char del, int quo_flag);
 int		quo_stx_check(char *line, char *eline);
