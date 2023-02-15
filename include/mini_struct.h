@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/12 21:32:24 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:38:33 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define STR_QUOTE "\'\""
 //# define MAXARGC 10
 
+char	**g_envp[2];
+
 typedef struct s_cmd
 {
 	int		type;
@@ -38,32 +40,13 @@ typedef struct s_redir
 typedef struct s_simple_cmd
 {
 	int		type;
-	int		argc;
 	char	**argv;
-	int		redir_counter;
+	int		argc;
+	int		redirc;
 	int		stdin_cpy;
 	int		stdout_cpy;
 	t_redir	*redir;
 }	t_spl_cmd;
-
-/* typedef struct s_exec_cmd
-{
-	int		type;
-// 	char	*argv[MAXARGC];
-//	char	*eargv[MAXARGC];
-	char	**argv;
-	char	**eargv;
-}	t_exec;
-
-typedef struct s_redir_cmd
-{
-	int		type;
-	t_cmd	*cmd;
-	char	*file;
-	char	*efile;
-	int		mode;
-	int		fd;
-}	t_redir; */
 
 typedef struct s_pipe_cmd
 {

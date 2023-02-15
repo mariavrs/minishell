@@ -6,53 +6,47 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/31 15:22:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:24:17 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-void	ft_exec_tree(t_cmd *cmd, int *exit_status, char **envp)
+void	parse_exec_prep(char *sline, char **envp)
 {
-	if (!cmd)
-		return ;
-	else if (cmd->type == EXEC_CMD)
-		run_spl_cmd((t_spl_cmd *)cmd, exit_status, envp);
-/* 	else if (cmd->type == REDIR_CMD)
-		run_redir((t_redir *)cmd, exit_status, envp); */
-	else if (cmd->type == PIPE_CMD)
-		run_pipe((t_pipe *)cmd, exit_status, envp);
-	else if (cmd->type == LIST_CMD)
-		run_list((t_lol *)cmd, exit_status, envp);
-}
-
-void	exec_prep(char *sline, char **envp)
-{
-	t_cmd		*ret;
+	t_cmd		*cmd;
 	char		*line;
 	char		*eline;
 	static int	exit_status;
 
 	line = sline;
 	eline = line + ft_strlen(line);
-	if (!trim_whitespaces(&line, &eline))
-	{
-		if (!check_whitespace(*sline))
-			add_history(sline);
-		if (!brackets_check(line, eline))
-		{
-			ret = parse_list(line, eline);
-			if (ret)
-				ft_exec_tree(ret, &exit_status, envp);
-			else
-				exit_status = 2;//syntax error
-		}
- 		else
-		{
-			printf("minishell: syntax error: incorrect usage of parentheses\n");
-			exit_status = 2;
-		}
-	}
+	cmd = NULL;
+	if (trim_whitespaces(&line, &eline))
+		return ;
+	if (!check_if_in_str(*sline, STR_WHSPACE))
+		add_history(sline);
+	if (quo_stx_check(line, eline))
+		write(2, "minishell: syntax error: unclosed quotes\n", 41);
+	else if (brackets_check(line, eline))
+		write(2, "minishell: syntax error: unclosed parentheses\n", 46);
+ 	else
+		cmd = parse_list(line, eline);
+	if (cmd)
+		ft_exec_tree(cmd, &exit_status, envp);
+	else
+		exit_status = 2;//syntax error
+}
+
+int	ft_malloc_envp(char **envp)
+{
+	g_envp[0] = envp;
+	g_envp[1] = NULL;
+	g_envp[1] = malloc(sizeof(char *));
+	if (!g_envp[1])
+		return (1);
+	g_envp[1][0] = NULL;
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -61,9 +55,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-/* 	int i = -1;
-	while(envp[++i])
-		printf("%s\n", envp[i]); */
+	if (ft_malloc_envp)
+		return (write(2, "malloc error\n", 13), 1);
 	while (1)
 	{
 		sline = NULL;
@@ -71,7 +64,7 @@ int	main(int argc, char **argv, char **envp)
 		if (sline)
 		{
 			if (ft_strlen(sline) != 0)
-				exec_prep(sline, envp);
+				parse_exec_prep(sline, envp);
 			free(sline);
 		}
 	}

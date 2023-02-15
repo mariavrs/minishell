@@ -1,13 +1,5 @@
 #include "../include/mini_fun.h"
 
-int	check_if_in_str(char c, char *str)
-{
-	while (*str)
-		if (c == *str++)
-			return (1);
-	return (0);
-}
-
 int	redir_info(char *line, char *mode)
 {
 	int		count;
@@ -106,7 +98,7 @@ int	ft_malloc_spl_cmd(t_spl_cmd *cmd, int argc, int redirc)
 		return (free(cmd->argv), 1);//print error
 	cmd->argv[argc] = NULL;
 	cmd->argc = argc;
-	cmd->redir_counter = redirc;
+	cmd->redirc = redirc;
 	return (0);
 }
 

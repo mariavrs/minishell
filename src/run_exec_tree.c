@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:26:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/10 23:31:17 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:10:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	run_spl_cmd(t_spl_cmd *cmd, int *exit_status, char **envp)
 
 	i = -1;
 	*exit_status = 0;
-	while (++i < cmd->redir_counter)
+	while (++i < cmd->redirc)
 	{
 		if (cmd->redir[i].mode == '>' || cmd->redir[i].mode == '+')
 			redir_out(cmd, i);
@@ -71,4 +71,16 @@ void	run_list(t_lol *cmd, int *exit_status, char **envp)
 		ft_exec_tree(cmd->right, exit_status, envp);
 	else if (!(*exit_status) && cmd->mode == '&')
 		ft_exec_tree(cmd->right, exit_status, envp);
+}
+
+void	ft_exec_tree(t_cmd *cmd, int *exit_status, char **envp)
+{
+	if (!cmd)
+		return ;
+	else if (cmd->type == EXEC_CMD)
+		run_spl_cmd((t_spl_cmd *)cmd, exit_status, envp);
+	else if (cmd->type == PIPE_CMD)
+		run_pipe((t_pipe *)cmd, exit_status, envp);
+	else if (cmd->type == LIST_CMD)
+		run_list((t_lol *)cmd, exit_status, envp);
 }
