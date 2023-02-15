@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/15 19:25:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/15 19:27:45 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 # define STR_REDIRSIGN "<>"
 # define STR_QUOTE "\'\""
 //# define MAXARGC 10
-
-char	**g_envp[2];
 
 typedef struct s_cmd
 {
