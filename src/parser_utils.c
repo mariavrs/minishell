@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 16:18:32 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/15 19:07:19 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/15 19:17:52 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ int	trim_brackets(char **line, char **eline)
 
 int	trim_whitespaces(char **line, char **eline)
 {
-	while (*line < *eline && check_if_in_str(**line, STR_WHSPACE))
+	while (*line < *eline && check_whitespace(**line))
 		*line = *line + 1;
-	while (*eline > *line && check_if_in_str(*(*eline - 1), STR_WHSPACE))
+	while (*eline > *line && check_whitespace(*(*eline - 1)))
 		*eline = *eline - 1;
 	if (*line == *eline)
 		return (1);

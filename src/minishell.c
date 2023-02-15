@@ -6,13 +6,11 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/15 19:07:43 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/15 19:17:02 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
-
-char	**g_envp[2];
 
 void	parse_exec_prep(char *sline, char **envp)
 {
@@ -44,7 +42,7 @@ int	ft_malloc_envp(char **envp)
 {
 	g_envp[0] = envp;
 	g_envp[1] = NULL;
-	g_envp[1] = malloc(sizeof(char **));
+	g_envp[1] = malloc(sizeof(char *));
 	if (!g_envp[1])
 		return (1);
 	g_envp[1][0] = NULL;
@@ -57,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	if (ft_malloc_envp(envp))
+	if (ft_malloc_envp)
 		return (write(2, "malloc error\n", 13), 1);
 	while (1)
 	{
