@@ -129,18 +129,23 @@ int	build_the_struct(t_spl_cmd *cmd, char *line, int argc, int redirc)
 	return (fill_the_struct(cmd, line, argc, redirc, symb_count, mode, env_flag));
 }
 
-int	parse_simple_cmd(t_cmd **res, char *line, char *eline)
+t_cmd	*parse_simple_cmd(char *line, char *eline)
 {
-	t_spl_cmd	cmd;
+	t_spl_cmd	*cmd;
 
-	*res = NULL;
-	trim_whitespaces(&line, &eline);
-	cmd.type = EXEC_CMD;
+	cmd = NULL;
+	if (trim_whitespaces(&line, &eline))
+		return (NULL);
+	cmd = malloc(sizeof(t_spl_cmd));
+	if (!cmd)
+		return (NULL); //manage error etc
+	cmd->type = EXEC_CMD;
 	*eline = '\0';
-	if (build_the_struct(&cmd, line, 0, 0))
-		return (1);
-	cmd.stdin_cpy = 0;
-	cmd.stdout_cpy = 0;
-	*res = (t_cmd *)(&cmd);
-	return (0);
+/* 	if (words_counter)
+		return (NULL); //print error */
+	if (build_the_struct(cmd, line, 0, 0))
+		return (free(cmd), NULL);
+	cmd->stdin_cpy = 0;
+	cmd->stdout_cpy = 0;
+	return ((t_cmd *)cmd);
 }
