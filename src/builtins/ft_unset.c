@@ -6,14 +6,21 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/26 20:25:18 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/15 16:59:23 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-int	ft_unset(void)
+int	ft_unset(char ***env, char **inputs)
 {
-	printf("Hey! Im Unset, nice to meet you ! (>.o)\n");
+	int	i;
+
+	i = 0;
+	while (inputs[++i])
+	{
+		if (!(ft_strlen(inputs[i]) == 1 && inputs[i][0] == '_'))
+			env_del(env, inputs[i]);
+	}
 	return (0);
 }
