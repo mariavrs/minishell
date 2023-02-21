@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/13 17:36:25 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/16 15:05:13 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_cmd	*parse_list(char *line, char *eline)
 	char	*del;
 
 	cmd = NULL;
-	if (trim_whitespaces(&line, &eline) || trim_brackets(&line, &eline))
+	if (trim_whitespaces(&line, &eline) || trim_brackets(&line, &eline))//this should be modified
 		return (printf("minishell: syntax error: incorrect usage of parentheses\n"), NULL);
 	if(list_delim_locator(line, eline, &del) == 1)
 		return (parse_pipe(line, eline));
