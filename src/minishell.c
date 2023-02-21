@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/15 19:27:37 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/21 20:32:53 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,20 @@ char	**g_envp[2];
 
 void	parse_exec_prep(char *sline, char **envp)
 {
-	t_cmd		*cmd;
 	char		*line;
 	char		*eline;
 	static int	exit_status;
 
 	line = sline;
 	eline = line + ft_strlen(line);
-	cmd = NULL;
 	if (trim_whitespaces(&line, &eline))
 		return ;
-	if (!check_if_in_str(*sline, STR_WHSPACE))
+	if (!is_in_str(*sline, STR_WHSPACE))
 		add_history(sline);
-	if (quo_stx_check(line, eline))
-		write(2, "minishell: syntax error: unclosed quotes\n", 41);
-	else if (brackets_check(line, eline))
-		write(2, "minishell: syntax error: unclosed parentheses\n", 46);
- 	else
-		cmd = parse_list(line, eline);
-	if (cmd)
-		ft_exec_tree(cmd, &exit_status, envp);
+	if (!syntax_check_prep(line, eline))
+		ft_exec_tree(parse_list(line, eline), &exit_status, envp);
 	else
-		exit_status = 2;//syntax error
+		exit_status = 2;
 }
 
 int	ft_malloc_envp(char **envp)

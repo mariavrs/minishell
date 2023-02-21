@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/15 19:27:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/21 20:17:19 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@
 # define LIST_CMD 4
 
 # define STR_WHSPACE " \t\n\r\v"
-# define STR_REDIRSIGN "<>"
+# define STR_REDIR "<>"
 # define STR_QUOTE "\'\""
+# define STR_BRACKETS "()"
+# define STR_LOL "|&"
 //# define MAXARGC 10
 
 typedef struct s_cmd
@@ -60,5 +62,12 @@ typedef struct s_logical_list_cmd
 	t_cmd	*left;
 	t_cmd	*right;
 }	t_lol;
+
+typedef struct s_stx
+{
+	char	special_ch;
+	int		quo_flag;
+	int		brackets_flag;
+}	t_stx;
 
 #endif

@@ -13,10 +13,8 @@ int	redir_info(char *line, char *mode)
 		*mode = '+';
 	if (*line == *(line + 1))
 		count++;
-	while (*(line + count) && check_if_in_str(*(line + count), STR_WHSPACE))
+	while (*(line + count) && is_in_str(*(line + count), STR_WHSPACE))
 		count++;
-	if (check_if_in_str(*(line + count), STR_REDIRSIGN))
-		return (printf("minishell: syntax error: '%c'\n", *(line + count)), *mode = '\0', 0); //manage error
 	return (count);
 }
 
@@ -40,8 +38,8 @@ int	wrd_collect(char *line, int *env_flag)
 	}
 	else
 	{
-		while (*(line + count) && !check_if_in_str(*(line + count), STR_WHSPACE)
-			&& !check_if_in_str(*(line + count), STR_QUOTE))
+		while (*(line + count) && !is_in_str(*(line + count), STR_WHSPACE)
+			&& !is_in_str(*(line + count), STR_QUOTE))
 		{
 			if (*(line + count) == '$')
 				*env_flag = 1;
@@ -110,22 +108,20 @@ int	build_the_struct(t_spl_cmd *cmd, char *line, int argc, int redirc)
 
 	symb_count = 0;
 	mode = '\0';
-	while (line && check_if_in_str(*line, STR_WHSPACE))
+	while (line && is_in_str(*line, STR_WHSPACE))
 		line++;
 	if (!(*line))
 		return (ft_malloc_spl_cmd(cmd, argc, redirc));
-	if (check_if_in_str(*line, STR_REDIRSIGN))
+	if (is_in_str(*line, STR_REDIR))
 	{
 		line += redir_info(line, &mode);
-		if (!mode)
-			return (1);//manage error
 		redirc++;
 	}
 	else
 		argc++;
 	symb_count = wrd_collect(line, &env_flag);
 	if (build_the_struct(cmd, line + symb_count, argc, redirc))
-		return (1);//manage error
+		return (1);
 	return (fill_the_struct(cmd, line, argc, redirc, symb_count, mode, env_flag));
 }
 
@@ -141,8 +137,6 @@ t_cmd	*parse_simple_cmd(char *line, char *eline)
 		return (NULL); //manage error etc
 	cmd->type = EXEC_CMD;
 	*eline = '\0';
-/* 	if (words_counter)
-		return (NULL); //print error */
 	if (build_the_struct(cmd, line, 0, 0))
 		return (free(cmd), NULL);
 	cmd->stdin_cpy = 0;
