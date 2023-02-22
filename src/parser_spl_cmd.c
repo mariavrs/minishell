@@ -39,7 +39,7 @@ int	wrd_collect(char *line, int *env_flag)
 	else
 	{
 		while (*(line + count) && !is_in_str(*(line + count), STR_WHSPACE)
-			&& !is_in_str(*(line + count), STR_QUOTE))
+			&& !is_in_str(*(line + count), STR_QUOTE) && !is_in_str(*(line + count), STR_REDIR))
 		{
 			if (*(line + count) == '$')
 				*env_flag = 1;
