@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:26:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/14 13:10:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 03:09:49 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,16 @@ void	run_spl_cmd(t_spl_cmd *cmd, int *exit_status, char **envp)
 
 	i = -1;
 	*exit_status = 0;
-	while (++i < cmd->redirc)
+	while (++i < cmd->redirc && *exit_status == 0)
 	{
 		if (cmd->redir[i].mode == '>' || cmd->redir[i].mode == '+')
-			redir_out(cmd, i);
+			*exit_status = redir_out(cmd, i);
 		else
-			redir_in(cmd, i);
+			*exit_status = redir_in(cmd, i);
 		close(cmd->redir[i].fd);
 	}
-	run_exec(cmd, exit_status, envp);
+	if (*exit_status == 0)
+		run_exec(cmd, exit_status, envp);
 	redir_clean(cmd);
 }
 
