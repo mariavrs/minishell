@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/21 20:17:19 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 02:35:05 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 # define MINI_STRUCT_H
 
 # define EXEC_CMD 1
-//# define REDIR_CMD 2
-# define PIPE_CMD 3
-# define LIST_CMD 4
+# define PIPE_CMD 2
+# define LIST_CMD 3
 
 # define STR_WHSPACE " \t\n\r\v"
 # define STR_REDIR "<>"
 # define STR_QUOTE "\'\""
 # define STR_BRACKETS "()"
 # define STR_LOL "|&"
-//# define MAXARGC 10
+
+# include <sys/stat.h>//duplicate from mini_fun.h, reotganization of .h t be done
 
 typedef struct s_cmd
 {
@@ -62,6 +62,14 @@ typedef struct s_logical_list_cmd
 	t_cmd	*left;
 	t_cmd	*right;
 }	t_lol;
+
+typedef struct s_heredoc
+{
+	char		*line;
+	char		*hdoc;
+	char		*hdoc_id;
+	struct stat	statbuf;
+}	t_heredoc;
 
 typedef struct s_stx
 {

@@ -6,36 +6,17 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/11 01:27:34 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 01:22:09 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-char	*ft_strjoin_custom(char *s1, char *s2)
-{
-	char	*str;
-	int		i;
-	int		j;
-
-	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!str)
-		return (NULL);
-	i = -1;
-	while (s1[++i])
-		str[i] = s1[i];
-	j = -1;
-	while (s2[++j])
-		str[i + j] = s2[j];
-	str[i + j] = '\0';
-	return (str);
-}
-
 void	run_exec_bin(char **argv, int *exit_status, char **envp)
 {
 	char	*full_fun_name;
 
-	full_fun_name = ft_strjoin_custom("/usr/bin/", *argv);
+	full_fun_name = ft_strjoin("/usr/bin/", *argv);
 	if (fork() == 0)
 		execve(full_fun_name, argv, envp);
 	else

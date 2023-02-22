@@ -6,12 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/21 20:25:01 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 01:22:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_FUN_H
 # define MINI_FUN_H
+# define _GNU_SOURCE
 # include "../lib/libft/libft.h"
 # include "mini_struct.h"
 # include <stdio.h>
@@ -19,6 +20,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <dirent.h>
 # include <fcntl.h>
 
