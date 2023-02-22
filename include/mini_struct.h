@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/22 02:35:05 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 16:56:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,6 @@
 # define STR_LOL "|&"
 
 # include <sys/stat.h>//duplicate from mini_fun.h, reotganization of .h t be done
-
-typedef struct s_cmd
-{
-	int		type;
-}	t_cmd;
 
 typedef struct s_redir
 {
@@ -48,21 +43,6 @@ typedef struct s_simple_cmd
 	t_redir	*redir;
 }	t_spl_cmd;
 
-typedef struct s_pipe_cmd
-{
-	int		type;
-	t_cmd	*left;
-	t_cmd	*right;
-}	t_pipe;
-
-typedef struct s_logical_list_cmd
-{
-	int		type;
-	char	mode;
-	t_cmd	*left;
-	t_cmd	*right;
-}	t_lol;
-
 typedef struct s_heredoc
 {
 	char		*line;
@@ -77,5 +57,13 @@ typedef struct s_stx
 	int		quo_flag;
 	int		brackets_flag;
 }	t_stx;
+
+typedef struct s_msh
+{
+	char	**envp;
+	char	**envp_lcl;
+	char	*sline;
+	int		exit_status;
+}	t_msh;
 
 #endif

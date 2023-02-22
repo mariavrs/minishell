@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 18:09:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/21 20:31:53 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 17:17:01 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int	syntax_check(t_stx stx, char *line, char *eline)
 			stx.special_ch = 'a';
 		}
 	}
-	if (stx.quo_flag || stx.brackets_flag > 0 || stx.special_ch != 'a')
+	if (stx.quo_flag || stx.brackets_flag > 0
+		|| (stx.special_ch != 'a' && stx.special_ch != ')'))
 		return (puterror_unexpected_token("\n"), 1);
 	return (0);
 }

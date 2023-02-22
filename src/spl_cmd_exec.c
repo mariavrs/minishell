@@ -6,25 +6,25 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/22 01:22:09 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 17:34:36 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-void	run_exec_bin(char **argv, int *exit_status, char **envp)
+void	run_exec_bin(char **argv, t_msh *msh)
 {
 	char	*full_fun_name;
 
 	full_fun_name = ft_strjoin("/usr/bin/", *argv);
 	if (fork() == 0)
-		execve(full_fun_name, argv, envp);
+		execve(full_fun_name, argv, msh->envp);
 	else
-		wait(exit_status);
+		wait(&msh->exit_status);
 	free(full_fun_name);
 }
 
-int	run_search_bin(char **argv, int *exit_status, char **envp)
+int	run_search_bin(char **argv, t_msh *msh)
 {
 	DIR	*bin_lib;
 	struct dirent *bin_lib_obj;
@@ -38,13 +38,13 @@ int	run_search_bin(char **argv, int *exit_status, char **envp)
 		bin_lib_obj = readdir(bin_lib);
 	closedir(bin_lib);
 	if (bin_lib_obj) // I'm not sure if we have to check the type
-		run_exec_bin(argv, exit_status, envp);
+		run_exec_bin(argv, msh);
 	else
 		return (1);
 	return (0);
 }
 
-void	run_exec(t_spl_cmd *cmd, int *exit_status, char **envp)
+void	run_exec(t_spl_cmd *cmd, t_msh *msh)
 {
 	if (!ft_strncmp(cmd->argv[0], "cd", 3))
 		ft_cd();
@@ -60,9 +60,30 @@ void	run_exec(t_spl_cmd *cmd, int *exit_status, char **envp)
 		ft_pwd();
 	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
 		ft_unset();
-	else if (run_search_bin(cmd->argv, exit_status, envp))
+	else if (run_search_bin(cmd->argv, msh))
 	{
-		printf("minishell: %s: command not found :(\n", cmd->argv[0]);//modify with strerror or perror
-		*exit_status = 127;
+		printf("minishell: %s: command not found\n", cmd->argv[0]);//modify with strerror or perror
+		msh->exit_status = 127;
 	}
+}
+
+void	run_spl_cmd(t_spl_cmd *cmd, t_msh *msh)
+{
+	int	i;
+
+	i = -1;
+	msh->exit_status = 0;
+	while (++i < cmd->redirc && msh->exit_status == 0)
+	{
+		if (cmd->redir[i].mode == '>' || cmd->redir[i].mode == '+')
+			msh->exit_status = redir_out(cmd, i);
+		else
+			msh->exit_status = redir_in(cmd, i);
+		close(cmd->redir[i].fd);
+	}
+	ft_free_redir_info(cmd);
+	if (msh->exit_status == 0)
+		run_exec(cmd, msh);
+	ft_free_argv(cmd);
+	redir_clean(cmd);
 }

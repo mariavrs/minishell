@@ -6,7 +6,7 @@
 #    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/02/21 18:11:04 by mvorslov         ###   ########.fr        #
+#    Updated: 2023/02/22 17:39:23 by mvorslov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,9 @@ OBJ_DIR = obj
 DEPS_DIR = include
 BUILT_DIR = builtins/
 
-SRC_LIST = minishell.c parser.c parser_utils.c run_exec_tree.c \
-	spl_cmd_exec.c spl_cmd_redir.c parser_spl_cmd.c syntax_check.c \
+SRC_LIST = minishell.c syntax_check.c parse_and_run_pipe_list.c \
+	parser_utils.c parse_spl_cmd.c parser_utils_spl_cmd.c spl_cmd_exec.c \
+	spl_cmd_redir.c spl_cmd_malloc_free.c \
 	$(BUILT_DIR)ft_echo.c $(BUILT_DIR)ft_cd.c $(BUILT_DIR)ft_pwd.c $(BUILT_DIR)ft_export.c \
 	$(BUILT_DIR)ft_unset.c $(BUILT_DIR)ft_env.c $(BUILT_DIR)ft_exit.c
 DEPS_LIST = mini_fun.h mini_struct.h

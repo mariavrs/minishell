@@ -1,24 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parse_and_run_pipe_list.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/21 18:10:14 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 16:56:04 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-t_cmd	*parse_pipe(char *line, char *eline)
+void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 {
-	t_pipe	*cmd;
+	int		fd[2];
+	pid_t	id[2];
+
+	pipe(fd);
+	//if (pipe(fd) == -1)
+		//stop everything, pipe didn't work
+	id[0] = fork();
+	if (id[0] == 0)
+	{
+		dup2(fd[1], STDOUT_FILENO);
+//		close(1);
+		close(fd[0]);
+		close(fd[1]);
+		parse_pipe(line, del, msh);
+		exit(msh->exit_status);
+	}
+	id[1] = fork();
+	if (id[1] == 0)
+	{
+		dup2(fd[0], STDIN_FILENO);
+//		close(0);
+		close(fd[0]);
+		close(fd[1]);
+		parse_pipe(del + 1, eline, msh);
+		exit(msh->exit_status);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(id[0], &msh->exit_status, 0); //modify the option later
+	waitpid(id[1], &msh->exit_status, 0); //modify the option later
+}
+
+void	parse_pipe(char *line, char *eline, t_msh *msh)
+{
 	char	*del;
 	int		quo_flag;
 
-	cmd = NULL;
 	trim_whitespaces(&line, &eline);
 	del = eline - 1;
 	quo_flag = 0;
@@ -28,21 +60,8 @@ t_cmd	*parse_pipe(char *line, char *eline)
 		del--;
 	}
 	if (del == line)
-		return (parse_simple_cmd(line, eline));
-	cmd = malloc(sizeof(t_pipe));
-	if (!cmd)
-		printf("malloc error\n"); //modify after
-	cmd->type = PIPE_CMD;
-	cmd->left = parse_pipe(line, del);
-	if (cmd->left)
-		cmd->right = parse_pipe(del + 1, eline);
-	if (!cmd->right)
-	{
-		if (cmd->left)
-			free(cmd->left);
-		free(cmd);
-	}
-	return ((t_cmd *)cmd);
+		return (parse_simple_cmd(line, eline, msh));
+	run_pipe(line, eline, del, msh);
 }
 
 int	list_delim_locator(char *line, char *eline, char **del)
@@ -71,29 +90,16 @@ int	list_delim_locator(char *line, char *eline, char **del)
 	return (0);
 }
 
-t_cmd	*parse_list(char *line, char *eline)
+void	parse_list(char *line, char *eline, t_msh *msh)
 {
-	t_lol	*cmd;
 	char	*del;
 
-	cmd = NULL;
 	trim_whitespaces(&line, &eline);
 	trim_brackets(&line, &eline);
 	if(list_delim_locator(line, eline, &del) == 1)
-		return (parse_pipe(line, eline));
-	cmd = malloc(sizeof(t_lol));
-	if (!cmd)
-		printf("malloc error\n"); //modify after
-	cmd->type = LIST_CMD;
-	cmd->mode = *del;
-	cmd->left = parse_list(line, del);
-	if (cmd->left)
-		cmd->right = parse_list(del + 2, eline);
-	if (!cmd->right)
-	{
-		if (cmd->left)
-			free(cmd->left);
-		free(cmd);
-	}
-	return ((t_cmd *)cmd);
+		return (parse_pipe(line, eline, msh));
+	parse_list(line, del, msh);
+	if ((msh->exit_status == 0 && *del == '&')
+		|| (msh->exit_status != 0 && *del == '|'))
+		parse_list(del + 2, eline, msh);
 }

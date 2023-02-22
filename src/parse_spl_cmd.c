@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_spl_cmd.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
+/*   Updated: 2023/02/22 16:49:48 by mvorslov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/mini_fun.h"
 
 int	redir_info(char *line, char *mode)
@@ -84,22 +96,6 @@ int	fill_the_struct(t_spl_cmd *cmd, char *line, int argc, int redirc, int symb_c
 	return (0);
 }
 
-int	ft_malloc_spl_cmd(t_spl_cmd *cmd, int argc, int redirc)
-{
-	cmd->argv = NULL;
-	cmd->redir = NULL;
-	cmd->argv = malloc(sizeof(char *) * (argc + 1));
-	if (!cmd->argv)
-		return (1);
-	cmd->redir = malloc(sizeof(t_redir) * redirc);
-	if (!cmd->redir)
-		return (free(cmd->argv), 1);//print error
-	cmd->argv[argc] = NULL;
-	cmd->argc = argc;
-	cmd->redirc = redirc;
-	return (0);
-}
-
 int	build_the_struct(t_spl_cmd *cmd, char *line, int argc, int redirc)
 {
 	int		symb_count;
@@ -125,21 +121,15 @@ int	build_the_struct(t_spl_cmd *cmd, char *line, int argc, int redirc)
 	return (fill_the_struct(cmd, line, argc, redirc, symb_count, mode, env_flag));
 }
 
-t_cmd	*parse_simple_cmd(char *line, char *eline)
+void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 {
-	t_spl_cmd	*cmd;
+	t_spl_cmd	cmd;
 
-	cmd = NULL;
-	if (trim_whitespaces(&line, &eline))
-		return (NULL);
-	cmd = malloc(sizeof(t_spl_cmd));
-	if (!cmd)
-		return (NULL); //manage error etc
-	cmd->type = EXEC_CMD;
+	trim_whitespaces(&line, &eline);
 	*eline = '\0';
-	if (build_the_struct(cmd, line, 0, 0))
-		return (free(cmd), NULL);
-	cmd->stdin_cpy = 0;
-	cmd->stdout_cpy = 0;
-	return ((t_cmd *)cmd);
+	if (build_the_struct(&cmd, line, 0, 0))
+		return ;
+	cmd.stdin_cpy = 0;
+	cmd.stdout_cpy = 0;
+	run_spl_cmd(&cmd, msh);
 }
