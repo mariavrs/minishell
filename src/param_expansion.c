@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 03:14:58 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 13:33:09 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,9 @@ char	*param_expansion(char *line, t_msh *msh)
 
 	i = 0;
 	str = NULL;
-	str = malloc(sizeof(char) * (final_line_len(line, msh) + 1));////
+	str = malloc(sizeof(char) * (final_line_len(line, msh) + 1));
+	if (!str)
+		return (write(2, "minishell: malloc error\n", 24), NULL);
 	quo_flag = quo_check(*line, 0);
 	while (*line)
 	{

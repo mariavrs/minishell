@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/22 03:09:43 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 13:35:00 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,18 @@ char	*ft_itoa_local(unsigned int n)
 	return (str);
 }
 
-int	redir_heredoc(t_spl_cmd *cmd, int i)
+void	write_to_heredoc(t_spl_cmd *cmd, int i, t_heredoc *hd, t_msh *msh)
+{
+	hd->line_out = NULL;
+	hd->line_out = param_expansion(hd->line_in, msh);
+	ft_putstr_fd(hd->line_out, cmd->redir[i].fd);
+	write(cmd->redir[i].fd, "\n", 1);
+	if (hd->line_out)
+		free(hd->line_out);
+	free(hd->line_in);
+}
+
+int	redir_heredoc(t_spl_cmd *cmd, int i, t_msh *msh)
 {
 	t_heredoc	hd;
 
@@ -54,14 +65,13 @@ int	redir_heredoc(t_spl_cmd *cmd, int i)
 	cmd->redir[i].fd = open(hd.hdoc, O_CREAT | O_WRONLY | O_APPEND | O_TRUNC, 0444);
 	if (cmd->redir[i].fd < 0)
 		return (perror("minishell: open"), 1);//check exit status for open failure
-	hd.line = NULL;
-	hd.line = readline("> ");
-	while (ft_strncmp(hd.line, cmd->redir[i].file,
+	hd.line_in = NULL;
+	hd.line_in = readline("> ");
+	while (hd.line_in && ft_strncmp(hd.line_in, cmd->redir[i].file,
 		ft_strlen(cmd->redir[i].file) + 1))
 	{
-		ft_putstr_fd(hd.line, cmd->redir[i].fd);
-		write(cmd->redir[i].fd, "\n", 1);
-		hd.line = readline("> ");
+		write_to_heredoc(cmd, i, &hd, msh);
+		hd.line_in = readline("> ");
 	}
 	close(cmd->redir[i].fd);
 	cmd->redir[i].fd = open(hd.hdoc, O_RDONLY);
@@ -72,7 +82,7 @@ int	redir_heredoc(t_spl_cmd *cmd, int i)
 	return (0);
 }
 
-int	redir_in(t_spl_cmd *cmd, int i)
+int	redir_in(t_spl_cmd *cmd, int i, t_msh *msh)
 {
 	if (cmd->redir[i].mode == '<')
 	{
@@ -82,7 +92,7 @@ int	redir_in(t_spl_cmd *cmd, int i)
 	}
 	else if (cmd->redir[i].mode == '-')
 	{
-		if (redir_heredoc(cmd, i))
+		if (redir_heredoc(cmd, i, msh))
 			return (1);
 	}
 	if (!cmd->stdin_cpy)

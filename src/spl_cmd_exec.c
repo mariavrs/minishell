@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/22 18:16:21 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 13:35:56 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	run_spl_cmd(t_spl_cmd *cmd, t_msh *msh)
 		if (cmd->redir[i].mode == '>' || cmd->redir[i].mode == '+')
 			msh->exit_status = redir_out(cmd, i);
 		else
-			msh->exit_status = redir_in(cmd, i);
+			msh->exit_status = redir_in(cmd, i, msh);
 		close(cmd->redir[i].fd);
 	}
 	ft_free_redir_info(cmd);
