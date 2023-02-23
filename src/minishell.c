@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/15 16:51:28 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:17:32 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	ft_parent_env_cpy(&env, envp);
-/* 	printf("############ Calling of echo ############\n");
+	printf("############ Calling of echo ############\n");
 	ft_echo(argv);
 	printf("############ Calling of pwd ############\n");
 	ft_pwd();
@@ -38,12 +38,12 @@ int	main(int argc, char *argv[], char *envp[])
 	ft_env(env);
 	printf("############ del TERM from env ############\n");
 	env_del(&env, "TERM");
-	ft_env(env); */
+	ft_env(env);
 	printf("############ Calling of export ############\n");
 	ft_unset(&env, argv);
-	ft_env(env);/* 
+	ft_env(env);
 	printf("############ Calling of unset ############\n");
 	ft_unset(&env, argv);
-	ft_env(env); */
+	ft_env(env);
 	return (free_table(env), 0);
 }
