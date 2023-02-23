@@ -6,22 +6,22 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 13:33:09 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 14:22:54 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int		var_value(char *line, char *str, int *i, t_msh *msh)
+int	var_value(char *line, char *str, int *i, t_msh *msh)
 {
 	int	pos;
 	int	ln;
 
 	ln = 0;
 	pos = 0;
-	while (*(line + ln) && *(line + ln)!= '$' && !is_in_str(*(line + ln), STR_QUOTE)
+	while (*(line + ln) && *(line + ln) != '$' && !is_in_str(*(line + ln), STR_QUOTE)
 		&& !is_in_str(*(line + ln), STR_WHSPACE)
-			&& !is_in_str(*(line + ln), STR_REDIR))
+		&& !is_in_str(*(line + ln), STR_REDIR))
 		ln++;
 	while (msh->envp_lcl[pos] && (ft_strncmp(msh->envp_lcl[pos], line, ln) || msh->envp_lcl[pos][ln] != '='))
 		pos++;
@@ -29,9 +29,7 @@ int		var_value(char *line, char *str, int *i, t_msh *msh)
 	{
 		pos = 0;
 		while (msh->envp[pos] && (ft_strncmp(msh->envp[pos], line, ln) || msh->envp[pos][ln] != '='))
-		{
 			pos++;
-		}
 		if (msh->envp[pos])
 		{
 			ft_strlcpy(&str[*i], &msh->envp[pos][ln + 1], ft_strlen(&msh->envp[pos][ln]));
@@ -46,16 +44,16 @@ int		var_value(char *line, char *str, int *i, t_msh *msh)
 	return (ln);
 }
 
-int		var_len(char *line, int *len, t_msh *msh)
+int	var_len(char *line, int *len, t_msh *msh)
 {
 	int	pos;
 	int	ln;
 
 	ln = 0;
 	pos = 0;
-	while (*(line + ln) && *(line + ln)!= '$' && !is_in_str(*(line + ln), STR_QUOTE)
+	while (*(line + ln) && *(line + ln) != '$' && !is_in_str(*(line + ln), STR_QUOTE)
 		&& !is_in_str(*(line + ln), STR_WHSPACE)
-			&& !is_in_str(*(line + ln), STR_REDIR))
+		&& !is_in_str(*(line + ln), STR_REDIR))
 		ln++;
 	*len -= ln;
 	while (msh->envp_lcl[pos] && (ft_strncmp(msh->envp_lcl[pos], line, ln) || msh->envp_lcl[pos][ln] != '='))
@@ -73,7 +71,7 @@ int		var_len(char *line, int *len, t_msh *msh)
 	return (ln);
 }
 
-int		final_line_len(char *line, t_msh *msh)
+int	final_line_len(char *line, t_msh *msh)
 {
 	int	len;
 	int	quo_flag;
@@ -84,15 +82,31 @@ int		final_line_len(char *line, t_msh *msh)
 	{
 		while (*line && !(*line == '$' && quo_flag != 1))
 			quo_flag = quo_check(*(line++), quo_flag);
-		if (*line)
+		if (*line && *(line + 1) == '?')
+		{
+			len += 3;
+			line += 2;
+		}
+		else if (*line)
 		{
 			line++;
 			len--;
 			line += var_len(line, &len, msh);
-			quo_flag = quo_check(*line, quo_flag);
 		}
 	}
 	return (len);
+}
+
+int	put_exit_status(char *str, t_msh *msh)
+{
+	char	*num;
+	int		ln;
+
+	num = ft_itoa(msh->exit_status);
+	ln = ft_strlen(num);
+	ft_strlcpy(str, num, ln + 1);
+	free(num);
+	return (ln);
 }
 
 char	*param_expansion(char *line, t_msh *msh)
@@ -114,13 +128,13 @@ char	*param_expansion(char *line, t_msh *msh)
 			str[i++] = *line;
 			quo_flag = quo_check(*(line++), quo_flag);
 		}
-		if (*line)
+		if (*line && *(line + 1) == '?')
 		{
-			line++;
-			line += var_value(line, str, &i, msh);
-			quo_flag = quo_check(*line, quo_flag);
+			i += put_exit_status(&str[i], msh);
+			line += 2;
 		}
+		else if (*line)
+			line += var_value(line + 1, str, &i, msh) + 1;
 	}
-	str[i] = '\0';
-	return (str);
+	return (str[i] = '\0', str);
 }
