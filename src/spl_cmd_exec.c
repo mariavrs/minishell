@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/22 17:34:36 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 18:16:21 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	run_exec(t_spl_cmd *cmd, t_msh *msh)
 {
 	if (!ft_strncmp(cmd->argv[0], "cd", 3))
 		ft_cd();
-	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
+/* 	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
 		ft_echo();
 	else if (!ft_strncmp(cmd->argv[0], "env", 4))
 		ft_env();
@@ -59,7 +59,7 @@ void	run_exec(t_spl_cmd *cmd, t_msh *msh)
 	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
 		ft_pwd();
 	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
-		ft_unset();
+		ft_unset(); */
 	else if (run_search_bin(cmd->argv, msh))
 	{
 		printf("minishell: %s: command not found\n", cmd->argv[0]);//modify with strerror or perror

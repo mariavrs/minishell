@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/22 16:56:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/22 23:37:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,20 @@ typedef struct s_msh
 	char	*sline;
 	int		exit_status;
 }	t_msh;
+
+typedef struct s_cmd_build
+{
+	int		symb_count;
+	int		env_flag;
+	int		quote;
+	char	mode;
+	char	*line;
+}	t_cmd_bld;
+
+typedef struct s_param_expan
+{
+	char	*str;
+	struct	s_param_expan *next;
+}	t_pexp;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/22 17:38:23 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 01:22:46 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,7 @@ void	redir_clean(t_spl_cmd *cmd);
 int		ft_malloc_spl_cmd(t_spl_cmd *cmd, int argc, int redirc);
 void	ft_free_redir_info(t_spl_cmd *cmd);
 void	ft_free_argv(t_spl_cmd *cmd);
+
+char	*param_expansion(char *line, t_msh *msh);
 
 #endif
