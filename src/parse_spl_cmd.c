@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 01:19:12 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 13:04:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	wrd_collect(char *line, t_cmd_bld *bld)
 	int	quo_flag;
 
 	count = 0;
-	bld->env_flag = 0;
 	quo_flag = quo_check(*line, 0);
 	if (quo_flag)
 	{
@@ -45,8 +44,6 @@ int	wrd_collect(char *line, t_cmd_bld *bld)
 		quo_flag = quo_check(*(line + count), quo_flag);
 		while (*(line + count) && quo_flag)
 		{
-			if (*(line + count) == '$' && quo_flag != 1)
-				bld->env_flag = 1;
 			count++;
 			quo_flag = quo_check(*(line + count), quo_flag);
 		}
@@ -55,40 +52,22 @@ int	wrd_collect(char *line, t_cmd_bld *bld)
 	{
 		while (*(line + count) && !is_in_str(*(line + count), STR_WHSPACE)
 			&& !is_in_str(*(line + count), STR_QUOTE) && !is_in_str(*(line + count), STR_REDIR))
-		{
-			if (*(line + count) == '$')
-				bld->env_flag = 1;
 			count++;
-		}
 	}
 	return (count);
-}
-
-char	*env_join_str(char *line, int symb_count)
-{
-	char	*str;
-
-//	THIS FUN WILL BE DEVELOPED LATER (for now it's just a copy of the general one)
-	str = malloc(sizeof(char) * (symb_count));
-	str[symb_count] = '\0';
-	while (--symb_count >= 0)
-		str[symb_count] = *(line + symb_count);
-	return (str);
 }
 
 int	fill_the_struct(t_spl_cmd *cmd, int argc, int redirc, t_cmd_bld	bld)
 {
 	char	*str;
 
-	if (!bld.env_flag)
-	{
-		str = malloc(sizeof(char) * (bld.symb_count + 1));
-		str[bld.symb_count] = '\0';
-		while (--bld.symb_count >= 0)
-			str[bld.symb_count] = *(bld.line + bld.symb_count);
-	}
-	else
-		str = env_join_str(bld.line, bld.symb_count);
+	str = NULL;
+	str = malloc(sizeof(char) * (bld.symb_count + 1));
+	if (!str)
+		return (1);//malloc error print and manage
+	str[bld.symb_count] = '\0';
+	while (--bld.symb_count >= 0)
+		str[bld.symb_count] = *(bld.line + bld.symb_count);
 	if (bld.mode)
 	{
 		cmd->redir[redirc - 1].file = str;
@@ -134,61 +113,9 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 //	line = first_wrd_check(line, msh);
 	line = param_expansion(line, msh);
 	if (build_the_struct(&cmd, line, 0, 0))
-		return ;
+		return (free(line), ft_free_redir_info(&cmd), ft_free_argv(&cmd));
+	free(line);
 	cmd.stdin_cpy = 0;
 	cmd.stdout_cpy = 0;
 	run_spl_cmd(&cmd, msh);
 }
-
-/* void	replace_with_value(char)
-{
-
-}
-
-void	save_to_local_env(char *var, char *str, t_msh *msh)
-{
-	//check if var already exist
-	//delete if exist
-	//add concat of var+'='+str
-}
-
-char	*get_var_value(char *cursor, t_cmd_bld *bld)
-{
-	char	*str;
-
-	str = NULL;
-	bld->symb_count = 0;
-	bld->quote = 0;
-	bld->symb_count = wrd_collect(cursor, bld);
-	str = malloc(sizeof(char) * (bld->symb_count + 1));////
-	str[bld->symb_count] = '\0';
-	if (bld->quote)
-		cursor++;
-	while (--bld->symb_count >= 0)
-		str[bld->symb_count] = *(cursor + bld->symb_count);
-	return (str);
-}
-
-int	first_wrd_check(char *line, t_msh *msh)
-{
-	char	*cursor;
-	char	*str;
-	t_cmd_bld	bld;
-
-	cursor = line;
-	while (*cursor && !is_in_str(*cursor, STR_QUOTE)
-		&& !is_in_str(*cursor, STR_WHSPACE)
-			&& !is_in_str(*cursor, STR_REDIR))
-	{
-		if (*cursor == '=')
-		{
-			*cursor = '\0';
-			str = get_var_value(++cursor, &bld);
-			save_to_local_env(line, str, msh);
-			return (cursor + ft_strlen(str) + (bld.quote * 2));
-		}
-		cursor++;
-	}
-	return (line);
-}
- */

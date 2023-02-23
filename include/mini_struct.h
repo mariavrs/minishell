@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/22 23:37:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 13:05:54 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 # define STR_BRACKETS "()"
 # define STR_LOL "|&"
 
-# include <sys/stat.h>//duplicate from mini_fun.h, reotganization of .h t be done
+# include <sys/stat.h>
+// ^ duplicate from mini_fun.h, reotganization of .h to be done
 
 typedef struct s_redir
 {
@@ -69,16 +70,9 @@ typedef struct s_msh
 typedef struct s_cmd_build
 {
 	int		symb_count;
-	int		env_flag;
 	int		quote;
 	char	mode;
 	char	*line;
 }	t_cmd_bld;
-
-typedef struct s_param_expan
-{
-	char	*str;
-	struct	s_param_expan *next;
-}	t_pexp;
 
 #endif
