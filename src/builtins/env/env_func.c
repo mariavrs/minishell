@@ -97,8 +97,9 @@ int	env_del(char ***env, char *var)
 
 	k = 0;
 	i = -1;
-	if (!ft_parent_env_cpy(&env_tmp, *env) && env_exist(*env, var))
+	if (env_exist(*env, var))
 		return (1);
+	ft_parent_env_cpy(&env_tmp, *env);
 	free_table(*env);
 	*env = malloc (ft_count_elem(env_tmp) * sizeof(char *));
 	if (!(*env))

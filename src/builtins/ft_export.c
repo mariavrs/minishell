@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/15 16:28:05 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:06:26 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ static void	exp_error(char *var)
 	ft_putstr_fd(": not a valid identifier\n", 2);
 }
 
-int	ft_export(char ***env, char **inputs)
+int	ft_export(t_msh *msh, char **inputs)
 {
 	char	**split;
 	int		i;
 
 	i = 0;
 	if (!inputs[1])
-		return (ft_env(*env), 0);
+		return (ft_env(*msh), 0);
 	while (inputs[++i])
 	{
 		split = NULL;
@@ -64,10 +64,10 @@ int	ft_export(char ***env, char **inputs)
 		{
 			if (!pos_sep(inputs[i]))
 				return (free_table(split), 0);
-			if (!env_exist(*env, split[0]))
-				env_edit(env, split[0], inputs[i] + pos_sep(inputs[i]));
+			if (!env_exist(msh->envp, split[0]))
+				env_edit(&msh->envp, split[0], inputs[i] + pos_sep(inputs[i]));
 			else
-				env_add(env, inputs[i]);
+				env_add(&msh->envp, inputs[i]);
 		}
 		else
 			exp_error(split[0]);

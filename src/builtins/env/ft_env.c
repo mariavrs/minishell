@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/02 13:29:26 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:08:45 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,12 @@ int	ft_parent_env_cpy(char ***env, char **envp)
 	return (0);
 }
 
-int	ft_env(char **env)
+int	ft_env(t_msh msh)
 {
-	while (*env)
-		printf("%s\n", *env++);
+	int	i;
+
+	i = -1;
+	while (msh.envp[++i])
+		printf("%s\n", msh.envp[i]);
 	return (0);
 }

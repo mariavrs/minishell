@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/15 17:00:21 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:32:12 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 int		ft_echo(char *input[]);
 int		ft_cd(char **input, char ***env);
 int		ft_pwd(void);
-int		ft_export(char ***env, char **inputs);
-int		ft_unset(char ***env, char **inputs);
+int		ft_export(t_msh *msh, char **inputs);
+int		ft_unset(t_msh *msh, char **inputs);
 int		ft_exit(void);
-int		ft_env(char **env);
+int		ft_env(t_msh msh);
 // Environment extra functions
 int		env_exist(char **env, char *var);
 void	ft_fill_env(char *env, char *var, char *value);
