@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
+#    By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/02/02 13:24:03 by mvorslov         ###   ########.fr        #
+#    Updated: 2023/02/23 16:50:46 by ede-smet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,9 @@ OBJ_DIR = obj
 DEPS_DIR = include
 BUILT_DIR = builtins/
 
-SRC_LIST = minishell.c \
+SRC_LIST = minishell.c syntax_check.c parse_and_run_pipe_list.c \
+	parser_utils.c parse_spl_cmd.c parser_utils_spl_cmd.c spl_cmd_exec.c \
+	spl_cmd_redir.c spl_cmd_malloc_free.c param_expansion.c \
 	$(BUILT_DIR)ft_echo.c $(BUILT_DIR)ft_cd.c $(BUILT_DIR)ft_pwd.c $(BUILT_DIR)ft_export.c \
 	$(BUILT_DIR)ft_unset.c $(BUILT_DIR)env/ft_env.c $(BUILT_DIR)env/env_func.c $(BUILT_DIR)env/env_utils.c $(BUILT_DIR)ft_exit.c
 DEPS_LIST = mini_fun.h mini_struct.h
@@ -30,7 +32,7 @@ LFT = lib/libft
 
 CC = cc -g3
 CFLAGS = -Wall -Wextra -Werror
-LFLAGS = -L$(LFT) -lft
+LFLAGS = -L$(LFT) -lft -lreadline #-fsanitize=leak
 
 NOCOLOR	= \033[0m
 RED 	= \033[1;31m
@@ -63,7 +65,7 @@ lib_clean:
 
 clean: lib_clean
 	@rm -rf $(OBJ_DIR)
-	@rm -f .out.gch	
+	@rm -f *.out *.gch	
 	@rm -f *.o
 	@echo "$(RED)$(NAME) objects deleted$(NOCOLOR)"
 

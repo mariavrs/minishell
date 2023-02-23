@@ -1,0 +1,102 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   spl_cmd_redir.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
+/*   Updated: 2023/02/23 15:33:56 by mvorslov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/mini_fun.h"
+
+void	write_to_heredoc(t_spl_cmd *cmd, int i, t_heredoc *hd, t_msh *msh)
+{
+	hd->line_out = NULL;
+	hd->line_out = param_expansion(hd->line_in, msh);
+	ft_putstr_fd(hd->line_out, cmd->redir[i].fd);
+	write(cmd->redir[i].fd, "\n", 1);
+	if (hd->line_out)
+		free(hd->line_out);
+	free(hd->line_in);
+}
+
+int	redir_heredoc(t_spl_cmd *cmd, int i, t_msh *msh)
+{
+	t_heredoc	hd;
+
+	fstat(STDIN_FILENO, &hd.statbuf);
+	hd.hdoc_id = ft_itoa(hd.statbuf.st_atim.tv_sec);
+	hd.hdoc = ft_strjoin("/tmp/minishell-", hd.hdoc_id);
+	free(hd.hdoc_id);
+	cmd->redir[i].fd = open(hd.hdoc,
+			O_CREAT | O_WRONLY | O_APPEND | O_TRUNC, 0444);
+	if (cmd->redir[i].fd < 0)
+		return (perror("minishell: open"), 1);
+	hd.line_in = NULL;
+	hd.line_in = readline("> ");
+	while (hd.line_in && ft_strncmp(hd.line_in, cmd->redir[i].file,
+			ft_strlen(cmd->redir[i].file) + 1))
+	{
+		write_to_heredoc(cmd, i, &hd, msh);
+		hd.line_in = readline("> ");
+	}
+	close(cmd->redir[i].fd);
+	cmd->redir[i].fd = open(hd.hdoc, O_RDONLY);
+	if (cmd->redir[i].fd < 0)
+		return (perror("minishell: open"), 1);
+	unlink(hd.hdoc);
+	free(hd.hdoc);
+	return (0);
+}
+
+int	redir_in(t_spl_cmd *cmd, int i, t_msh *msh)
+{
+	if (cmd->redir[i].mode == '<')
+	{
+		cmd->redir[i].fd = open(cmd->redir[i].file, O_RDONLY);
+		if (cmd->redir[i].fd < 0)
+			return (perror("minishell: open"), 1);
+	}
+	else if (cmd->redir[i].mode == '-')
+	{
+		if (redir_heredoc(cmd, i, msh))
+			return (1);
+	}
+	if (!cmd->stdin_cpy)
+		cmd->stdin_cpy = dup(STDIN_FILENO);
+	dup2(cmd->redir[i].fd, STDIN_FILENO);
+	return (0);
+}
+
+int	redir_out(t_spl_cmd *cmd, int i)
+{
+	if (cmd->redir[i].mode == '>')
+		cmd->redir[i].fd = open(cmd->redir[i].file,
+				O_CREAT | O_RDWR | O_TRUNC, 0664);
+	else if (cmd->redir[i].mode == '+')
+		cmd->redir[i].fd = open(cmd->redir[i].file,
+				O_CREAT | O_RDWR | O_APPEND, 0664);
+	if (cmd->redir[i].fd < 0)
+		return (perror("minishell: open"), 1);
+	if (!cmd->stdout_cpy)
+		cmd->stdout_cpy = dup(STDOUT_FILENO);
+	dup2(cmd->redir[i].fd, STDOUT_FILENO);
+	return (0);
+}
+
+void	redir_clean(t_spl_cmd *cmd)
+{
+	if (cmd->stdin_cpy)
+	{
+		dup2(cmd->stdin_cpy, STDIN_FILENO);
+		close(cmd->stdin_cpy);
+	}
+	if (cmd->stdout_cpy)
+	{
+		dup2(cmd->stdout_cpy, STDOUT_FILENO);
+		close(cmd->stdout_cpy);
+	}
+}
