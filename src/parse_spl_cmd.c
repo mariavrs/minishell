@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 13:04:31 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:37:13 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int	wrd_collect(char *line, t_cmd_bld *bld)
 	else
 	{
 		while (*(line + count) && !is_in_str(*(line + count), STR_WHSPACE)
-			&& !is_in_str(*(line + count), STR_QUOTE) && !is_in_str(*(line + count), STR_REDIR))
+			&& !is_in_str(*(line + count), STR_QUOTE)
+			&& !is_in_str(*(line + count), STR_REDIR))
 			count++;
 	}
 	return (count);
@@ -64,7 +65,7 @@ int	fill_the_struct(t_spl_cmd *cmd, int argc, int redirc, t_cmd_bld	bld)
 	str = NULL;
 	str = malloc(sizeof(char) * (bld.symb_count + 1));
 	if (!str)
-		return (1);//malloc error print and manage
+		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	str[bld.symb_count] = '\0';
 	while (--bld.symb_count >= 0)
 		str[bld.symb_count] = *(bld.line + bld.symb_count);

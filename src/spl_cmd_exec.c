@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 13:35:56 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:09:21 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,16 @@ void	run_exec_bin(char **argv, t_msh *msh)
 
 int	run_search_bin(char **argv, t_msh *msh)
 {
-	DIR	*bin_lib;
-	struct dirent *bin_lib_obj;
+	DIR				*bin_lib;
+	struct dirent	*bin_lib_obj;
 
 	bin_lib = NULL;
 	bin_lib = opendir("/usr/bin");
 /* 	if (!bin_lib)
 		panic open didn't work, quit everything */
 	bin_lib_obj = readdir(bin_lib);
-	while (bin_lib_obj && ft_strncmp(bin_lib_obj->d_name, *argv, ft_strlen(*argv) + 1))
+	while (bin_lib_obj
+		&& ft_strncmp(bin_lib_obj->d_name, *argv, ft_strlen(*argv) + 1))
 		bin_lib_obj = readdir(bin_lib);
 	closedir(bin_lib);
 	if (bin_lib_obj) // I'm not sure if we have to check the type
@@ -62,7 +63,7 @@ void	run_exec(t_spl_cmd *cmd, t_msh *msh)
 		ft_unset(); */
 	else if (run_search_bin(cmd->argv, msh))
 	{
-		printf("minishell: %s: command not found\n", cmd->argv[0]);//modify with strerror or perror
+		printf("minishell: %s: command not found\n", cmd->argv[0]);
 		msh->exit_status = 127;
 	}
 }

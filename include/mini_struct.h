@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/23 13:29:58 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:28:33 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ typedef struct s_simple_cmd
 
 typedef struct s_heredoc
 {
-	char	*line_in;
-	char	*line_out;
+	char		*line_in;
+	char		*line_out;
 	char		*hdoc;
 	char		*hdoc_id;
 	struct stat	statbuf;

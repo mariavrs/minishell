@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 18:09:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/22 17:17:01 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:27:09 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,9 @@ int	syntax_check(t_stx stx, char *line, char *eline)
 {
 	while (line < eline)
 	{
-		if (is_in_str(*line, STR_WHSPACE))
-			while (is_in_str(*line, STR_WHSPACE))
-				line++;
-		else if ((!ft_strncmp(line, "&&", 2) || !ft_strncmp(line, "||", 2)
+		while (is_in_str(*line, STR_WHSPACE))
+			line++;
+		if ((!ft_strncmp(line, "&&", 2) || !ft_strncmp(line, "||", 2)
 				|| is_in_str(*line, STR_BRACKETS)) && !stx.quo_flag)
 		{
 			if (stx_list_brackets_check(&stx, &line))
@@ -91,7 +90,7 @@ int	syntax_check(t_stx stx, char *line, char *eline)
 			if (stx_pipe_redir_check(&stx, &line))
 				return (1);
 		}
-		else
+		else if (*line)
 		{
 			stx.quo_flag = quo_check(*(line++), stx.quo_flag);
 			stx.special_ch = 'a';

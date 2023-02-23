@@ -6,11 +6,17 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/22 16:56:04 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:05:14 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+void	close_fd(int fd1, int fd2)
+{
+	close(fd1);
+	close(fd2);
+}
 
 void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 {
@@ -18,15 +24,13 @@ void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 	pid_t	id[2];
 
 	pipe(fd);
-	//if (pipe(fd) == -1)
-		//stop everything, pipe didn't work
+	if (pipe(fd) == -1)
+		return (perror("pipe"));
 	id[0] = fork();
 	if (id[0] == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
-//		close(1);
-		close(fd[0]);
-		close(fd[1]);
+		close_fd(fd[0], fd[1]);
 		parse_pipe(line, del, msh);
 		exit(msh->exit_status);
 	}
@@ -34,16 +38,13 @@ void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 	if (id[1] == 0)
 	{
 		dup2(fd[0], STDIN_FILENO);
-//		close(0);
-		close(fd[0]);
-		close(fd[1]);
+		close_fd(fd[0], fd[1]);
 		parse_pipe(del + 1, eline, msh);
 		exit(msh->exit_status);
 	}
-	close(fd[0]);
-	close(fd[1]);
-	waitpid(id[0], &msh->exit_status, 0); //modify the option later
-	waitpid(id[1], &msh->exit_status, 0); //modify the option later
+	close_fd(fd[0], fd[1]);
+	waitpid(id[0], &msh->exit_status, 0);
+	waitpid(id[1], &msh->exit_status, 0);
 }
 
 void	parse_pipe(char *line, char *eline, t_msh *msh)
@@ -54,7 +55,8 @@ void	parse_pipe(char *line, char *eline, t_msh *msh)
 	trim_whitespaces(&line, &eline);
 	del = eline - 1;
 	quo_flag = 0;
-	while (del > line && ((*del != '|' && *del != '(' && *del != ')') || quo_flag))
+	while (del > line
+		&& ((*del != '|' && *del != '(' && *del != ')') || quo_flag))
 	{
 		quo_flag = quo_check(*del, quo_flag);
 		del--;
@@ -73,8 +75,8 @@ int	list_delim_locator(char *line, char *eline, char **del)
 	quo_flag = 0;
 	*del = eline - 1;
 	while (*del > line && !(!block_check && !quo_flag
-		&& ((**del == '&' && *(*del - 1) == '&')
-			|| (**del == '|' && *(*del - 1) == '|'))))
+			&& ((**del == '&' && *(*del - 1) == '&')
+				|| (**del == '|' && *(*del - 1) == '|'))))
 	{
 		if (**del == ')' && !quo_flag)
 			block_check++;
@@ -96,7 +98,7 @@ void	parse_list(char *line, char *eline, t_msh *msh)
 
 	trim_whitespaces(&line, &eline);
 	trim_brackets(&line, &eline);
-	if(list_delim_locator(line, eline, &del) == 1)
+	if (list_delim_locator(line, eline, &del) == 1)
 		return (parse_pipe(line, eline, msh));
 	parse_list(line, del, msh);
 	if ((msh->exit_status == 0 && *del == '&')

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 13:02:59 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:06:51 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ char	*get_var_value(char *cursor, t_cmd_bld *bld)
 
 int	first_wrd_check(char *line, t_msh *msh)
 {
-	char	*cursor;
-	char	*str;
+	char		*cursor;
+	char		*str;
 	t_cmd_bld	bld;
 
 	cursor = line;
 	while (*cursor && !is_in_str(*cursor, STR_QUOTE)
 		&& !is_in_str(*cursor, STR_WHSPACE)
-			&& !is_in_str(*cursor, STR_REDIR))
+		&& !is_in_str(*cursor, STR_REDIR))
 	{
 		if (*cursor == '=')
 		{

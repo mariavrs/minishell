@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 17:27:19 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 12:54:34 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:08:21 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	ft_malloc_spl_cmd(t_spl_cmd *cmd, int argc, int redirc)
 		return (1);
 	cmd->redir = malloc(sizeof(t_redir) * redirc);
 	if (!cmd->redir)
-		return (free(cmd->argv), 1);//print error
+		return (ft_putstr_fd("minishell: malloc error\n", 2),
+			free(cmd->argv), 1);
 	cmd->argv[argc] = NULL;
 	cmd->argc = argc;
 	cmd->redirc = redirc;

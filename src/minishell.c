@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/22 16:36:11 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:07:18 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	msh.envp_lcl = malloc(sizeof(char *));
 	if (!msh.envp_lcl)
 		return (write(2, "malloc error\n", 13), 1);
-	msh.envp_lcl[0]= NULL;
+	msh.envp_lcl[0] = NULL;
 	msh.exit_status = 0;
 	while (1)
 	{
