@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 17:33:27 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/24 18:07:08 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,19 @@ int	run_search_bin(char **argv, t_msh *msh)
 void	run_exec(t_spl_cmd *cmd, t_msh *msh)
 {
 	if (!ft_strncmp(cmd->argv[0], "cd", 3))
-		ft_cd(cmd->argv, msh);
+		msh->exit_status = ft_cd(cmd->argv, msh);
 	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
-		ft_echo(cmd->argv);
+		msh->exit_status = ft_echo(cmd->argv);
 	else if (!ft_strncmp(cmd->argv[0], "env", 4))
-		ft_env(*msh);
+		msh->exit_status = ft_env(*msh);
 	else if (!ft_strncmp(cmd->argv[0], "exit", 5))
-		ft_exit();
+		msh->exit_status = ft_exit();
 	else if (!ft_strncmp(cmd->argv[0], "export", 7))
-		ft_export(msh, cmd->argv);
+		msh->exit_status = ft_export(msh, cmd->argv);
 	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
-		ft_pwd();
+		msh->exit_status = ft_pwd();
 	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
-		ft_unset(msh, cmd->argv);
+		msh->exit_status = ft_unset(msh, cmd->argv);
 	else if (run_search_bin(cmd->argv, msh))
 	{
 		printf("minishell: %s: command not found\n", cmd->argv[0]);
