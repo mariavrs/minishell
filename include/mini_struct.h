@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/24 18:17:21 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/24 23:28:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,13 @@ typedef struct s_cmd_build
 	char	mode;
 	char	*line;
 }	t_cmd_bld;
+
+typedef struct s_search_bin
+{
+	char	**path_split;
+	char	*path_val;
+	char	*full_name;
+	int		name_len;
+}	t_path;
 
 #endif

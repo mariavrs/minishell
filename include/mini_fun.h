@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/23 17:03:21 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/24 23:37:14 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh);
 
 void	run_spl_cmd(t_spl_cmd *cmd, t_msh *msh);
 void	run_exec(t_spl_cmd *cmd, t_msh *msh);
+int		search_bin(char **argv, t_msh *msh);
 
 int		redir_in(t_spl_cmd *cmd, int i, t_msh *msh);
 int		redir_out(t_spl_cmd *cmd, int i);
