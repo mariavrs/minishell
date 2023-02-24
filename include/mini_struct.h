@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/24 18:16:36 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/24 18:17:21 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_msh
 	char	**envp;
 	char	**envp_lcl;
 	char	*sline;
+	char	*ex_sline;
 	int		exit_status;
 }	t_msh;
 

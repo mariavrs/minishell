@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 00:33:56 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/01/17 23:51:01 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/24 18:31:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		ft_isprint(int c);
 size_t	ft_strlen(char *str);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
-int		ft_strncmp(char *s1, char *s2, unsigned int n);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_memcmp( const void *p1, const void *p2, size_t n );
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
