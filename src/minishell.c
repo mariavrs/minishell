@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/23 16:52:41 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/23 17:42:17 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	msh.envp = envp;
+	ft_parent_env_cpy(&(msh.envp), envp);
 	msh.envp_lcl = NULL;
 	msh.envp_lcl = malloc(sizeof(char *));
 	if (!msh.envp_lcl)
@@ -53,5 +53,5 @@ int	main(int argc, char **argv, char **envp)
 			free(msh.sline);
 		}
 	}
-	return (0);
+	return (free_table(msh.envp), 0);
 }
