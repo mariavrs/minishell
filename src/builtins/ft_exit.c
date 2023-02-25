@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/24 23:58:47 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/25 15:14:15 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,36 @@ static void	exit_error(int i, char *str)
 	}
 }
 
+static int	border_llong_check(char *str)
+{
+	if (str[0] == '+' || ft_isdigit(str[0]))
+	{
+		if (ft_ll_atoi(str) < 0)
+			return (1);
+	}
+	else
+		if (ft_ll_atoi(str) > 0)
+			return (1);
+	return (0);
+}
+
 int	ft_exit(char **input, t_msh *msh)
 {
-	double	i;
+	long long int	i;
 
 	if (!input)
 		return (1);
 	if (!input[1])
 		return (exit_error(-1, NULL), exit(msh->exit_status), msh->exit_status);
-	i = ft_atoi(input[1]);
+	i = ft_ll_atoi(input[1]);
 	if (!is_numeric(input[1]) && input[2])
 		return (exit_error(0, NULL), 1);
-	else if (i > (double)LLONG_MAX || is_numeric(input[1]))
+	else if (border_llong_check(input[1]) || is_numeric(input[1]))
 		return (exit_error(1, input[1]), exit(2), 2);
 	else if (i < 0)
-		return (exit_error(-1, NULL), exit(256 + (long long int)i % 256), 256 - (long long int)i % 256);
+		return (exit_error(-1, NULL), exit(256 + i % 256), 256 - i % 256);
 	else if (i > 255)
-		return (exit_error(-1, NULL), exit((long long int)i % 256), (long long int)i % 256);
+		return (exit_error(-1, NULL), exit(i % 256), i % 256);
 	else
 		return (exit_error(-1, NULL), exit(i), i);
 	return (0);
