@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 15:28:14 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/25 15:28:35 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/25 16:09:57 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ int	get_var_name_len(char *line)
 	int	ln;
 
 	ln = 0;
-	while (*(line + ln) && *(line + ln) != '$' && *(line + ln) != '?'
-		&& !is_in_str(*(line + ln), STR_QUOTE)
-		&& !is_in_str(*(line + ln), STR_WHSPACE)
-		&& !is_in_str(*(line + ln), STR_REDIR))
+	while ((*(line + ln) >= 'a' && *(line + ln) <= 'z')
+		|| (*(line + ln) >= 'A' && *(line + ln) <= 'Z')
+		|| (*(line + ln) >= '0' && *(line + ln) <= '9')
+		|| *(line + ln) == '_')
 		ln++;
-	return (0);
+	return (ln);
 }
