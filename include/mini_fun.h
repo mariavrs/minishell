@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/23 17:03:21 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/24 23:06:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <dirent.h>
 # include <fcntl.h>
 # include <sys/types.h>
+# include <stdlib.h>
 
 // Builtins prototypes
 int		ft_echo(char *input[]);
@@ -31,7 +32,7 @@ int		ft_cd(char **input, t_msh *msh);
 int		ft_pwd(void);
 int		ft_export(t_msh *msh, char **inputs);
 int		ft_unset(t_msh *msh, char **inputs);
-int		ft_exit(void);
+int		ft_exit(char **input, t_msh *msh);
 int		ft_env(t_msh msh);
 // Environment extra functions
 int		env_exist(char **env, char *var);

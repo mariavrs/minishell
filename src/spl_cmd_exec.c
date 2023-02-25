@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 17:33:27 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/24 23:07:35 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	run_exec(t_spl_cmd *cmd, t_msh *msh)
 	else if (!ft_strncmp(cmd->argv[0], "env", 4))
 		ft_env(*msh);
 	else if (!ft_strncmp(cmd->argv[0], "exit", 5))
-		ft_exit();
+		ft_exit(cmd->argv, msh);
 	else if (!ft_strncmp(cmd->argv[0], "export", 7))
 		ft_export(msh, cmd->argv);
 	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
