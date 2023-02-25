@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/24 23:37:14 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/25 15:31:17 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,6 @@ void	ft_free_redir_info(t_spl_cmd *cmd);
 void	ft_free_argv(t_spl_cmd *cmd);
 
 char	*param_expansion(char *line, t_msh *msh);
+int		get_var_name_len(char *line);
 
 #endif
