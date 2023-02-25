@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 00:33:56 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/24 23:40:37 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/25 14:45:00 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_list			*ft_lstnew(void *content);
 char			*ft_strtrim(char const *s1, char const *set);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 void			*ft_calloc(size_t nmemb, size_t size);
-double			ft_atoi(const char *str);
+long long int	ft_atoi(const char *str);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
 int				ft_isalnum(int c);
