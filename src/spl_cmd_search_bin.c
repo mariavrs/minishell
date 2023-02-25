@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 23:34:56 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/25 16:30:21 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/25 16:53:16 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 void	run_bin(char *full_name, char **argv, t_msh *msh)
 {
-	if (fork() == 0)
-		execve(full_name, argv, msh->envp);
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+		exit(execve(full_name, argv, msh->envp));
 	else
-		wait(&msh->exit_status);
+		waitpid(pid, &msh->exit_status, 0);
+	msh->exit_status = WEXITSTATUS(msh->exit_status);
 }
 
 char	*bin_get_full_name(char *path, char *argv, int name_len)
