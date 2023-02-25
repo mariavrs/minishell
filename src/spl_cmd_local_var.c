@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 16:06:51 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/25 15:53:11 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	first_wrd_check(char *line, t_msh *msh)
 	t_cmd_bld	bld;
 
 	cursor = line;
-	while (*cursor && !is_in_str(*cursor, STR_QUOTE)
+	while (*cursor
+		&& !is_in_str(*cursor, STR_QUOTE)
 		&& !is_in_str(*cursor, STR_WHSPACE)
 		&& !is_in_str(*cursor, STR_REDIR))
 	{
