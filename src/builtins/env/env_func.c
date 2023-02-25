@@ -12,6 +12,14 @@
 
 #include "../../../include/mini_fun.h"
 
+typedef struct s_del
+{
+	char	**e_tmp;
+	char	**s_tmp;
+	int		i;
+	int		k;
+}	t_del;
+
 int	env_edit(char ***env, char *var, char *value)
 {
 	int		i;
@@ -90,31 +98,29 @@ int	env_add(char ***env, char *value)
 
 int	env_del(char ***env, char *var)
 {
-	char	**env_tmp;
-	char	**split_tmp;
-	int		i;
-	int		k;
+	t_del	d;
 
-	k = 0;
-	i = -1;
+	d.k = 0;
+	d.i = -1;
 	if (env_exist(*env, var))
 		return (1);
-	ft_parent_env_cpy(&env_tmp, *env);
+	ft_parent_env_cpy(&d.e_tmp, *env);
 	free_table(*env);
-	*env = malloc (ft_count_elem(env_tmp) * sizeof(char *));
+	*env = malloc (ft_count_elem(d.e_tmp) * sizeof(char *));
 	if (!(*env))
-		return (free_table(env_tmp), 1);
-	while (env_tmp[++i])
+		return (free_table(d.e_tmp), 1);
+	while (d.e_tmp[++d.i])
 	{
-		split_tmp = ft_split(env_tmp[i], '=');
-		if (ft_strncmp(split_tmp[0], var, ft_strlen(var) + 1) != 0)
+		d.s_tmp = ft_split(d.e_tmp[d.i], '=');
+		if (ft_strncmp(d.s_tmp[0], var, ft_strlen(var) + 1) != 0)
 		{
-			(*env)[k] = malloc ((ft_strlen(env_tmp[i]) + 1) * sizeof(char));
+			(*env)[d.k] = malloc ((ft_strlen(d.e_tmp[d.i]) + 1) * sizeof(char));
 			if (!(*env))
-				return (free_table(env_tmp), 1);
-			ft_strlcpy((*env)[k++], env_tmp[i], ft_strlen(env_tmp[i]) + 1);
+				return (free_table(d.e_tmp), 1);
+			ft_strlcpy((*env)[d.k++], d.e_tmp[d.i],
+				ft_strlen(d.e_tmp[d.i]) + 1);
 		}
-		free_table(split_tmp);
+		free_table(d.s_tmp);
 	}
-	return ((*env)[k] = NULL, free_table(env_tmp), 0);
+	return ((*env)[d.k] = NULL, free_table(d.e_tmp), 0);
 }
