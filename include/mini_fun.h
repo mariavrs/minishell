@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/25 15:14:06 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/25 15:55:46 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
 
 void			run_spl_cmd(t_spl_cmd *cmd, t_msh *msh);
 void			run_exec(t_spl_cmd *cmd, t_msh *msh);
+int				search_bin(char **argv, t_msh *msh);
 
 int				redir_in(t_spl_cmd *cmd, int i, t_msh *msh);
 int				redir_out(t_spl_cmd *cmd, int i);
@@ -79,5 +80,6 @@ void			ft_free_redir_info(t_spl_cmd *cmd);
 void			ft_free_argv(t_spl_cmd *cmd);
 
 char			*param_expansion(char *line, t_msh *msh);
+int				get_var_name_len(char *line);
 
 #endif
