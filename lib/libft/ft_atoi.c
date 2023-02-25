@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 17:00:04 by ede-smet          #+#    #+#             */
-/*   Updated: 2022/05/22 23:36:15 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/24 23:43:24 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *str)
+double	ft_atoi(const char *str)
 {
 	int	i;
-	int	sign;
-	int	to_i;
+	int		sign;
+	double	to_i;
 
 	to_i = 0;
 	sign = 1;
@@ -29,7 +29,7 @@ int	ft_atoi(const char *str)
 			sign *= -1;
 		i++;
 	}
-	while (ft_isdigit((int)str[i]))
+	while (ft_isdigit(str[i]))
 	{
 		to_i = to_i * 10 + (str[i] - '0');
 		i++;
