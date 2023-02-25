@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/25 15:14:15 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/25 16:04:46 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,23 @@ static int	border_llong_check(char *str)
 int	ft_exit(char **input, t_msh *msh)
 {
 	long long int	i;
+	int				mod;
 
 	if (!input)
 		return (1);
 	if (!input[1])
 		return (exit_error(-1, NULL), exit(msh->exit_status), msh->exit_status);
 	i = ft_ll_atoi(input[1]);
+	mod = i % 256;
 	if (!is_numeric(input[1]) && input[2])
 		return (exit_error(0, NULL), 1);
 	else if (border_llong_check(input[1]) || is_numeric(input[1]))
 		return (exit_error(1, input[1]), exit(2), 2);
 	else if (i < 0)
-		return (exit_error(-1, NULL), exit(256 + i % 256), 256 - i % 256);
+		return (exit_error(-1, NULL), exit(256 + mod), 256 + mod);
 	else if (i > 255)
-		return (exit_error(-1, NULL), exit(i % 256), i % 256);
+		return (exit_error(-1, NULL), exit(mod), mod);
 	else
-		return (exit_error(-1, NULL), exit(i), i);
+		return (exit_error(-1, NULL), exit((int)i), (int)i);
 	return (0);
 }
