@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 17:27:19 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 16:08:21 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/26 12:31:26 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ void	ft_free_redir_info(t_spl_cmd *cmd)
 {
 	if (!cmd->redir)
 		return ;
-	while (--cmd->redirc >= 0 && cmd->redir[cmd->redirc].file)
+	while (--cmd->redirc >= 0)
 	{
-		free(cmd->redir[cmd->redirc].file);
+		if (cmd->redir[cmd->redirc].file)
+			free(cmd->redir[cmd->redirc].file);
 		cmd->redir[cmd->redirc].file = NULL;
 	}
 	free(cmd->redir);
@@ -47,9 +48,10 @@ void	ft_free_argv(t_spl_cmd *cmd)
 	if (!cmd->argv)
 		return ;
 	cmd->argc++;
-	while (--cmd->argc >= 0 && cmd->argv[cmd->argc])
+	while (--cmd->argc >= 0)
 	{
-		free(cmd->argv[cmd->argc]);
+		if (cmd->argv[cmd->argc])
+			free(cmd->argv[cmd->argc]);
 		cmd->argv[cmd->argc] = NULL;
 	}
 	free(cmd->argv);
