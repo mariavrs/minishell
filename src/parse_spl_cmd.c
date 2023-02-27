@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/27 03:37:15 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/27 15:34:20 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 	else
 		status_lcl = redir_in(&line[i_tmp + quo_detected], rdr, msh);
 	line[*i] = tmp;
+	*i += quo_detected;
 	while (i_tmp < *i)
 		line[i_tmp++] = ' ';
 	return (status_lcl);
