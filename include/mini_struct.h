@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/25 15:43:16 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/27 01:43:29 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,25 @@
 # define STR_QUOTE "\'\""
 # define STR_BRACKETS "()"
 # define STR_LOL "|&"
+# define STR_SPECIAL " \t\n\r\v<>()\'\"|&"
 
 # include <sys/stat.h>
 // ^ duplicate from mini_fun.h, reotganization of .h to be done
 
-typedef struct s_redir
+/* typedef struct s_redir
 {
 	char	*file;
 	char	mode;
 	int		fd;
+}	t_redir;
+ */
+
+typedef struct s_redir
+{
+	int		stdin_cpy;
+	int		stdout_cpy;
+	int		fd;
+	char	mode;
 }	t_redir;
 
 typedef struct s_simple_cmd
@@ -41,7 +51,7 @@ typedef struct s_simple_cmd
 	int		redirc;
 	int		stdin_cpy;
 	int		stdout_cpy;
-	t_redir	*redir;
+//	t_redir	*redir;
 }	t_spl_cmd;
 
 typedef struct s_heredoc
@@ -66,6 +76,8 @@ typedef struct s_msh
 	char	**envp_lcl;
 	char	*sline;
 	char	*ex_sline;
+	char	*spl_cmd;
+	char	**argv;
 	int		exit_status;
 }	t_msh;
 

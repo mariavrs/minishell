@@ -1,33 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   param_expansion_utils.c                            :+:      :+:    :+:   */
+/*   spl_cmd_malloc_free.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/25 15:28:14 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/26 12:54:09 by mvorslov         ###   ########.fr       */
+/*   Created: 2023/02/22 17:27:19 by mvorslov          #+#    #+#             */
+/*   Updated: 2023/02/27 02:21:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	is_valid_varname(char c)
+void	ft_free_dbl_ptr(char **ptr)
 {
-	if ((c >= 'a' && c <= 'z')
-		|| (c >= 'A' && c <= 'Z')
-		|| (c >= '0' && c <= '9')
-		|| c == '_')
-		return (1);
-	return (0);
+	int	i;
+
+	i = 0;
+	if (!ptr)
+		return ;
+	while (ptr[i])
+	{
+		free(ptr[i]);
+		ptr[i] = NULL;
+		i++;
+	}
+	free(ptr);
+	ptr = NULL;
 }
 
-int	get_var_name_len(char *line)
+void	ft_free_spl_cmd(t_msh *msh)
 {
-	int	ln;
-
-	ln = 0;
-	while (is_valid_varname(*(line + ln)))
-		ln++;
-	return (ln);
+	if (msh->spl_cmd)
+	{
+		free(msh->spl_cmd);
+		msh->spl_cmd = NULL;
+	}
+	free(msh->argv);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/25 15:55:46 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/27 02:32:57 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,22 @@ int				trim_whitespaces(char **line, char **eline);
 int				quo_check(char del, int quo_flag);
 
 void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
+int				wrd_collect(char *line, int *quo_detected);
 
-void			run_spl_cmd(t_spl_cmd *cmd, t_msh *msh);
-void			run_exec(t_spl_cmd *cmd, t_msh *msh);
+void			run_cmd_exec(t_msh *msh);
 int				search_bin(char **argv, t_msh *msh);
 
-int				redir_in(t_spl_cmd *cmd, int i, t_msh *msh);
-int				redir_out(t_spl_cmd *cmd, int i);
-void			redir_clean(t_spl_cmd *cmd);
-
-int				ft_malloc_spl_cmd(t_spl_cmd *cmd, int argc, int redirc);
-void			ft_free_redir_info(t_spl_cmd *cmd);
-void			ft_free_argv(t_spl_cmd *cmd);
+int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
+int				redir_out(char *filename, t_redir *rdr);
+void			redir_clean(t_redir *rdr);
 
 char			*param_expansion(char *line, t_msh *msh);
 int				get_var_name_len(char *line);
+int				is_valid_varname(char c);
+
+int				first_wrd_check(char *line, t_msh *msh);
+
+void			ft_free_spl_cmd(t_msh *msh);
+void			ft_free_dbl_ptr(char **ptr);
 
 #endif
