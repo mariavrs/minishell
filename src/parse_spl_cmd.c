@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/27 15:34:20 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/27 15:43:32 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,14 +102,12 @@ int	parse_redir(char *line, t_redir *rdr, t_msh *msh)
 	{
 		while (line[i] && line[i] != '<' && line[i] != '>')
 			i++;
-		if (line[i] == '>' && line[i + 1] == '>')
+		if (line[i] && line[i] != line[i + 1])
+			rdr->mode = line[i];
+		else if (line[i] == '>' && line[i + 1] == '>')
 			rdr->mode = '+';
-		else if (line[i] == '>')
-			rdr->mode = '>';
 		else if (line[i] == '<' && line[i + 1] == '<')
 			rdr->mode = '-';
-		else if (line[i] == '<')
-			rdr->mode = '<';
 		while (line[i] == '<' || line[i] == '>')
 		{
 			line[i] = ' ';
