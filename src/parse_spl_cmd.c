@@ -6,13 +6,42 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/28 14:01:09 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 16:08:00 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	wrd_collect(char *line, int *quo_detected)
+int	wrd_collect(char *line)
+{
+	int	count;
+	int	quo_flag;
+
+	count = 0;
+	quo_flag = 0;
+	while (line[count] && !is_in_str(line[count], STR_WHSPACE)
+		&& !is_in_str(line[count], STR_REDIR))
+	{
+		if (is_in_str(line[count], STR_QUOTE))
+		{
+			quo_flag = quo_check(line[count], quo_flag);
+			ft_strlcpy(line + count, line + count + 1, ft_strlen(line + count));
+			while (line[count] && quo_flag)
+			{
+				quo_flag = quo_check(line[count], quo_flag);
+				if (!quo_flag)
+					ft_strlcpy(line + count, line + count + 1, ft_strlen(line + count));
+				else
+					count++;
+			}
+		}
+		else
+			count++;
+	}
+	return (count);
+}
+
+/* int	wrd_collect(char *line, int *quo_detected)
 {
 	int	count;
 	int	quo_flag;
@@ -39,13 +68,11 @@ int	wrd_collect(char *line, int *quo_detected)
 	}
 	return (count);
 }
-
+ */
 int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 {
-	int	quo_detected;
 	int	eword;
 
-	quo_detected = 0;
 	while (is_in_str(*line, STR_WHSPACE))
 		line++;
 	if (!(*line))
@@ -58,8 +85,7 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 	else
 	{
 		argc++;
-		eword = wrd_collect(line, &quo_detected);
-		line += quo_detected;
+		eword = wrd_collect(line);
 		if ((line[eword] && parse_cmd_argv(line + eword + 1, argc, msh))
 			|| (!line[eword] && parse_cmd_argv(line + eword, argc, msh)))
 			return (1);
@@ -72,22 +98,18 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 {
 	int		i_tmp;
-	int		quo_detected;
 	char	tmp;
 	int		status_lcl;
 
 	i_tmp = *i;
-	quo_detected = 0;
-	*i += wrd_collect(&line[*i], &quo_detected);
-	*i += quo_detected;
+	*i += wrd_collect(&line[*i]);
 	tmp = line[*i];
 	line[*i] = '\0';
 	if (rdr->mode == '>' || rdr->mode == '+')
-		status_lcl = redir_out(&line[i_tmp + quo_detected], rdr);
+		status_lcl = redir_out(&line[i_tmp], rdr);
 	else
-		status_lcl = redir_in(&line[i_tmp + quo_detected], rdr, msh);
+		status_lcl = redir_in(&line[i_tmp], rdr, msh);
 	line[*i] = tmp;
-	*i += quo_detected;
 	while (i_tmp < *i)
 		line[i_tmp++] = ' ';
 	return (status_lcl);
@@ -145,4 +167,5 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 		msh->exit_status = status_lcl;
 	redir_clean(&rdr);
 	ft_free_spl_cmd(msh);
+	printf("hey im here\n");
 }

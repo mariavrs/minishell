@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/27 17:21:54 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:11:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int				trim_whitespaces(char **line, char **eline);
 int				quo_check(char del, int quo_flag);
 
 void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
-int				wrd_collect(char *line, int *quo_detected);
+int				wrd_collect(char *line);
 
 void			run_cmd_exec(t_msh *msh);
 int				search_bin(char **argv, t_msh *msh);
@@ -82,6 +82,7 @@ int				is_valid_varname(char c);
 int				first_wrd_check(int *skip, char *line, t_msh *msh);
 
 void			ft_free_spl_cmd(t_msh *msh);
-void			ft_free_dbl_ptr(char **ptr);
+void			ft_free_dbl_str(char **str);
+void			ft_free_str(char *str);
 
 #endif
