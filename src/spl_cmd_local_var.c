@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/27 02:38:29 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:18:38 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,39 +76,37 @@ int	find_in_envp_lcl(char *line, int ln, t_msh *msh)
 	i = -1;
 	while (msh->envp_lcl[++i])
 	{
-		if (ft_strncmp(line, msh->envp_lcl[i], ln))
+		if (!ft_strncmp(line, msh->envp_lcl[i], ln))
 			return (i);
 	}
 	return (-1);
 }
 
-int	first_wrd_check(char *line, t_msh *msh)
+int	first_wrd_check(int *skip, char *line, t_msh *msh)
 {
-	t_envl		envl;
-	int			quo_detected;
+	t_envl	envl;
+	int		quo_detected;
 
-	envl.ln = 0;
+	envl.ln = -1;
 	quo_detected = 0;
-	if (*line >= '0' && *line <= '9')
-		return (0);
-	while (is_valid_varname(*(line + envl.ln)) || *(line + envl.ln) == '=')
+	while (is_valid_varname(line[++envl.ln]) || line[envl.ln] == '=')
 	{
-		if (*(line + envl.ln) == '=')
+		if (line[envl.ln] == '=')
 		{
-			envl.ln++;
-			envl.env_value = get_var_value(line + envl.ln, &quo_detected);
+			envl.env_value = get_var_value(&line[++envl.ln], &quo_detected);
 			if (!envl.env_value)
-				return (0);
+				return (*skip = 0, 1);
 			envl.env_vlen = ft_strlen(envl.env_value);
+			*skip = envl.ln + envl.env_vlen + (quo_detected * 2);
+			if (line[*skip])
+				return (free(envl.env_value), 0);
 			envl.env_i = find_in_envp_lcl(line, envl.ln, msh);
 			if (envl.env_i >= 0 && env_lcl_replace(line, envl, msh))
-				return (free(envl.env_value), 0);
+				return (free(envl.env_value), *skip = 0, 1);
 			else if (envl.env_i < 0 && env_lcl_add(line, envl, msh))
-				return (free(envl.env_value), 0);
-			free(envl.env_value);
-			return (envl.ln + envl.env_vlen + (quo_detected * 2));
+				return (free(envl.env_value), *skip = 0, 1);
+			return (free(envl.env_value), 0);
 		}
-		envl.ln++;
 	}
 	return (0);
 }

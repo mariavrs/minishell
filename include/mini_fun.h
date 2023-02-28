@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/27 02:32:57 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/27 17:21:54 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char			*param_expansion(char *line, t_msh *msh);
 int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
 
-int				first_wrd_check(char *line, t_msh *msh);
+int				first_wrd_check(int *skip, char *line, t_msh *msh);
 
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_ptr(char **ptr);

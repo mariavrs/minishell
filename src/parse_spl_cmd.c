@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/27 15:43:32 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:01:09 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,16 +126,20 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 {
 	t_redir	rdr;
 	int		status_lcl;
+	int		skip;
 
 	rdr.stdin_cpy = 0;
 	rdr.stdout_cpy = 0;
+	skip = 0;
 	trim_whitespaces(&line, &eline);
 	*eline = '\0';
 	msh->spl_cmd = param_expansion(line, msh);
 	status_lcl = parse_redir(msh->spl_cmd, &rdr, msh);
-	if (!status_lcl)
-		status_lcl = parse_cmd_argv(msh->spl_cmd, 0, msh);
-	if (!status_lcl)
+	if (!status_lcl && !(*line >= '0' && *line <= '9'))
+		status_lcl = first_wrd_check(&skip, msh->spl_cmd, msh);
+	if (!status_lcl && msh->spl_cmd[skip])
+		status_lcl = parse_cmd_argv(&msh->spl_cmd[skip], 0, msh);
+	if (!status_lcl && msh->spl_cmd[skip])
 		run_cmd_exec(msh);
 	else
 		msh->exit_status = status_lcl;
