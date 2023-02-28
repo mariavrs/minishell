@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/28 14:18:38 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 18:23:24 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,17 @@ int	env_lcl_add(char *line, t_envl envl, t_msh *msh)
 	return (env_lcl_replace(line, envl, msh));
 }
 
-char	*get_var_value(char *cursor, int *quo_detected)
+char	*get_var_value(char *cursor)
 {
 	char	*str;
 	int		symb_count;
 
 	str = NULL;
-	symb_count = wrd_collect(cursor, quo_detected);
+	symb_count = wrd_collect(cursor);
 	str = malloc(sizeof(char) * (symb_count + 1));
 	if (!str)
 		return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
 	str[symb_count] = '\0';
-	if (*quo_detected)
-		cursor++;
 	while (--symb_count >= 0)
 		str[symb_count] = *(cursor + symb_count);
 	return (str);
@@ -85,19 +83,17 @@ int	find_in_envp_lcl(char *line, int ln, t_msh *msh)
 int	first_wrd_check(int *skip, char *line, t_msh *msh)
 {
 	t_envl	envl;
-	int		quo_detected;
 
 	envl.ln = -1;
-	quo_detected = 0;
 	while (is_valid_varname(line[++envl.ln]) || line[envl.ln] == '=')
 	{
 		if (line[envl.ln] == '=')
 		{
-			envl.env_value = get_var_value(&line[++envl.ln], &quo_detected);
+			envl.env_value = get_var_value(&line[++envl.ln]);
 			if (!envl.env_value)
 				return (*skip = 0, 1);
 			envl.env_vlen = ft_strlen(envl.env_value);
-			*skip = envl.ln + envl.env_vlen + (quo_detected * 2);
+			*skip = envl.ln + envl.env_vlen;
 			if (line[*skip])
 				return (free(envl.env_value), 0);
 			envl.env_i = find_in_envp_lcl(line, envl.ln, msh);
