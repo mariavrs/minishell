@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/25 16:38:37 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/27 20:37:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	ft_cd(char **input, t_msh *msh)
 {
 	char	current_dir[PATH_MAX];
 	char	*home;
+	char	*dir;
 
 	if (!input)
 		return (1);
@@ -24,14 +25,22 @@ int	ft_cd(char **input, t_msh *msh)
 	if (!home && !input[1])
 		return (write(2, "cd: HOME not set\n", 17), 1);
 	if (home && !input[1])
-		input[1] = home;
+		dir = home;
+	else
+		dir = input[1];
 	env_edit(&msh->envp, "OLDPWD", current_dir);
-	if (chdir(input[1]) == 0)
+	if (chdir(dir) == 0)
 	{
 		getcwd(current_dir, PATH_MAX);
 		env_edit(&msh->envp, "PWD", current_dir);
-		return (free(home), 0);
+		if (home)
+			free(home);
+		return (0);
 	}
 	else
-		return (perror("cd"), free(home), 1);
+	{
+		if (home)
+			free(home);
+		return (perror("cd"), 1);
+	}
 }
