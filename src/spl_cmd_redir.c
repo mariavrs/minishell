@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/27 03:10:54 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 19:31:35 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
 	hd->line_out = param_expansion(hd->line_in, msh);
 	ft_putstr_fd(hd->line_out, rdr->fd);
 	write(rdr->fd, "\n", 1);
-	if (hd->line_out)
-		free(hd->line_out);
-	free(hd->line_in);
+	ft_free_str(&hd->line_out);
+	ft_free_str(&hd->line_in);
 }
 
 int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
@@ -30,7 +29,7 @@ int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
 	fstat(STDIN_FILENO, &hd.statbuf);
 	hd.hdoc_id = ft_itoa(hd.statbuf.st_atim.tv_sec);
 	hd.hdoc = ft_strjoin("/tmp/minishell-", hd.hdoc_id);
-	free(hd.hdoc_id);
+	ft_free_str(&hd.hdoc_id);
 	rdr->fd = open(hd.hdoc,
 			O_CREAT | O_WRONLY | O_APPEND | O_TRUNC, 0444);
 	if (rdr->fd < 0)
@@ -48,7 +47,7 @@ int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
 	if (rdr->fd < 0)
 		return (perror("minishell: open"), 1);
 	unlink(hd.hdoc);
-	free(hd.hdoc);
+	ft_free_str(&hd.hdoc);
 	return (0);
 }
 

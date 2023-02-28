@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/27 03:38:13 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 19:28:47 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,10 @@ char	*bin_get_full_name(char *path, char *argv, int name_len)
 		full_name[path_len] = '/';
 		ft_strlcpy(&full_name[path_len + 1], argv, name_len + 1);
 		if (stat(full_name, &statbuf))
-		{
-			free(full_name);
-			full_name = NULL;
-		}
+			ft_free_str(&full_name);
 	}
+	else
+		ft_putstr_fd("minishell: malloc error\n", 2);
 	return (full_name);
 }
 
@@ -58,7 +57,7 @@ int	search_in_path(char **argv, t_msh *msh)
 	if (!pb.path_val)
 		return (1);
 	pb.path_split = ft_split(pb.path_val, ':');
-	free(pb.path_val);
+	ft_free_str(&pb.path_val);
 	if (!pb.path_split)
 		return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
 	pb.full_name = NULL;
@@ -66,12 +65,10 @@ int	search_in_path(char **argv, t_msh *msh)
 	while (pb.path_split[++i] && !pb.full_name)
 		pb.full_name = bin_get_full_name(pb.path_split[i], argv[0],
 				pb.name_len);
-	i = -1;
-	while (pb.path_split[++i])
-		free(pb.path_split[i]);
-	free(pb.path_split);
+	ft_free_dbl_str(&pb.path_split);
 	if (pb.full_name)
-		return (run_bin(pb.full_name, argv, msh), free(pb.full_name), 0);
+		return (run_bin(pb.full_name, argv, msh),
+			ft_free_str(&pb.full_name), 0);
 	return (1);
 }
 

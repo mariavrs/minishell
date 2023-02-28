@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/28 18:23:24 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 19:30:16 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ typedef struct s_env_lcl_detect
 
 int	env_lcl_replace(char *line, t_envl envl, t_msh *msh)
 {
-	if (msh->envp_lcl[envl.env_i])
-		free(msh->envp_lcl[envl.env_i]);
+	ft_free_str(&msh->envp_lcl[envl.env_i]);
 	line[envl.ln] = '\0';
 	msh->envp_lcl[envl.env_i] = ft_strjoin(line, envl.env_value);
 	if (!msh->envp_lcl[envl.env_i])
@@ -44,7 +43,7 @@ int	env_lcl_add(char *line, t_envl envl, t_msh *msh)
 	envl.env_i = -1;
 	while (msh->envp_lcl[++envl.env_i])
 		envp_tmp[envl.env_i] = msh->envp_lcl[envl.env_i];
-	free (msh->envp_lcl);
+	ft_free_dbl_str(&msh->envp_lcl);
 	msh->envp_lcl = envp_tmp;
 	msh->envp_lcl[envl.env_i] = NULL;
 	msh->envp_lcl[envl.env_i + 1] = NULL;
@@ -95,13 +94,13 @@ int	first_wrd_check(int *skip, char *line, t_msh *msh)
 			envl.env_vlen = ft_strlen(envl.env_value);
 			*skip = envl.ln + envl.env_vlen;
 			if (line[*skip])
-				return (free(envl.env_value), 0);
+				return (ft_free_str(&envl.env_value), 0);
 			envl.env_i = find_in_envp_lcl(line, envl.ln, msh);
 			if (envl.env_i >= 0 && env_lcl_replace(line, envl, msh))
-				return (free(envl.env_value), *skip = 0, 1);
+				return (ft_free_str(&envl.env_value), *skip = 0, 1);
 			else if (envl.env_i < 0 && env_lcl_add(line, envl, msh))
-				return (free(envl.env_value), *skip = 0, 1);
-			return (free(envl.env_value), 0);
+				return (ft_free_str(&envl.env_value), *skip = 0, 1);
+			return (ft_free_str(&envl.env_value), 0);
 		}
 	}
 	return (0);

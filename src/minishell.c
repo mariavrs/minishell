@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/24 19:56:14 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 19:26:46 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	parse_exec_prep(t_msh *msh)
 		&& ft_strncmp(msh->sline, msh->ex_sline, sline_cmp_len(msh)))
 	{
 		add_history(msh->sline);
-		if (msh->ex_sline)
-			free(msh->ex_sline);
+		ft_free_str(&msh->ex_sline);
 		msh->ex_sline = ft_strdup(msh->sline);
 	}
 	if (!syntax_check_prep(line, eline))
@@ -70,7 +69,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (ft_strlen(msh.sline) != 0)
 				parse_exec_prep(&msh);
-			free(msh.sline);
+			ft_free_str(&msh.sline);
 		}
 	}
 }

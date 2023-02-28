@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/25 15:57:58 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/02/28 19:27:48 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	put_exit_status(char *str, char **line, t_msh *msh)
 	num = ft_itoa(msh->exit_status);
 	ln = ft_strlen(num);
 	ft_strlcpy(str, num, ln + 1);
-	free(num);
+	ft_free_str(&num);
 	*line += 2;
 	return (ln);
 }
