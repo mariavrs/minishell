@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/01 14:39:37 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/01 15:42:23 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,8 @@ int	wrd_collect(char *line, int count)
 
 int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 {
-	int	quo_detected;
 	int	eword;
 
-	quo_detected = 0;
 	while (is_in_str(*line, STR_WHSPACE))
 		line++;
 	if (!(*line))
@@ -54,12 +52,12 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 		if (!msh->argv)
 			return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 		msh->argv[argc] = NULL;
+		msh->argc = argc;
 	}
 	else
 	{
 		argc++;
 		eword = wrd_collect(line, 0);
-		line += quo_detected;
 		if ((line[eword] && parse_cmd_argv(line + eword + 1, argc, msh))
 			|| (!line[eword] && parse_cmd_argv(line + eword, argc, msh)))
 			return (1);
@@ -130,6 +128,8 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	trim_whitespaces(&line, &eline);
 	*eline = '\0';
 	msh->spl_cmd = param_expansion(line, msh);
+	if (!msh->spl_cmd)
+		return (ft_putstr_fd("minishell: malloc error\n", 2));
 	status_lcl = parse_redir(msh->spl_cmd, &rdr, msh);
 	if (!status_lcl && !(*line >= '0' && *line <= '9'))
 		status_lcl = first_wrd_check(&skip, msh->spl_cmd, msh);
