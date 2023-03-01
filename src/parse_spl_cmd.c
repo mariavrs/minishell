@@ -6,18 +6,16 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/28 18:22:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:39:37 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	wrd_collect(char *line)
+int	wrd_collect(char *line, int count)
 {
-	int	count;
 	int	quo_flag;
 
-	count = 0;
 	quo_flag = 0;
 	while (line[count] && !is_in_str(line[count], STR_WHSPACE)
 		&& !is_in_str(line[count], STR_REDIR))
@@ -30,7 +28,8 @@ int	wrd_collect(char *line)
 			{
 				quo_flag = quo_check(line[count], quo_flag);
 				if (!quo_flag)
-					ft_strlcpy(line + count, line + count + 1, ft_strlen(line + count));
+					ft_strlcpy(line + count, line + count + 1,
+						ft_strlen(line + count));
 				else
 					count++;
 			}
@@ -59,7 +58,7 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 	else
 	{
 		argc++;
-		eword = wrd_collect(line);
+		eword = wrd_collect(line, 0);
 		line += quo_detected;
 		if ((line[eword] && parse_cmd_argv(line + eword + 1, argc, msh))
 			|| (!line[eword] && parse_cmd_argv(line + eword, argc, msh)))
@@ -77,7 +76,7 @@ int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 	int		status_lcl;
 
 	i_tmp = *i;
-	*i += wrd_collect(&line[*i]);
+	*i += wrd_collect(&line[*i], 0);
 	tmp = line[*i];
 	line[*i] = '\0';
 	if (rdr->mode == '>' || rdr->mode == '+')

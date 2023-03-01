@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/28 19:30:16 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:39:55 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*get_var_value(char *cursor)
 	int		symb_count;
 
 	str = NULL;
-	symb_count = wrd_collect(cursor);
+	symb_count = wrd_collect(cursor, 0);
 	str = malloc(sizeof(char) * (symb_count + 1));
 	if (!str)
 		return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
