@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/25 15:30:38 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/01 15:28:46 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,15 @@ int	final_line_len(char *line, t_msh *msh)
 			len += 3;
 			line += 2;
 		}
+		else if (*line && *(line + 1) >= '0' && *(line + 1) <= '9')
+			line += 2;
 		else if (*line)
 		{
 			len--;
 			line += var_len(line + 1, &len, msh) + 1;
 		}
 	}
+	msh->spl_cmd_len = len;
 	return (len);
 }
 
@@ -96,7 +99,7 @@ int	put_exit_status(char *str, char **line, t_msh *msh)
 	num = ft_itoa(msh->exit_status);
 	ln = ft_strlen(num);
 	ft_strlcpy(str, num, ln + 1);
-	free(num);
+	ft_free_str(&num);
 	*line += 2;
 	return (ln);
 }
@@ -111,7 +114,7 @@ char	*param_expansion(char *line, t_msh *msh)
 	str = NULL;
 	str = malloc(sizeof(char) * (final_line_len(line, msh) + 1));
 	if (!str)
-		return (write(2, "minishell: malloc error\n", 24), NULL);
+		return (msh->exit_status = 1, NULL);
 	quo_flag = quo_check(*line, 0);
 	while (*line)
 	{
@@ -122,6 +125,8 @@ char	*param_expansion(char *line, t_msh *msh)
 		}
 		if (*line && *(line + 1) == '?')
 			i += put_exit_status(&str[i], &line, msh);
+		else if (*line && *(line + 1) >= '0' && *(line + 1) <= '9')
+			line += 2;
 		else if (*line)
 			line += var_value(line + 1, str, &i, msh) + 1;
 	}

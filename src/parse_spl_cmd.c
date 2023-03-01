@@ -6,117 +6,139 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 15:37:13 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/01 15:42:23 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	redir_info(char *line, char *mode)
+int	wrd_collect(char *line, int count)
 {
-	int		count;
-
-	count = 1;
-	if (*line != *(line + 1))
-		*mode = *line;
-	else if (*line == '<')
-		*mode = '-';
-	else
-		*mode = '+';
-	if (*line == *(line + 1))
-		count++;
-	while (*(line + count) && is_in_str(*(line + count), STR_WHSPACE))
-		count++;
-	return (count);
-}
-
-int	wrd_collect(char *line, t_cmd_bld *bld)
-{
-	int	count;
 	int	quo_flag;
 
-	count = 0;
-	quo_flag = quo_check(*line, 0);
-	if (quo_flag)
+	quo_flag = 0;
+	while (line[count] && !is_in_str(line[count], STR_WHSPACE)
+		&& !is_in_str(line[count], STR_REDIR))
 	{
-		line++;
-		bld->quote = 1;
-		quo_flag = quo_check(*(line + count), quo_flag);
-		while (*(line + count) && quo_flag)
+		if (is_in_str(line[count], STR_QUOTE))
 		{
-			count++;
-			quo_flag = quo_check(*(line + count), quo_flag);
+			quo_flag = quo_check(line[count], quo_flag);
+			ft_strlcpy(line + count, line + count + 1, ft_strlen(line + count));
+			while (line[count] && quo_flag)
+			{
+				quo_flag = quo_check(line[count], quo_flag);
+				if (!quo_flag)
+					ft_strlcpy(line + count, line + count + 1,
+						ft_strlen(line + count));
+				else
+					count++;
+			}
 		}
-	}
-	else
-	{
-		while (*(line + count) && !is_in_str(*(line + count), STR_WHSPACE)
-			&& !is_in_str(*(line + count), STR_QUOTE)
-			&& !is_in_str(*(line + count), STR_REDIR))
+		else
 			count++;
 	}
 	return (count);
 }
 
-int	fill_the_struct(t_spl_cmd *cmd, int argc, int redirc, t_cmd_bld	bld)
+int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 {
-	char	*str;
+	int	eword;
 
-	str = NULL;
-	str = malloc(sizeof(char) * (bld.symb_count + 1));
-	if (!str)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
-	str[bld.symb_count] = '\0';
-	while (--bld.symb_count >= 0)
-		str[bld.symb_count] = *(bld.line + bld.symb_count);
-	if (bld.mode)
+	while (is_in_str(*line, STR_WHSPACE))
+		line++;
+	if (!(*line))
 	{
-		cmd->redir[redirc - 1].file = str;
-		cmd->redir[redirc - 1].mode = bld.mode;
+		msh->argv = malloc(sizeof(char *) * (argc + 1));
+		if (!msh->argv)
+			return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		msh->argv[argc] = NULL;
+		msh->argc = argc;
 	}
 	else
-		cmd->argv[argc - 1] = str;
+	{
+		argc++;
+		eword = wrd_collect(line, 0);
+		if ((line[eword] && parse_cmd_argv(line + eword + 1, argc, msh))
+			|| (!line[eword] && parse_cmd_argv(line + eword, argc, msh)))
+			return (1);
+		line[eword] = '\0';
+		msh->argv[argc - 1] = line;
+	}
 	return (0);
 }
 
-int	build_the_struct(t_spl_cmd *cmd, char *line, int argc, int redirc)
+int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 {
-	t_cmd_bld	bld;
+	int		i_tmp;
+	char	tmp;
+	int		status_lcl;
 
-	bld.symb_count = 0;
-	bld.mode = '\0';
-	bld.quote = 0;
-	while (line && is_in_str(*line, STR_WHSPACE))
-		line++;
-	if (!(*line))
-		return (ft_malloc_spl_cmd(cmd, argc, redirc));
-	if (is_in_str(*line, STR_REDIR))
-	{
-		line += redir_info(line, &bld.mode);
-		redirc++;
-	}
+	i_tmp = *i;
+	*i += wrd_collect(&line[*i], 0);
+	tmp = line[*i];
+	line[*i] = '\0';
+	if (rdr->mode == '>' || rdr->mode == '+')
+		status_lcl = redir_out(&line[i_tmp], rdr);
 	else
-		argc++;
-	bld.symb_count = wrd_collect(line, &bld);
-	line += bld.quote;
-	if (build_the_struct(cmd, line + bld.symb_count + bld.quote, argc, redirc))
-		return (1);
-	bld.line = line;
-	return (fill_the_struct(cmd, argc, redirc, bld));
+		status_lcl = redir_in(&line[i_tmp], rdr, msh);
+	line[*i] = tmp;
+	while (i_tmp < *i)
+		line[i_tmp++] = ' ';
+	return (status_lcl);
+}
+
+int	parse_redir(char *line, t_redir *rdr, t_msh *msh)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		while (line[i] && line[i] != '<' && line[i] != '>')
+			i++;
+		if (line[i] && line[i] != line[i + 1])
+			rdr->mode = line[i];
+		else if (line[i] == '>' && line[i + 1] == '>')
+			rdr->mode = '+';
+		else if (line[i] == '<' && line[i + 1] == '<')
+			rdr->mode = '-';
+		while (line[i] == '<' || line[i] == '>')
+		{
+			line[i] = ' ';
+			i++;
+		}
+		while (is_in_str(line[i], STR_WHSPACE))
+			i++;
+		if (line[i])
+			if (run_redir(line, &i, rdr, msh))
+				return (1);
+	}
+	return (0);
 }
 
 void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 {
-	t_spl_cmd	cmd;
+	t_redir	rdr;
+	int		status_lcl;
+	int		skip;
 
+	rdr.stdin_cpy = 0;
+	rdr.stdout_cpy = 0;
+	skip = 0;
 	trim_whitespaces(&line, &eline);
 	*eline = '\0';
-//	line = first_wrd_check(line, msh);
-	line = param_expansion(line, msh);
-	if (build_the_struct(&cmd, line, 0, 0))
-		return (free(line), ft_free_redir_info(&cmd), ft_free_argv(&cmd));
-	free(line);
-	cmd.stdin_cpy = 0;
-	cmd.stdout_cpy = 0;
-	run_spl_cmd(&cmd, msh);
+	msh->spl_cmd = param_expansion(line, msh);
+	if (!msh->spl_cmd)
+		return (ft_putstr_fd("minishell: malloc error\n", 2));
+	status_lcl = parse_redir(msh->spl_cmd, &rdr, msh);
+	if (!status_lcl && !(*line >= '0' && *line <= '9'))
+		status_lcl = first_wrd_check(&skip, msh->spl_cmd, msh);
+	if (!status_lcl && msh->spl_cmd[skip])
+		status_lcl = parse_cmd_argv(&msh->spl_cmd[skip], 0, msh);
+	if (!status_lcl && msh->spl_cmd[skip])
+		run_cmd_exec(msh);
+	else
+		msh->exit_status = status_lcl;
+	redir_clean(&rdr);
+	ft_free_spl_cmd(msh);
 }

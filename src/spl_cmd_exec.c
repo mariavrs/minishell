@@ -3,55 +3,111 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/25 16:02:11 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/02/28 19:28:47 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-void	run_exec(t_spl_cmd *cmd, t_msh *msh)
+void	run_bin(char *full_name, char **argv, t_msh *msh)
 {
-	if (!ft_strncmp(cmd->argv[0], "cd", 3))
-		msh->exit_status = ft_cd(cmd->argv, msh);
-	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
-		msh->exit_status = ft_echo(cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "env", 4))
-		msh->exit_status = ft_env(*msh);
-	else if (!ft_strncmp(cmd->argv[0], "exit", 5))
-		msh->exit_status = ft_exit(cmd->argv, msh);
-	else if (!ft_strncmp(cmd->argv[0], "export", 7))
-		msh->exit_status = ft_export(msh, cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
-		msh->exit_status = ft_pwd();
-	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
-		msh->exit_status = ft_unset(msh, cmd->argv);
-	else if (search_bin(cmd->argv, msh))
-	{
-		printf("minishell: %s: command not found\n", cmd->argv[0]);
-		msh->exit_status = 127;
-	}
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+		exit(execve(full_name, argv, msh->envp));
+	else
+		waitpid(pid, &msh->exit_status, 0);
+	msh->exit_status = WEXITSTATUS(msh->exit_status);
 }
 
-void	run_spl_cmd(t_spl_cmd *cmd, t_msh *msh)
+char	*bin_get_full_name(char *path, char *argv, int name_len)
 {
-	int	i;
+	int			path_len;
+	char		*full_name;
+	struct stat	statbuf;
+
+	path_len = ft_strlen(path);
+	full_name = malloc(sizeof(char) * (path_len + name_len + 2));
+	if (full_name)
+	{
+		ft_strlcpy(full_name, path, path_len + 1);
+		full_name[path_len] = '/';
+		ft_strlcpy(&full_name[path_len + 1], argv, name_len + 1);
+		if (stat(full_name, &statbuf))
+			ft_free_str(&full_name);
+	}
+	else
+		ft_putstr_fd("minishell: malloc error\n", 2);
+	return (full_name);
+}
+
+int	search_in_path(char **argv, t_msh *msh)
+{
+	t_path	pb;
+	int		i;
 
 	i = -1;
-	msh->exit_status = 0;
-	while (++i < cmd->redirc && msh->exit_status == 0)
+	pb.path_val = env_get(msh->envp_lcl, "PATH");
+	if (!pb.path_val)
+		pb.path_val = env_get(msh->envp, "PATH");
+	if (!pb.path_val)
+		return (1);
+	pb.path_split = ft_split(pb.path_val, ':');
+	ft_free_str(&pb.path_val);
+	if (!pb.path_split)
+		return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
+	pb.full_name = NULL;
+	pb.name_len = ft_strlen(argv[0]);
+	while (pb.path_split[++i] && !pb.full_name)
+		pb.full_name = bin_get_full_name(pb.path_split[i], argv[0],
+				pb.name_len);
+	ft_free_dbl_str(&pb.path_split);
+	if (pb.full_name)
+		return (run_bin(pb.full_name, argv, msh),
+			ft_free_str(&pb.full_name), 0);
+	return (1);
+}
+
+int	search_bin(char **argv, t_msh *msh)
+{
+	struct stat	statbuf;
+
+	if (ft_strchr(argv[0], '/'))
 	{
-		if (cmd->redir[i].mode == '>' || cmd->redir[i].mode == '+')
-			msh->exit_status = redir_out(cmd, i);
+		if (!stat(argv[0], &statbuf))
+			run_bin(argv[0], argv, msh);
 		else
-			msh->exit_status = redir_in(cmd, i, msh);
-		close(cmd->redir[i].fd);
+			return (1);
 	}
-	ft_free_redir_info(cmd);
-	if (msh->exit_status == 0)
-		run_exec(cmd, msh);
-	ft_free_argv(cmd);
-	redir_clean(cmd);
+	else
+		if (search_in_path(argv, msh))
+			return (1);
+	return (0);
+}
+
+void	run_cmd_exec(t_msh *msh)
+{
+	if (!ft_strncmp(msh->argv[0], "cd", 3))
+		msh->exit_status = ft_cd(msh->argv, msh);
+	else if (!ft_strncmp(msh->argv[0], "echo", 5))
+		msh->exit_status = ft_echo(msh->argv);
+	else if (!ft_strncmp(msh->argv[0], "env", 4))
+		msh->exit_status = ft_env(*msh);
+	else if (!ft_strncmp(msh->argv[0], "exit", 5))
+		msh->exit_status = ft_exit(msh->argv, msh);
+	else if (!ft_strncmp(msh->argv[0], "export", 7))
+		msh->exit_status = ft_export(msh, msh->argv);
+	else if (!ft_strncmp(msh->argv[0], "pwd", 4))
+		msh->exit_status = ft_pwd();
+	else if (!ft_strncmp(msh->argv[0], "unset", 6))
+		msh->exit_status = ft_unset(msh, msh->argv);
+	else if (search_bin(msh->argv, msh))
+	{
+		printf("minishell: %s: command not found\n", msh->argv[0]);
+		msh->exit_status = 127;
+	}
 }
