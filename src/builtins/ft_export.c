@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/23 16:06:26 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/02 17:50:01 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ int	ft_export(t_msh *msh, char **inputs)
 	{
 		split = NULL;
 		split = ft_split(inputs[i], '=');
+		if (!split)
+			return (1);
 		if (!is_valid(split[0]))
 		{
 			if (!pos_sep(inputs[i]))
-				return (free_table(split), 0);
+				return (ft_free_dbl_str(&split), 0);
 			if (!env_exist(msh->envp, split[0]))
 				env_edit(&msh->envp, split[0], inputs[i] + pos_sep(inputs[i]));
 			else
@@ -71,7 +73,7 @@ int	ft_export(t_msh *msh, char **inputs)
 		}
 		else
 			exp_error(split[0]);
-		free_table(split);
+		ft_free_dbl_str(&split);
 	}
 	return (0);
 }
