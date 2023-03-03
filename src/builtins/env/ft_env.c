@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/02 17:39:24 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:34:55 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,19 @@ int	ft_parent_env_cpy(char ***env, char **envp)
 	return (0);
 }
 
-int	ft_env(t_msh msh)
+int	ft_env(t_msh msh, int mode)
 {
-	int	i;
+	int		i;
 
 	i = -1;
-	while (msh.envp[++i])
-		printf("%s\n", msh.envp[i]);
+	if (mode == 1)
+		while (msh.envp[++i])
+			printf("%s\n", msh.envp[i]);
+	else
+	{
+		while (msh.envp[++i])
+			if (pos_sep(msh.envp[i]))
+				printf("%s\n", msh.envp[i]);
+	}
 	return (0);
 }

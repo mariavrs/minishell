@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/03 10:30:35 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:42:35 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_valid(char *str)
 	return (0);
 }
 
-static int	pos_sep(char *str)
+int	pos_sep(char *str)
 {
 	int	i;
 
@@ -55,7 +55,7 @@ int	ft_export(t_msh *msh, char **inputs)
 
 	i = 0;
 	if (!inputs[1])
-		return (ft_env(*msh), 0);
+		return (ft_env(*msh, 1), 0);
 	while (inputs[++i])
 	{
 		split = ft_split(inputs[i], '=');
@@ -63,8 +63,6 @@ int	ft_export(t_msh *msh, char **inputs)
 			return (1);
 		if (!is_valid(split[0]))
 		{
-			if (!pos_sep(inputs[i]))
-				return (ft_free_dbl_str(&split), 0);
 			if (!env_exist(msh->envp, split[0]))
 				env_edit(&msh->envp, split[0], inputs[i] + pos_sep(inputs[i]));
 			else

@@ -67,7 +67,9 @@ char	*env_get(char **env, char *var)
 					* sizeof(char));
 			if (!value)
 				return (ft_free_dbl_str(&tmp), NULL);
-			ft_strlcpy(value, tmp[1], ft_strlen(tmp[1]) + 1);
+			if (tmp[1])
+				ft_strlcpy(value, env[i] + pos_sep(env[i]),
+					ft_strlen(env[i] + pos_sep(env[i])) + 1);
 		}
 		ft_free_dbl_str(&tmp);
 	}

@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/01 20:45:13 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/03 11:32:08 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int				ft_pwd(void);
 int				ft_export(t_msh *msh, char **inputs);
 int				ft_unset(t_msh *msh, char **inputs);
 int				ft_exit(char **input, t_msh *msh);
-int				ft_env(t_msh msh);
+int				ft_env(t_msh msh, int mode);
 // Environment extra functions
 int				env_exist(char **env, char *var);
 void			ft_fill_env(char *env, char *var, char *value);
@@ -43,10 +43,7 @@ int				env_edit(char ***env, char *var, char *value);
 char			*env_get(char **env, char *var);
 int				env_add(char ***env, char *value);
 int				env_del(char ***env, char *var);
-
-// Generic functions
-void			free_table(char **table);
-
+int				pos_sep(char *str);
 // utils functions
 long long int	ft_ll_atoi(const char *str);
 
