@@ -14,8 +14,8 @@
 
 typedef struct s_del
 {
-	char	**e_tmp;
-	char	**s_tmp;
+	char	**t_e;
+	char	**t_s;
 	int		i;
 	int		k;
 }	t_del;
@@ -107,26 +107,25 @@ int	env_del(char ***env, char *var)
 
 	d.k = 0;
 	d.i = -1;
-	if (env_exist(*env, var) || ft_parent_env_cpy(&d.e_tmp, *env))
+	if (env_exist(*env, var) || ft_parent_env_cpy(&d.t_e, *env))
 		return (1);
 	ft_free_dbl_str(env);
-	*env = malloc (ft_count_elem(d.e_tmp) * sizeof(char *));
+	*env = malloc (ft_count_elem(d.t_e) * sizeof(char *));
 	if (!(*env))
-		return (ft_free_dbl_str(&d.e_tmp), 1);
-	while (d.e_tmp[++d.i])
+		return (ft_free_dbl_str(&d.t_e), 1);
+	while (d.t_e[++d.i])
 	{
-		d.s_tmp = ft_split(d.e_tmp[d.i], '=');
-		if (!d.s_tmp)
+		d.t_s = ft_split(d.t_e[d.i], '=');
+		if (!d.t_s)
 			return (1);
-		if (ft_strncmp(d.s_tmp[0], var, ft_strlen(var) + 1) != 0)
+		if (ft_strncmp(d.t_s[0], var, ft_strlen(var) + 1) != 0)
 		{
-			(*env)[d.k] = malloc ((ft_strlen(d.e_tmp[d.i]) + 1) * sizeof(char));
+			(*env)[d.k] = malloc ((ft_strlen(d.t_e[d.i]) + 1) * sizeof(char));
 			if (!(*env))
-				return (ft_free_dbl_str(&d.e_tmp), 1);
-			ft_strlcpy((*env)[d.k++], d.e_tmp[d.i],
-				ft_strlen(d.e_tmp[d.i]) + 1);
+				return (ft_free_dbl_str(&d.t_e), 1);
+			ft_strlcpy((*env)[d.k++], d.t_e[d.i], ft_strlen(d.t_e[d.i]) + 1);
 		}
-		ft_free_dbl_str(&d.s_tmp);
+		ft_free_dbl_str(&d.t_s);
 	}
-	return ((*env)[d.k] = NULL, ft_free_dbl_str(&d.e_tmp), 0);
+	return ((*env)[d.k] = NULL, ft_free_dbl_str(&d.t_e), 0);
 }

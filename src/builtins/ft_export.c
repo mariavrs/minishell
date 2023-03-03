@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/02 17:50:01 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/03 10:30:35 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	ft_export(t_msh *msh, char **inputs)
 		return (ft_env(*msh), 0);
 	while (inputs[++i])
 	{
-		split = NULL;
 		split = ft_split(inputs[i], '=');
 		if (!split)
 			return (1);
