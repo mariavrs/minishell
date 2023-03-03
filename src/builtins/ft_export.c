@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/03 11:42:35 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/03 17:20:33 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,29 +48,54 @@ static void	exp_error(char *var)
 	ft_putstr_fd(": not a valid identifier\n", 2);
 }
 
+static void	export_env_print(t_msh *msh)
+{
+	char	*line_1;
+	char	*line_2;
+	char	*value;
+	char	*var;
+	int		i;
+
+	i = -1;
+	while (msh->envp[++i])
+	{
+		var = ft_substr(msh->envp[i], 0, pos_sep(msh->envp[i]) - 1);
+		value = ft_strdup(msh->envp[i] + pos_sep(msh->envp[i]));
+		line_1 = ft_strjoin("declare -x ", var);
+		line_2 = ft_strjoin(line_1, "=\"");
+		ft_free_str(&line_1);
+		line_1 = ft_strjoin(line_2, value);
+		ft_free_str(&line_2);
+		line_2 = ft_strjoin(line_1, "\"");
+		printf("%s\n", line_2);
+		ft_free_str(&var);
+		ft_free_str(&value);
+		ft_free_str(&line_2);
+		ft_free_str(&line_1);
+	}
+}
+
 int	ft_export(t_msh *msh, char **inputs)
 {
-	char	**split;
+	char	*e_var;
 	int		i;
 
 	i = 0;
 	if (!inputs[1])
-		return (ft_env(*msh, 1), 0);
+		return (export_env_print(msh), 0);
 	while (inputs[++i])
 	{
-		split = ft_split(inputs[i], '=');
-		if (!split)
-			return (1);
-		if (!is_valid(split[0]))
+		e_var = ft_substr(inputs[i], 0, pos_sep(inputs[i]) - 1);
+		if (!is_valid(e_var))
 		{
-			if (!env_exist(msh->envp, split[0]))
-				env_edit(&msh->envp, split[0], inputs[i] + pos_sep(inputs[i]));
+			if (!env_exist(msh->envp, e_var))
+				env_edit(&msh->envp, e_var, inputs[i] + pos_sep(inputs[i]));
 			else
 				env_add(&msh->envp, inputs[i]);
 		}
 		else
-			exp_error(split[0]);
-		ft_free_dbl_str(&split);
+			exp_error(e_var);
+		ft_free_str(&e_var);
 	}
 	return (0);
 }

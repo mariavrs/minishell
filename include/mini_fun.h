@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/03 11:32:08 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/03 12:23:08 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ char			*env_get(char **env, char *var);
 int				env_add(char ***env, char *value);
 int				env_del(char ***env, char *var);
 int				pos_sep(char *str);
+
 // utils functions
 long long int	ft_ll_atoi(const char *str);
 

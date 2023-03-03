@@ -23,84 +23,75 @@ typedef struct s_del
 int	env_edit(char ***env, char *var, char *value)
 {
 	int		i;
-	char	**tmp;
+	char	*env_var;
 
 	i = -1;
-	tmp = NULL;
 	while ((*env)[++i])
 	{
-		tmp = ft_split((*env)[i], '=');
-		if (!tmp)
-			return (1);
-		if (ft_strncmp(tmp[0], var, ft_strlen(var) + 1) == 0)
+		env_var = ft_substr((*env)[i], 0, pos_sep((*env)[i]) - 1);
+		if (!ft_strncmp(env_var, var, ft_strlen(var) + 1))
 		{
 			free((*env)[i]);
 			(*env)[i] = NULL;
-			(*env)[i] = malloc((ft_strlen(tmp[0]) + ft_strlen(value) + 2)
+			(*env)[i] = malloc((ft_strlen(env_var) + ft_strlen(value) + 2)
 					* sizeof(char));
 			if (!(*env)[i])
-				return (ft_free_dbl_str(&tmp), 1);
-			ft_fill_env((*env)[i], tmp[0], value);
+				return (ft_free_str(&env_var), 1);
+			ft_fill_env((*env)[i], env_var, value);
 		}
-		ft_free_dbl_str(&tmp);
+		ft_free_str(&env_var);
 	}
 	return (0);
 }
 
 char	*env_get(char **env, char *var)
 {
-	char	**tmp;
-	char	*value;
+	char	*e_var;
+	char	*e_val;
 	int		i;
 
 	i = -1;
-	value = NULL;
 	while (env[++i])
 	{
-		tmp = ft_split(env[i], '=');
-		if (!tmp)
-			return (NULL);
-		if (ft_strncmp(tmp[0], var, ft_strlen(var) + 1) == 0)
-		{
-			value = NULL;
-			value = malloc((ft_strlen(tmp[1]) + 1)
-					* sizeof(char));
-			if (!value)
-				return (ft_free_dbl_str(&tmp), NULL);
-			if (tmp[1])
-				ft_strlcpy(value, env[i] + pos_sep(env[i]),
-					ft_strlen(env[i] + pos_sep(env[i])) + 1);
-		}
-		ft_free_dbl_str(&tmp);
+		e_var = ft_substr(env[i], 0, pos_sep(env[i]) - 1);
+		e_val = ft_strdup(env[i] + pos_sep(env[i]));
+		if (!ft_strncmp(e_var, var, ft_strlen(var) + 1))
+			return(ft_free_str(&e_var), e_val);
+		ft_free_str(&e_var);
+		ft_free_str(&e_val);
 	}
-	return (value);
+	return (NULL);
 }
 
 int	env_add(char ***env, char *value)
 {
 	char	**env_tmp;
+	char	*val_tmp;
 	int		i;
 
 	i = -1;
+	if (value[pos_sep(value)] == '\0')
+		val_tmp = ft_strjoin(value, "\"\"");
+	else
+		val_tmp = ft_strdup(value);
 	if (ft_parent_env_cpy(&env_tmp, *env))
 		return (1);
 	ft_free_dbl_str(env);
 	*env = malloc ((ft_count_elem(env_tmp) + 2) * sizeof(char *));
 	if (!(*env))
-		return (ft_free_dbl_str(&env_tmp), 1);
+		return (ft_free_str(&val_tmp), ft_free_dbl_str(&env_tmp), 1);
 	while (env_tmp[++i])
 	{
-		(*env)[i] = malloc ((ft_strlen(env_tmp[i]) + 1) * sizeof(char));
-		if (!(*env))
-			return (ft_free_dbl_str(&env_tmp), 1);
-		ft_strlcpy((*env)[i], env_tmp[i], ft_strlen(env_tmp[i]) + 1);
+		(*env)[i] = ft_strdup(env_tmp[i]);
+		if (!(*env)[i])
+			return (ft_free_str(&val_tmp), ft_free_dbl_str(&env_tmp), 1);
 	}
 	(*env)[i] = malloc ((ft_strlen(value) + 1) * sizeof(char));
 	if (!(*env))
-		return (ft_free_dbl_str(&env_tmp), 1);
-	ft_strlcpy((*env)[i], value, ft_strlen(value) + 1);
+		return (ft_free_str(&val_tmp), ft_free_dbl_str(&env_tmp), 1);
+	(*env)[i] = ft_strdup(val_tmp);
 	(*env)[++i] = NULL;
-	return (ft_free_dbl_str(&env_tmp), 0);
+	return (ft_free_str(&val_tmp), ft_free_dbl_str(&env_tmp), 0);
 }
 
 int	env_del(char ***env, char *var)
@@ -117,17 +108,13 @@ int	env_del(char ***env, char *var)
 		return (ft_free_dbl_str(&d.t_e), 1);
 	while (d.t_e[++d.i])
 	{
-		d.t_s = ft_split(d.t_e[d.i], '=');
-		if (!d.t_s)
-			return (1);
-		if (ft_strncmp(d.t_s[0], var, ft_strlen(var) + 1) != 0)
+		if (ft_strncmp(ft_substr(d.t_e[d.i], 0, pos_sep(d.t_e[d.i]) - 1), var, ft_strlen(var) + 1))
 		{
 			(*env)[d.k] = malloc ((ft_strlen(d.t_e[d.i]) + 1) * sizeof(char));
 			if (!(*env))
 				return (ft_free_dbl_str(&d.t_e), 1);
 			ft_strlcpy((*env)[d.k++], d.t_e[d.i], ft_strlen(d.t_e[d.i]) + 1);
 		}
-		ft_free_dbl_str(&d.t_s);
 	}
 	return ((*env)[d.k] = NULL, ft_free_dbl_str(&d.t_e), 0);
 }
