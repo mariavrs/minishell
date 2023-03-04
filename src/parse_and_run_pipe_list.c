@@ -6,45 +6,24 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 16:05:14 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/04 19:24:42 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-void	close_fd(int fd1, int fd2)
-{
-	close(fd1);
-	close(fd2);
-}
-
 void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 {
 	int		fd[2];
-	pid_t	id[2];
 
 	pipe(fd);
 	if (pipe(fd) == -1)
 		return (perror("pipe"));
-	id[0] = fork();
-	if (id[0] == 0)
-	{
-		dup2(fd[1], STDOUT_FILENO);
+	run_pipe_left(fd, line, del, msh);
+	if (!msh->exit_status)
+		run_pipe_right(fd, eline, del, msh);
+	else
 		close_fd(fd[0], fd[1]);
-		parse_pipe(line, del, msh);
-		exit(msh->exit_status);
-	}
-	id[1] = fork();
-	if (id[1] == 0)
-	{
-		dup2(fd[0], STDIN_FILENO);
-		close_fd(fd[0], fd[1]);
-		parse_pipe(del + 1, eline, msh);
-		exit(msh->exit_status);
-	}
-	close_fd(fd[0], fd[1]);
-	waitpid(id[0], &msh->exit_status, 0);
-	waitpid(id[1], &msh->exit_status, 0);
 }
 
 void	parse_pipe(char *line, char *eline, t_msh *msh)

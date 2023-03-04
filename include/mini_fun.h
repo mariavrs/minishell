@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/01 20:45:13 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/04 19:27:14 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,10 @@ int				brackets_check(char *line, char *eline);
 int				trim_brackets(char **line, char **eline);
 int				trim_whitespaces(char **line, char **eline);
 int				quo_check(char del, int quo_flag);
+
+void			close_fd(int fd0, int fd1);
+void			run_pipe_left(int fd[2], char *line, char *del, t_msh *msh);
+void			run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh);
 
 void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
 int				wrd_collect(char *line, int count);

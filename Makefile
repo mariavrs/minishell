@@ -6,7 +6,7 @@
 #    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/02/28 19:43:50 by mvorslov         ###   ########.fr        #
+#    Updated: 2023/03/04 19:25:08 by mvorslov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ DEPS_DIR = include
 BUILT_DIR = builtins/
 UTILS_DIR = utils/
 
-SRC_LIST = minishell.c syntax_check.c parse_and_run_pipe_list.c \
+SRC_LIST = minishell.c syntax_check.c parse_and_run_pipe_list.c run_pipe_utils.c \
 	parser_utils.c parse_spl_cmd.c parser_utils_spl_cmd.c spl_cmd_exec.c \
 	spl_cmd_redir.c spl_cmd_local_var.c \
 	param_expansion.c param_expansion_utils.c \
