@@ -86,10 +86,9 @@ int	env_add(char ***env, char *value)
 		if (!(*env)[i])
 			return (ft_free_str(&val_tmp), ft_free_dbl_str(&env_tmp), 1);
 	}
-	(*env)[i] = malloc ((ft_strlen(value) + 1) * sizeof(char));
-	if (!(*env))
-		return (ft_free_str(&val_tmp), ft_free_dbl_str(&env_tmp), 1);
 	(*env)[i] = ft_strdup(val_tmp);
+	if (!(*env)[i])
+		return (ft_free_str(&val_tmp), ft_free_dbl_str(&env_tmp), 1);
 	(*env)[++i] = NULL;
 	return (ft_free_str(&val_tmp), ft_free_dbl_str(&env_tmp), 0);
 }
