@@ -97,6 +97,7 @@ int	env_add(char ***env, char *value)
 int	env_del(char ***env, char *var)
 {
 	t_del	d;
+	char	*sub;
 
 	d.k = 0;
 	d.i = -1;
@@ -108,13 +109,15 @@ int	env_del(char ***env, char *var)
 		return (ft_free_dbl_str(&d.t_e), 1);
 	while (d.t_e[++d.i])
 	{
-		if (ft_strncmp(ft_substr(d.t_e[d.i], 0, pos_sep(d.t_e[d.i]) - 1), var, ft_strlen(var) + 1))
+		sub = ft_substr(d.t_e[d.i], 0, pos_sep(d.t_e[d.i]) - 1);
+		if (ft_strncmp(sub, var, ft_strlen(var) + 1))
 		{
 			(*env)[d.k] = malloc ((ft_strlen(d.t_e[d.i]) + 1) * sizeof(char));
 			if (!(*env))
 				return (ft_free_dbl_str(&d.t_e), 1);
 			ft_strlcpy((*env)[d.k++], d.t_e[d.i], ft_strlen(d.t_e[d.i]) + 1);
 		}
+		free(sub);
 	}
 	return ((*env)[d.k] = NULL, ft_free_dbl_str(&d.t_e), 0);
 }
