@@ -6,16 +6,12 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/13 17:17:00 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/13 17:39:28 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_STRUCT_H
 # define MINI_STRUCT_H
-
-# define EXEC_CMD 1
-# define PIPE_CMD 2
-# define LIST_CMD 3
 
 # define STR_WHSPACE " \t\n\r\v"
 # define STR_REDIR "<>"
@@ -39,6 +35,13 @@ typedef struct s_msh
 	int		argc;
 	int		exit_status;
 }	t_msh;
+
+typedef struct s_stx
+{
+	char	special_ch;
+	int		quo_flag;
+	int		brackets_flag;
+}	t_stx;
 
 typedef struct s_redir
 {
@@ -65,14 +68,6 @@ typedef struct s_env
 	int		value_ln;
 	int		i;
 }	t_env;
-
-
-typedef struct s_stx
-{
-	char	special_ch;
-	int		quo_flag;
-	int		brackets_flag;
-}	t_stx;
 
 typedef struct s_search_bin
 {
