@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/01 15:42:23 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/13 17:34:07 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	skip = 0;
 	trim_whitespaces(&line, &eline);
 	*eline = '\0';
+	msh->argv = NULL;
+	msh->spl_cmd = NULL;
 	msh->spl_cmd = param_expansion(line, msh);
 	if (!msh->spl_cmd)
 		return (ft_putstr_fd("minishell: malloc error\n", 2));
