@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/01 15:42:30 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/13 17:17:00 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,16 @@ typedef struct s_heredoc
 	char		*hdoc_id;
 	struct stat	statbuf;
 }	t_heredoc;
+
+typedef struct s_env
+{
+	char	*full_var;
+	char	*value;
+	int		name_ln;
+	int		value_ln;
+	int		i;
+}	t_env;
+
 
 typedef struct s_stx
 {

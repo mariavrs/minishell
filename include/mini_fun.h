@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/04 19:27:14 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/13 17:19:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,10 @@ int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
 
 int				first_wrd_check(int *skip, char *line, t_msh *msh);
+
+int				find_in_envp(t_env env, char **envp);
+int				env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag);
+int				env_lcl_replace(t_env env, char **envp);
 
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
