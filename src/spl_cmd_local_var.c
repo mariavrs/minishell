@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/13 17:18:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/15 00:17:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ int	get_full_var_str(char *line, t_env *env)
 {
 	char	tmp;
 
-	tmp = line[env->name_ln];
-	line[env->name_ln] = '\0';
+	tmp = line[env->name_ln + 1];
+	line[env->name_ln  + 1] = '\0';
 	env->full_var = ft_strjoin(line, env->value);
 	ft_free_str(&env->value);
-	line[env->name_ln] = tmp;
+	line[env->name_ln + 1] = tmp;
 	if (!env->full_var)
 		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	return (0);
@@ -51,11 +51,11 @@ int	first_wrd_check(int *skip, char *line, t_msh *msh)
 	{
 		if (line[env.name_ln] == '=')
 		{
-			env.value = get_var_value(&line[++env.name_ln]);
+			env.value = get_var_value(&line[env.name_ln + 1]);
 			if (!env.value)
 				return (*skip = 0, 1);
 			env.value_ln = ft_strlen(env.value);
-			*skip = env.name_ln + env.value_ln;
+			*skip = env.name_ln + 1 + env.value_ln;
 			if (line[*skip])
 				return (ft_free_str(&env.value), 0);
 			if (get_full_var_str(line, &env))

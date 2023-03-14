@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 17:17:30 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/13 17:19:11 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/15 00:18:44 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,11 @@ int	find_in_envp(t_env env, char **envp)
 
 	i = -1;
 	while (envp[++i])
-		if (!ft_strncmp(env.full_var, envp[i], env.name_ln))
+		if (!ft_strncmp(env.full_var, envp[i], env.name_ln)
+			&& ((env.full_var[env.name_ln] == '=')
+			|| (env.full_var[env.name_ln] == '\0'))
+			&& ((envp[i][env.name_ln] == '=')
+			|| (envp[i][env.name_ln] == '\0')))
 			return (i);
 	return (-1);
 }
