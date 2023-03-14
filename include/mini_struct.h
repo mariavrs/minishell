@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/13 17:39:28 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/14 19:40:56 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,17 @@
 # define STR_LOL "|&"
 # define STR_SPECIAL " \t\n\r\v<>()\'\"|&"
 
+# include <stdio.h>
+# include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/stat.h>
-// ^ duplicate from mini_fun.h, reotganization of .h to be done
+# include <sys/wait.h>
+# include <sys/stat.h>
+# include <dirent.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <stdlib.h>
 
 typedef struct s_msh
 {
