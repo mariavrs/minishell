@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/03 11:33:23 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/14 19:36:28 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,9 @@ void	run_cmd_exec(t_msh *msh)
 		msh->exit_status = ft_unset(msh, msh->argv);
 	else if (search_bin(msh->argv, msh))
 	{
-		printf("minishell: %s: command not found\n", msh->argv[0]);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(msh->argv[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		msh->exit_status = 127;
 	}
 }

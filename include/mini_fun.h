@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/03 12:23:08 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/14 19:35:49 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,10 @@ int				trim_brackets(char **line, char **eline);
 int				trim_whitespaces(char **line, char **eline);
 int				quo_check(char del, int quo_flag);
 
+void			close_fd(int fd0, int fd1);
+void			run_pipe_left(int fd[2], char *line, char *del, t_msh *msh);
+void			run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh);
+
 void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
 int				wrd_collect(char *line, int count);
 
@@ -78,6 +82,10 @@ int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
 
 int				first_wrd_check(int *skip, char *line, t_msh *msh);
+
+int				find_in_envp(t_env env, char **envp);
+int				env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag);
+int				env_lcl_replace(t_env env, char **envp);
 
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
