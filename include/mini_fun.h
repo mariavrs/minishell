@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/14 19:35:49 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/14 20:20:31 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,6 @@
 # define _GNU_SOURCE
 # include "../lib/libft/libft.h"
 # include "mini_struct.h"
-# include <stdio.h>
-# include <unistd.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <sys/wait.h>
-# include <sys/stat.h>
-# include <dirent.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <stdlib.h>
 
 // Builtins prototypes
 int				ft_echo(char *input[]);
