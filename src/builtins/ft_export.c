@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/14 23:25:16 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/15 01:15:08 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,9 @@ int	ft_export(t_msh *msh, char **inputs)
 		if (!is_valid(e_var))
 		{
 			env.full_var = ft_strdup(inputs[i]);
-			env.name_ln = ft_strlen(inputs[i]) - pos_sep(inputs[i]);
+			env.name_ln = 0;
+			while (inputs[i][env.name_ln] && inputs[i][env.name_ln] != '=')
+				env.name_ln++;
 			env.i = find_in_envp(env, msh->envp);
 			if (env.i >= 0)
 				env_lcl_replace(env, msh->envp);
