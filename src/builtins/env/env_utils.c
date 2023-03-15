@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/02 17:49:21 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/15 00:22:24 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,14 @@ int	env_exist(char **env, char *var)
 	if (!value)
 		return (1);
 	return (free(value), 0);
+}
+
+int	env_size(char **env)
+{
+	int	i;
+
+	i = -1;
+	while (env[++i])
+		i++;
+	return (i - 1);
 }
