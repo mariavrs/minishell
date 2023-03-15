@@ -66,22 +66,19 @@ int	env_del(char ***env, char *var)
 	j = -1;
 	if (env_exist(*env, var))
 		return (1);
-	// to be corrected to remove mallocs
-	env_tmp = NULL;
-	env_tmp = malloc ((env_size(*env) - 1) * sizeof(char *));
+	env_tmp = malloc (env_size(*env) * sizeof(char *));
 	if (!env_tmp)
 		return (1);
 	while ((*env)[++i])
 	{
-		// to be corrected to remove mallocs
 		env_var = ft_substr((*env)[i], 0, pos_sep((*env)[i]) - 1);
 		if (ft_strncmp(env_var, var, ft_strlen(var) + 1))
 			env_tmp[++j] = (*env)[i];
 		else
-			free((*env)[i]);
-		free(env_var);
+			ft_free_str(&(*env)[i]);
+		ft_free_str(&env_var);
 	}
-	env_tmp[j + 1] = NULL;
+	env_tmp[++j] = NULL;
 	free(*env);
 	*env = env_tmp;
 	return (0);

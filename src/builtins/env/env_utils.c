@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/15 00:22:24 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/15 20:45:46 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	env_size(char **env)
 {
 	int	i;
 
-	i = -1;
-	while (env[++i])
+	i = 0;
+	while (env[i])
 		i++;
-	return (i - 1);
+	return (i);
 }

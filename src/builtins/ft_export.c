@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/15 01:15:08 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/16 00:45:57 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,19 @@
 
 static int	is_valid(char *str)
 {
+	int	i;
+
+	i = 0;
 	if (str[0] >= '0' && str[0] <= '9')
 		return (1);
-	while (*str)
+	while (str[i] && str[i] != '=')
 	{
-		if (!((*str >= 'a' && *str <= 'z')
-				|| (*str >= 'A' && *str <= 'Z')
-				|| *str == '_'
-				|| (*str >= '0' && *str <= '9')))
+		if (!((str[i] >= 'a' && str[i] <= 'z')
+				|| (str[i] >= 'A' && str[i] <= 'Z')
+				|| str[i] == '_'
+				|| (str[i] >= '0' && str[i] <= '9')))
 			return (1);
-		str++;
+		i++;
 	}
 	return (0);
 }
@@ -41,9 +44,18 @@ int	pos_sep(char *str)
 
 static void	exp_error(char *var)
 {
+	int	i;
+
+	i = 0;
+	if (!var)
+		return (ft_putstr_fd("minishell: malloc error\n", 2));
 	ft_putstr_fd("export: ", 2);
 	write(2, "\'", 1);
-	ft_putstr_fd(var, 2);
+	while (var[i] && var[i] != '=')
+	{
+		ft_putchar_fd(var[i], 2);
+		i++;
+	}
 	write(2, "\'", 1);
 	ft_putstr_fd(": not a valid identifier\n", 2);
 }
@@ -80,29 +92,26 @@ int	ft_export(t_msh *msh, char **inputs)
 {
 	int		i;
 	t_env	env;
-	char	*e_var;
 
 	i = 0;
 	if (!inputs[1])
 		return (export_env_print(msh), 0);
 	while (inputs[++i])
 	{
-		e_var = ft_substr(inputs[i], 0, pos_sep(inputs[i]) - 1);
-		if (!is_valid(e_var))
+		if (!is_valid(inputs[i]))
 		{
 			env.full_var = ft_strdup(inputs[i]);
 			env.name_ln = 0;
 			while (inputs[i][env.name_ln] && inputs[i][env.name_ln] != '=')
 				env.name_ln++;
 			env.i = find_in_envp(env, msh->envp);
-			if (env.i >= 0)
+			if (env.i >= 0 && pos_sep(inputs[i]) != 0)
 				env_lcl_replace(env, msh->envp);
-			else
+			else if (env.i < 0)
 				env_lcl_add(env, msh, msh->envp, 1);
 		}
 		else
-			exp_error(e_var);
-		ft_free_str(&e_var);
+			return (exp_error(inputs[i]), 1);
 	}
 	return (0);
 }
