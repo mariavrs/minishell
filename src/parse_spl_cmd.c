@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/13 17:34:07 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:30:22 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,10 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	msh->spl_cmd = param_expansion(line, msh);
 	if (!msh->spl_cmd)
 		return (ft_putstr_fd("minishell: malloc error\n", 2));
-	status_lcl = parse_redir(msh->spl_cmd, &rdr, msh);
-	if (!status_lcl && !(*line >= '0' && *line <= '9'))
+	if (!(*line >= '0' && *line <= '9'))
 		status_lcl = first_wrd_check(&skip, msh->spl_cmd, msh);
+	if (!status_lcl && msh->spl_cmd[skip])
+		status_lcl = parse_redir(msh->spl_cmd, &rdr, msh);
 	if (!status_lcl && msh->spl_cmd[skip])
 		status_lcl = parse_cmd_argv(&msh->spl_cmd[skip], 0, msh);
 	if (!status_lcl && msh->spl_cmd[skip])
