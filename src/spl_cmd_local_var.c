@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/15 00:17:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/16 17:00:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	get_full_var_str(char *line, t_env *env)
 	char	tmp;
 
 	tmp = line[env->name_ln + 1];
-	line[env->name_ln  + 1] = '\0';
+	line[env->name_ln + 1] = '\0';
 	env->full_var = ft_strjoin(line, env->value);
 	ft_free_str(&env->value);
 	line[env->name_ln + 1] = tmp;
