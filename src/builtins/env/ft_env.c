@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/14 22:35:56 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/19 15:16:31 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,15 @@ int	ft_parent_env_cpy(char ***env, char **envp)
 
 	i = -1;
 	nb_env = ft_count_elem(envp);
+	(*env) = NULL;
 	(*env) = malloc((nb_env + 1) * sizeof(char *));
 	if (!(*env))
-		return (1);
+		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	while (envp[++i])
 	{
-		(*env)[i] = NULL;
-		(*env)[i] = malloc ((ft_strlen(envp[i]) + 1) * sizeof(char));
+		(*env)[i] = ft_strdup(envp[i]);
 		if (!(*env)[i])
-			return (1);
-		ft_strlcpy((*env)[i], envp[i], ft_strlen(envp[i]) + 1);
+			return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	}
 	(*env)[i++] = NULL;
 	return (0);
@@ -51,13 +50,13 @@ int	ft_env(t_msh msh, int mode)
 	i = -1;
 	if (mode == 1)
 		while (msh.envp[++i])
-			printf("%s\n", msh.envp[i]);
+			ft_putendl_fd(msh.envp[i], 1);
 	else
 	{
 		while (msh.envp[++i])
 			if (ft_strncmp(msh.envp[i] + pos_sep(msh.envp[i]), "\"\"\0", 3)
 				&& pos_sep(msh.envp[i]))
-				printf("%s\n", msh.envp[i]);
+				ft_putendl_fd(msh.envp[i], 1);
 	}
 	return (0);
 }

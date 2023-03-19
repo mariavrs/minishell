@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/03 11:01:57 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/19 14:41:18 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ int	ft_cd(char **input, t_msh *msh)
 		dir = input[1];
 	else
 		dir = home;
-	env_edit(&msh->envp, "OLDPWD", current_dir);
-	if (chdir(dir) == 0)
+	if (!env_edit(&msh->envp, "OLDPWD", current_dir) && chdir(dir) == 0)
 	{
 		getcwd(current_dir, PATH_MAX);
 		env_edit(&msh->envp, "PWD", current_dir);
-		ft_free_str(&home);
-		return (0);
+		return (ft_free_str(&home), 0);
 	}
+	else if (env_edit(&msh->envp, "OLDPWD", current_dir))
+		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	else
 		return (perror("cd"), ft_free_str(&home), 1);
 }

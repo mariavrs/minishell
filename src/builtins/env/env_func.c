@@ -12,6 +12,14 @@
 
 #include "../../../include/mini_fun.h"
 
+typedef struct env_func
+{
+	char	*env_var;
+	char	**env_tmp;
+	int		i;
+	int		j;
+}	t_ef;
+
 int	env_edit(char ***env, char *var, char *value)
 {
 	int		i;
@@ -21,10 +29,11 @@ int	env_edit(char ***env, char *var, char *value)
 	while ((*env)[++i])
 	{
 		env_var = ft_substr((*env)[i], 0, pos_sep((*env)[i]) - 1);
+		if (!env_var)
+			return (1);
 		if (!ft_strncmp(env_var, var, ft_strlen(var) + 1))
 		{
-			free((*env)[i]);
-			(*env)[i] = NULL;
+			ft_free_str(&(*env)[i]);
 			(*env)[i] = malloc((ft_strlen(env_var) + ft_strlen(value) + 2)
 					* sizeof(char));
 			if (!(*env)[i])
@@ -47,6 +56,8 @@ char	*env_get(char **env, char *var)
 	{
 		e_var = ft_substr(env[i], 0, pos_sep(env[i]) - 1);
 		e_val = ft_strdup(env[i] + pos_sep(env[i]));
+		if (!e_var || !e_val)
+			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
 		if (!ft_strncmp(e_var, var, ft_strlen(var) + 1))
 			return (ft_free_str(&e_var), e_val);
 		ft_free_str(&e_var);
@@ -57,29 +68,29 @@ char	*env_get(char **env, char *var)
 
 int	env_del(char ***env, char *var)
 {
-	char	*env_var;
-	char	**env_tmp;
-	int		i;
-	int		j;
+	t_ef	ef;
 
-	i = -1;
-	j = -1;
+	ef.i = -1;
+	ef.j = -1;
 	if (env_exist(*env, var))
 		return (1);
-	env_tmp = malloc (env_size(*env) * sizeof(char *));
-	if (!env_tmp)
-		return (1);
-	while ((*env)[++i])
+	ef.env_tmp = NULL;
+	ef.env_tmp = malloc (env_size(*env) * sizeof(char *));
+	if (!ef.env_tmp)
+		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+	while ((*env)[++ef.i])
 	{
-		env_var = ft_substr((*env)[i], 0, pos_sep((*env)[i]) - 1);
-		if (ft_strncmp(env_var, var, ft_strlen(var) + 1))
-			env_tmp[++j] = (*env)[i];
+		ef.env_tmp[ef.j + 1] = NULL;
+		ef.env_var = ft_substr((*env)[ef.i], 0, pos_sep((*env)[ef.i]) - 1);
+		if (!ef.env_var)
+			return (ft_free_dbl_str(&ef.env_tmp),
+				ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		if (ft_strncmp(ef.env_var, var, ft_strlen(var) + 1))
+			ef.env_tmp[++ef.j] = (*env)[ef.i];
 		else
-			ft_free_str(&(*env)[i]);
-		ft_free_str(&env_var);
+			ft_free_str(&(*env)[ef.i]);
+		ft_free_str(&ef.env_var);
 	}
-	env_tmp[++j] = NULL;
-	free(*env);
-	*env = env_tmp;
-	return (0);
+	return (ef.env_tmp[++ef.j] = NULL, free(*env),
+		*env = ef.env_tmp, 0);
 }

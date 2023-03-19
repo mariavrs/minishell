@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/16 00:45:57 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/19 23:38:50 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,12 @@ static int	is_valid(char *str)
 	return (0);
 }
 
-int	pos_sep(char *str)
-{
-	int	i;
-
-	i = -1;
-	while (++i < (int)ft_strlen(str))
-		if (str[i] == '=')
-			return (i + 1);
-	return (0);
-}
-
-static void	exp_error(char *var)
+static void	exp_error(char *var, char *check)
 {
 	int	i;
 
 	i = 0;
-	if (!var)
+	if (!check)
 		return (ft_putstr_fd("minishell: malloc error\n", 2));
 	ft_putstr_fd("export: ", 2);
 	write(2, "\'", 1);
@@ -67,13 +56,14 @@ static void	export_env_print(t_msh *msh)
 	char	*value;
 
 	i = -1;
-	value = NULL;
 	while (msh->envp[++i])
 	{
-		write(1, "declare -x ", 11);
 		var = ft_substr(msh->envp[i], 0, pos_sep(msh->envp[i]) - 1);
+		if (!var)
+			return (ft_putstr_fd("minishell: malloc error\n", 2));
+		write(1, "declare -x ", 11);
 		if (pos_sep(msh->envp[i]) <= (int)ft_strlen(msh->envp[i]))
-			value = ft_strdup(msh->envp[i] + pos_sep(msh->envp[i]));
+			value = msh->envp[i] + pos_sep(msh->envp[i]);
 		write(1, var, ft_strlen(var));
 		if (value && pos_sep(msh->envp[i]))
 		{
@@ -84,8 +74,15 @@ static void	export_env_print(t_msh *msh)
 		else
 			write(1, "\n", 1);
 		ft_free_str(&var);
-		ft_free_str(&value);
 	}
+}
+
+void	replace_if_value(t_env *env, t_msh *msh, char *input)
+{
+	if (pos_sep(input))
+		env_lcl_replace(*env, msh->envp);
+	else
+		ft_free_str(&env->full_var);
 }
 
 int	ft_export(t_msh *msh, char **inputs)
@@ -98,20 +95,20 @@ int	ft_export(t_msh *msh, char **inputs)
 		return (export_env_print(msh), 0);
 	while (inputs[++i])
 	{
-		if (!is_valid(inputs[i]))
+		env.full_var = NULL;
+		if (env.full_var && !is_valid(inputs[i]))
 		{
-			env.full_var = ft_strdup(inputs[i]);
 			env.name_ln = 0;
 			while (inputs[i][env.name_ln] && inputs[i][env.name_ln] != '=')
 				env.name_ln++;
 			env.i = find_in_envp(env, msh->envp);
-			if (env.i >= 0 && pos_sep(inputs[i]) != 0)
-				env_lcl_replace(env, msh->envp);
+			if (env.i >= 0)
+				replace_if_value(&env, msh, inputs[i]);
 			else if (env.i < 0)
 				env_lcl_add(env, msh, msh->envp, 1);
 		}
 		else
-			return (exp_error(inputs[i]), 1);
+			return (exp_error(inputs[i], env.full_var), 1);
 	}
 	return (0);
 }
