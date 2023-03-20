@@ -95,7 +95,7 @@ int	ft_export(t_msh *msh, char **inputs)
 		return (export_env_print(msh), 0);
 	while (inputs[++i])
 	{
-		env.full_var = NULL;
+		env.full_var = ft_strdup(inputs[i]);
 		if (env.full_var && !is_valid(inputs[i]))
 		{
 			env.name_ln = 0;
