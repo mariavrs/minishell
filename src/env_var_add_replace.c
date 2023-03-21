@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 17:17:30 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/19 16:47:31 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/16 16:59:18 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	env_lcl_replace(t_env env, char **envp)
 {
-	if (!ft_strchr(env.full_var, '='))
-		return (ft_free_str(&env.full_var), 0);
 	ft_free_str(&envp[env.i]);
 	envp[env.i] = env.full_var;
 	return (0);
