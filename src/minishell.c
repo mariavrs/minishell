@@ -12,8 +12,6 @@
 
 #include "../include/mini_fun.h"
 
-volatile int	sig_flag;
-
 int	sline_cmp_len(t_msh *msh)
 {
 	int	s_len;
@@ -49,32 +47,12 @@ void	parse_exec_prep(t_msh *msh)
 		msh->exit_status = 2;
 }
 
-void	init_termios()
-{
-	struct termios	t;
-	tcgetattr(0, &t);
-	t.c_lflag &= ~ECHOCTL;
-	printf("Default settings:\n");
-	printf("VEOF(ctrl+d)=%d\n", t.c_cc[VEOF]);
-	printf("VINTR(ctrl+c)=%d\n", t.c_cc[VINTR]);
-	printf("VQUIT(ctrl+\\)=%d\n", t.c_cc[VQUIT]);
-	t.c_cc[VEOF] = 3; //^C become ^D
-	t.c_cc[VINTR] = 4; //^D become ^C
-	t.c_cc[VQUIT] = 0; //^"\" do nothin
-	printf("New settings:\n");
-	printf("VEOF(ctrl+d)=%d\n", t.c_cc[VEOF]);
-	printf("VINTR(ctrl+c)=%d\n", t.c_cc[VINTR]);
-	printf("VQUIT(ctrl+\\)=%d\n", t.c_cc[VQUIT]);
-	tcsetattr(0, TCSANOW, &t);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
 
 	(void)argc;
 	(void)argv;
-	init_termios();
 	ft_parent_env_cpy(&(msh.envp), envp);
 	msh.envp_lcl = NULL;
 	msh.envp_lcl = malloc(sizeof(char *));

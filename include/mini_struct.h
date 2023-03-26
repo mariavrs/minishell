@@ -31,7 +31,6 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <stdlib.h>
-# include <termios.h>
 
 typedef struct s_msh
 {
