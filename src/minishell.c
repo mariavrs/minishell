@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/28 19:26:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/26 15:34:44 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,25 @@ void	parse_exec_prep(t_msh *msh)
 		msh->exit_status = 2;
 }
 
+void	init_termios(void)
+{
+	struct termios	t;
+
+	tcgetattr(0, &t);
+	t.c_lflag &= ~ECHOCTL; // to not echo the shortcut
+	t.c_cc[VEOF] = 3; //^C become ^D
+	t.c_cc[VINTR] = 4; //^D become ^C
+	t.c_cc[VQUIT] = 0; //^"\" do nothin
+	tcsetattr(0, TCSANOW, &t);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
 
 	(void)argc;
 	(void)argv;
+	init_termios();
 	ft_parent_env_cpy(&(msh.envp), envp);
 	msh.envp_lcl = NULL;
 	msh.envp_lcl = malloc(sizeof(char *));
