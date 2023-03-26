@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/26 15:34:44 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/26 22:42:54 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,24 @@ void	init_termios(void)
 	tcsetattr(0, TCSANOW, &t);
 }
 
+void	handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		rl_on_new_line();
+		rl_replace_line("", 1);
+		rl_redisplay();
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
 
 	(void)argc;
 	(void)argv;
-	init_termios();
+	signal(SIGINT, &handler);
+	//init_termios();
 	ft_parent_env_cpy(&(msh.envp), envp);
 	msh.envp_lcl = NULL;
 	msh.envp_lcl = malloc(sizeof(char *));
@@ -84,5 +95,7 @@ int	main(int argc, char **argv, char **envp)
 				parse_exec_prep(&msh);
 			ft_free_str(&msh.sline);
 		}
+		else
+			ft_exit(NULL, &msh);
 	}
 }
