@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/14 19:40:58 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:42:27 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void			run_pipe_left(int fd[2], char *line, char *del, t_msh *msh);
 void			run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh);
 
 void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
-int				wrd_collect(char *line, int count);
+char			*get_next_word(char *line, t_msh *msh, int *i);
 
 void			run_cmd_exec(t_msh *msh);
 int				search_bin(char **argv, t_msh *msh);
@@ -69,7 +69,7 @@ int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
 int				redir_out(char *filename, t_redir *rdr);
 void			redir_clean(t_redir *rdr);
 
-char			*param_expansion(char *line, t_msh *msh);
+char			*param_expansion(char *line, t_msh *msh, int quo_flag);
 int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
 
@@ -78,6 +78,8 @@ int				first_wrd_check(int *skip, char *line, t_msh *msh);
 int				find_in_envp(t_env env, char **envp);
 int				env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag);
 int				env_lcl_replace(t_env env, char **envp);
+
+char			*ft_malloc_str(int size, int *exit_status);
 
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);

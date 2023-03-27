@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/28 19:31:35 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:47:04 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
 {
 	hd->line_out = NULL;
-	hd->line_out = param_expansion(hd->line_in, msh);
+	hd->line_out = param_expansion(hd->line_in, msh,
+			quo_check(*hd->line_in, 0));
 	ft_putstr_fd(hd->line_out, rdr->fd);
 	write(rdr->fd, "\n", 1);
 	ft_free_str(&hd->line_out);
