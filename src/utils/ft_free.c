@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 17:27:19 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/12 17:40:53 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:45:49 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,8 @@ void	ft_free_spl_cmd(t_msh *msh)
 {
 	if (!msh)
 		return ;
-	if (msh->spl_cmd)
-	{
-		while (--msh->spl_cmd_len >= 0)
-			msh->spl_cmd[msh->spl_cmd_len] = '\0';
-		free(msh->spl_cmd);
-		msh->spl_cmd = NULL;
-	}
-	if (msh->argv)
-	{
-		while (--msh->argc >= 0)
-			msh->argv[msh->argc] = NULL;
-		free(msh->argv);
-		msh->argv = NULL;
-	}
+	ft_free_str(&msh->spl_cmd);
+	ft_free_dbl_str(&msh->argv);
 }
 
 void	ft_free_exit(t_msh *msh)

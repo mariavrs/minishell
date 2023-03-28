@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/15 00:17:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/26 22:29:57 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	get_full_var_str(char *line, t_env *env)
 	char	tmp;
 
 	tmp = line[env->name_ln + 1];
-	line[env->name_ln  + 1] = '\0';
+	line[env->name_ln + 1] = '\0';
 	env->full_var = ft_strjoin(line, env->value);
 	ft_free_str(&env->value);
 	line[env->name_ln + 1] = tmp;
@@ -26,7 +26,7 @@ int	get_full_var_str(char *line, t_env *env)
 	return (0);
 }
 
-char	*get_var_value(char *cursor)
+/* char	*get_var_value(char *cursor)
 {
 	char	*str;
 	int		symb_count;
@@ -40,7 +40,7 @@ char	*get_var_value(char *cursor)
 	while (--symb_count >= 0)
 		str[symb_count] = *(cursor + symb_count);
 	return (str);
-}
+} */
 
 int	first_wrd_check(int *skip, char *line, t_msh *msh)
 {
@@ -51,11 +51,10 @@ int	first_wrd_check(int *skip, char *line, t_msh *msh)
 	{
 		if (line[env.name_ln] == '=')
 		{
-			env.value = get_var_value(&line[env.name_ln + 1]);
+			env.value = get_next_word(&line[env.name_ln + 1], msh, skip);
 			if (!env.value)
 				return (*skip = 0, 1);
-			env.value_ln = ft_strlen(env.value);
-			*skip = env.name_ln + 1 + env.value_ln;
+			*skip += env.name_ln + 1;
 			if (line[*skip])
 				return (ft_free_str(&env.value), 0);
 			if (get_full_var_str(line, &env))
