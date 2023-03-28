@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/15 16:18:16 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/19 23:38:33 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,6 @@ void	ft_fill_env(char *env, char *var, char *value)
 	env[++i] = '\0';
 }
 
-void	free_table(char **table)
-{
-	int	i;
-
-	i = 0;
-	if (!table)
-		return ;
-	while (table[i])
-	{
-		free(table[i]);
-		i++;
-	}
-	free(table);
-}
-
 int	env_exist(char **env, char *var)
 {
 	char	*value;
@@ -51,4 +36,25 @@ int	env_exist(char **env, char *var)
 	if (!value)
 		return (1);
 	return (free(value), 0);
+}
+
+int	env_size(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	return (i);
+}
+
+int	pos_sep(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (++i < (int)ft_strlen(str))
+		if (str[i] == '=')
+			return (i + 1);
+	return (0);
 }

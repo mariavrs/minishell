@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/04 19:04:57 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/14 19:36:28 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	run_cmd_exec(t_msh *msh)
 	else if (!ft_strncmp(msh->argv[0], "echo", 5))
 		msh->exit_status = ft_echo(msh->argv);
 	else if (!ft_strncmp(msh->argv[0], "env", 4))
-		msh->exit_status = ft_env(*msh);
+		msh->exit_status = ft_env(*msh, 0);
 	else if (!ft_strncmp(msh->argv[0], "exit", 5))
 		msh->exit_status = ft_exit(msh->argv, msh);
 	else if (!ft_strncmp(msh->argv[0], "export", 7))
