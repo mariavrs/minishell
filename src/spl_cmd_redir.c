@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/27 16:47:04 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/28 22:19:24 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
 	close(rdr->fd);
 	rdr->fd = open(hd.hdoc, O_RDONLY);
 	if (rdr->fd < 0)
-		return (perror("minishell: open"), 1);
+		return (ft_free_str(&hd.line_in), perror("minishell: open"), 1);
 	unlink(hd.hdoc);
 	ft_free_str(&hd.hdoc);
-	return (0);
+	return (ft_free_str(&hd.line_in), 0);
 }
 
 int	redir_in(char *filename, t_redir *rdr, t_msh *msh)
