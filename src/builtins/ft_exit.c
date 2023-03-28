@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/26 22:39:55 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/01 20:44:05 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,7 @@ int	ft_exit(char **input, t_msh *msh)
 	int				mod;
 
 	if (!input)
-	{
-		ft_free_exit(msh);
-		exit_error(-1, NULL);
-		exit(0);
-	}
+		return (1);
 	if (!input[1])
 		return (exit_error(-1, NULL), ft_free_exit(msh)
 			, exit(msh->exit_status), msh->exit_status);

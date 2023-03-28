@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/26 22:42:54 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/28 22:21:10 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ void	init_termios(void)
 	struct termios	t;
 
 	tcgetattr(0, &t);
-	t.c_lflag &= ~ECHOCTL; // to not echo the shortcut
-	t.c_cc[VEOF] = 3; //^C become ^D
-	t.c_cc[VINTR] = 4; //^D become ^C
+	//t.c_lflag &= ~ECHOCTL; // to not echo the shortcut
+	t.c_cc[VEOF] = 3; //^D become ^C
+	t.c_cc[VINTR] = 4; //^C become ^D
 	t.c_cc[VQUIT] = 0; //^"\" do nothin
 	tcsetattr(0, TCSANOW, &t);
 }
@@ -67,6 +67,12 @@ void	handler(int sig)
 		rl_replace_line("", 1);
 		rl_redisplay();
 	}
+	if (sig == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_replace_line(NULL, 1);
+		rl_redisplay();
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -75,8 +81,9 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	signal(SIGINT, &handler);
 	//init_termios();
+	signal(SIGINT, &handler);
+	signal(SIGQUIT, &handler);
 	ft_parent_env_cpy(&(msh.envp), envp);
 	msh.envp_lcl = NULL;
 	msh.envp_lcl = malloc(sizeof(char *));
