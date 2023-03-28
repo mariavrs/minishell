@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/27 16:57:37 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/28 22:12:12 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 
 	l_start = *i;
 	filename = NULL;
-	filename = get_next_word(&line[*i], msh, i);
+	filename = get_next_word(line, msh, i);
 	if (!filename)
 		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	if (rdr->mode == '>' || rdr->mode == '+')
@@ -65,6 +65,8 @@ int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 	{
 		while (line[i] && line[i] != '<' && line[i] != '>')
 			i++;
+		if (!line[i])
+			return (0);
 		if (line[i] && line[i] != line[i + 1])
 			rdr->mode = line[i];
 		else if (line[i] == '>' && line[i + 1] == '>')
@@ -72,15 +74,11 @@ int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 		else if (line[i] == '<' && line[i + 1] == '<')
 			rdr->mode = '-';
 		while (line[i] == '<' || line[i] == '>')
-		{
-			line[i] = ' ';
-			i++;
-		}
+			line[i++] = ' ';
 		while (is_in_str(line[i], STR_WHSPACE))
 			i++;
-		if (line[i])
-			if (run_redir(line, &i, rdr, msh))
-				return (1);
+		if (run_redir(line, &i, rdr, msh))
+			return (1);
 	}
 	return (0);
 }
