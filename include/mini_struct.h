@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/26 15:34:42 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/29 10:40:03 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_env
 	int		name_ln;
 	int		value_ln;
 	int		i;
+	int		i_local;
 }	t_env;
 
 typedef struct s_search_bin

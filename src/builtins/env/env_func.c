@@ -94,3 +94,29 @@ int	env_del(char ***env, char *var)
 	return (ef.env_tmp[++ef.j] = NULL, free(*env),
 		*env = ef.env_tmp, 0);
 }
+
+char	*get_var_name(char *input)
+{
+	char	*var_name;
+
+	var_name = NULL;
+	var_name = ft_substr(input, 0, pos_sep(input) - 1);
+	if (!var_name)
+		return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+	return (var_name);
+}
+
+int	check_append_charset(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '+')
+			if (str[++i] && str[i] == '=')
+				return (i - 1);
+		i++;
+	}
+	return (0);
+}
