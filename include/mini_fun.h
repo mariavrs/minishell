@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/28 20:50:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/29 20:15:09 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ int				first_wrd_check(int *skip, char *line, t_msh *msh);
 int				find_in_envp(t_env env, char **envp);
 int				env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag);
 int				env_lcl_replace(t_env env, char **envp);
+
+int				get_full_var_str(char *line, t_env *env, t_msh *msh);
+int				put_env_var(t_env *env, t_msh *msh);
 
 char			*ft_malloc_str(int size, int *exit_status);
 
