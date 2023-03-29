@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 17:17:30 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/29 20:11:25 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/29 22:48:22 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	get_full_var_str(char *line, t_env *env, t_msh *msh)
 		env->full_var_ln = ft_strlen(msh->envp[env->i]) + env->value_ln;
 	env->full_var = ft_malloc_str(env->full_var_ln + 1, &msh->exit_status);
 	if (!env->full_var)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (1);
 	full_var_join(env, msh);
 	return (0);
 }
