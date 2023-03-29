@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_var_add_replace.c                              :+:      :+:    :+:   */
+/*   env_declare_put_var.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/13 17:17:30 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/16 16:59:18 by mvorslov         ###   ########.fr       */
+/*   Created: 2023/03/29 20:09:29 by mvorslov          #+#    #+#             */
+/*   Updated: 2023/03/29 20:10:12 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag)
 	char	**envp_tmp;
 
 	env.i = 0;
-	while (msh->envp[env.i])
+	while (envp[env.i])
 		env.i++;
 	envp_tmp = malloc(sizeof(char *) * (env.i + 2));
 	if (!envp_tmp)
@@ -37,24 +37,22 @@ int	env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag)
 	envp = envp_tmp;
 	envp[env.i] = NULL;
 	envp[env.i + 1] = NULL;
-	if (!env_flag)
+	if (env_flag == ENV_LCL)
 		msh->envp_lcl = envp;
 	else
 		msh->envp = envp;
 	return (env_lcl_replace(env, envp));
 }
 
-int	find_in_envp(t_env env, char **envp)
+int	put_env_var(t_env *env, t_msh *msh)
 {
-	int	i;
-
-	i = -1;
-	while (envp[++i])
-		if (!ft_strncmp(env.full_var, envp[i], env.name_ln)
-			&& ((env.full_var[env.name_ln] == '=')
-				|| (env.full_var[env.name_ln] == '\0'))
-			&& ((envp[i][env.name_ln] == '=')
-			|| (envp[i][env.name_ln] == '\0')))
-			return (i);
-	return (-1);
+	if (env->dest == ENV_LCL && env->src == env->dest)
+		return (env_lcl_replace(*env, msh->envp_lcl));
+	else if (env->dest == ENV_EXP && env->src == env->dest)
+		return (env_lcl_replace(*env, msh->envp));
+	else if (env->dest == ENV_LCL && env->src != env->dest)
+		return (env_lcl_add(*env, msh, msh->envp_lcl, ENV_LCL));
+	else if (env->dest == ENV_EXP && env->src != env->dest)
+		return (env_lcl_add(*env, msh, msh->envp_lcl, ENV_EXP));
+	return (0);
 }
