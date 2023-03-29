@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/29 14:22:35 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/29 20:39:00 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ int				pos_sep(char *str);
 int				env_size(char **env);
 char			*get_var_name(char *input);
 int				check_append_charset(char *str);
+
+// signal functions
+void			sig_handler(int sig);
 
 // utils functions
 long long int	ft_ll_atoi(const char *str);

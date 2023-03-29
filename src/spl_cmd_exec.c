@@ -6,21 +6,21 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/14 19:36:28 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/29 20:43:07 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
+pid_t	g_pid = 0;
+
 void	run_bin(char *full_name, char **argv, t_msh *msh)
 {
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == 0)
+	g_pid = fork();
+	if (g_pid == 0)
 		exit(execve(full_name, argv, msh->envp));
 	else
-		waitpid(pid, &msh->exit_status, 0);
+		waitpid(g_pid, &msh->exit_status, 0);
 	msh->exit_status = WEXITSTATUS(msh->exit_status);
 }
 
