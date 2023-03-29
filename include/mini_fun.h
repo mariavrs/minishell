@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/29 20:15:09 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/30 01:39:21 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ char			*env_get(char **env, char *var);
 int				env_del(char ***env, char *var);
 int				pos_sep(char *str);
 int				env_size(char **env);
+int				remove_line_in_env(char ***env, char *line, int name_ln);
+int				get_and_put_var(t_env *env, t_msh *msh, char *name);
 
 // utils functions
 long long int	ft_ll_atoi(const char *str);
@@ -73,12 +75,15 @@ int				is_valid_varname(char c);
 
 int				first_wrd_check(int *skip, char *line, t_msh *msh);
 
+int				find_in_envp2(t_env *env, t_msh *msh);
 int				find_in_envp(t_env env, char **envp);
 int				env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag);
 int				env_lcl_replace(t_env env, char **envp);
 
 int				get_full_var_str(char *line, t_env *env, t_msh *msh);
 int				put_env_var(t_env *env, t_msh *msh);
+int				get_env_mod(char c);
+int				get_env_dest(t_env env);
 
 char			*ft_malloc_str(int size, int *exit_status);
 
