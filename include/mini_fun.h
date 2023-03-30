@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/30 23:14:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/30 23:51:33 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,8 @@ void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_exit(t_msh *msh);
+
+void			error_unexpected_token(char *str);
+void			error_search_bin(char *argv, char *err_msg);
 
 #endif

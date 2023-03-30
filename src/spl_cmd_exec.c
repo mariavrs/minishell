@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/30 23:18:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/30 23:50:58 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,6 @@ int	search_in_path(char **argv, t_msh *msh)
 	return (1);
 }
 
-void	search_bin_error(char *argv, char *err_msg)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(argv, 2);
-	ft_putstr_fd(err_msg, 2);
-}
-
 void	search_bin(char **argv, t_msh *msh)
 {
 	struct stat	statbuf;
@@ -89,20 +82,20 @@ void	search_bin(char **argv, t_msh *msh)
 		{
 			if (statbuf.st_mode & S_IFDIR)
 				return (msh->exit_status = 126,
-					search_bin_error(msh->argv[0], ": Is a directory\n"));
+					error_search_bin(msh->argv[0], ": Is a directory\n"));
 			else
 				run_bin(argv[0], argv, msh);
 		}
 		else
 		{
 			return (msh->exit_status = 127,
-				search_bin_error(msh->argv[0], ": No such file or directory\n"));
+				error_search_bin(msh->argv[0], ": No such file or directory\n"));
 		}
 	}
 	else if (search_in_path(argv, msh))
 	{
 		return (msh->exit_status = 127,
-			search_bin_error(msh->argv[0], ": command not found\n"));
+			error_search_bin(msh->argv[0], ": command not found\n"));
 	}
 }
 
