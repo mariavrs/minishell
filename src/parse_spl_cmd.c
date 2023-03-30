@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/28 22:12:12 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/30 23:39:13 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 		line++;
 	if (!(*line))
 	{
+		if (!argc)
+			return (0);
 		msh->argv = malloc(sizeof(char *) * (argc + 1));
 		if (!msh->argv)
 			return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 		msh->argv[argc] = NULL;
-		msh->argc = argc;
 	}
 	else
 	{
@@ -104,7 +105,7 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 		status_lcl = parse_redir(msh->spl_cmd, skip, &rdr, msh);
 	if (!status_lcl && line[skip])
 		status_lcl = parse_cmd_argv(&msh->spl_cmd[skip], 0, msh);
-	if (!status_lcl && line[skip])
+	if (!status_lcl && line[skip] && msh->argv)
 		run_cmd_exec(msh);
 	else
 		msh->exit_status = status_lcl;
