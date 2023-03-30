@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/29 20:15:09 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/30 23:14:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
 char			*get_next_word(char *line, t_msh *msh, int *i);
 
 void			run_cmd_exec(t_msh *msh);
-int				search_bin(char **argv, t_msh *msh);
+void			search_bin(char **argv, t_msh *msh);
 
 int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
 int				redir_out(char *filename, t_redir *rdr);
