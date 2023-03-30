@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/04 19:24:42 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 00:16:35 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 
 	pipe(fd);
 	if (pipe(fd) == -1)
-		return (perror("pipe"));
+		return (perror("minishell"));
 	run_pipe_left(fd, line, del, msh);
 	if (!msh->exit_status)
 		run_pipe_right(fd, eline, del, msh);
