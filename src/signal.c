@@ -6,21 +6,23 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 19:34:08 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/30 13:31:48 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 00:48:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
 extern pid_t	g_pid;
+extern int		g_khd;
 
 void	ctrl_c_handler(int sig)
 {
 	(void)sig;
 	ft_putchar_fd('\n', 1);
+	kill(1, SIGINT);
 }
 
-void	ctrl_d_handler(int sig)
+void	clear_line_handler(int sig)
 {
 	(void)sig;
 	ft_putchar_fd('\n', 1);
@@ -32,29 +34,19 @@ void	ctrl_d_handler(int sig)
 void	ctrl_bslash_handler(int sig)
 {
 	(void)sig;
-	if (g_pid != 0)
-	{
-		ft_putendl_fd("Quit (core dumped)", 1);
-		kill(g_pid, SIGQUIT);
-		g_pid = 0;
-	}
+	ft_putendl_fd("Quit (core dumped)", 1);
 }
 
-void	sig_handler(int sig)
+void	signal_manager(int flag)
 {
-	if (sig == 1)
+	if (flag == 1)
 	{
-		signal(SIGINT, &ctrl_d_handler);
+		signal(SIGINT, &clear_line_handler);
 		signal(SIGQUIT, SIG_IGN);
 	}
-	if (sig == 2)
+	if (flag == 2)
 	{
 		signal(SIGINT, &ctrl_c_handler);
 		signal(SIGQUIT, &ctrl_bslash_handler);
-	}
-	if (sig == 3)
-	{
-		printf("exit\n");
-		exit(0);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/30 13:29:03 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 00:42:05 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	close_fd(int fd0, int fd1)
 void	run_pipe_left(int fd[2], char *line, char *del, t_msh *msh)
 {
 	g_pid = fork();
-	sig_handler(2);
+	signal_manager(2);
 	if (g_pid == -1)
 		return (msh->exit_status = 1, perror("fork"));
 	else if (g_pid == 0)
@@ -40,7 +40,7 @@ void	run_pipe_left(int fd[2], char *line, char *del, t_msh *msh)
 void	run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh)
 {
 	g_pid = fork();
-	sig_handler(2);
+	signal_manager(2);
 	if (g_pid == -1)
 		return (perror("fork"), msh->exit_status = 1, close_fd(fd[0], fd[1]));
 	else if (g_pid == 0)

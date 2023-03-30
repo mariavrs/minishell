@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/30 13:29:01 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 00:42:23 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ extern pid_t	g_pid;
 void	run_bin(char *full_name, char **argv, t_msh *msh)
 {
 	g_pid = fork();
-	sig_handler(2);
+	signal_manager(2);
 	if (g_pid == 0)
 		exit(execve(full_name, argv, msh->envp));
 	else

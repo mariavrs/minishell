@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/30 01:51:51 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 00:42:26 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int				remove_line_in_env(char ***env, char *line, int name_ln);
 int				get_and_put_var(t_env *env, t_msh *msh, char *name);
 
 // signal functions
-void			sig_handler(int sig);
+void			signal_manager(int flag);
 
 // utils functions
 long long int	ft_ll_atoi(const char *str);

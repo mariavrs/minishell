@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/28 22:19:24 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 00:26:20 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+int	g_khd;
 
 void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
 {
@@ -37,8 +39,8 @@ int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
 		return (perror("minishell: open"), 1);
 	hd.line_in = NULL;
 	hd.line_in = readline("> ");
-	while (hd.line_in && ft_strncmp(hd.line_in, delim,
-			ft_strlen(delim) + 1))
+	while (hd.line_in && (ft_strncmp(hd.line_in, delim,
+			ft_strlen(delim) + 1)))
 	{
 		write_to_heredoc(rdr, &hd, msh);
 		hd.line_in = readline("> ");

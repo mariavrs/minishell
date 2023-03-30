@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/30 13:23:53 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 01:00:27 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	main(int argc, char **argv, char **envp)
 	msh.ex_sline = NULL;
 	while (1)
 	{
-		sig_handler(1);
+		signal_manager(1);
 		msh.sline = NULL;
 		msh.sline = readline("\033[1;36mminishell>> \033[0m");
 		if (msh.sline)
@@ -103,6 +103,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_free_str(&msh.sline);
 		}
 		else
-			sig_handler(3);
+			exit(0);
+			//ft_free_exit("");
 	}
 }
