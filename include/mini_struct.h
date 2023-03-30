@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/29 10:40:03 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/30 01:53:27 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 # define STR_BRACKETS "()"
 # define STR_LOL "|&"
 # define STR_SPECIAL " \t\n\r\v<>()\'\"|&"
+
+# define ENV_LCL 0
+# define ENV_EXP 1
+# define ENV_CREATE 0
+# define ENV_APPEND 1
 
 # include <stdio.h>
 # include <unistd.h>
@@ -73,11 +78,15 @@ typedef struct s_heredoc
 typedef struct s_env
 {
 	char	*full_var;
+	char	*name;
 	char	*value;
+	int		full_var_ln;
 	int		name_ln;
 	int		value_ln;
+	int		src;
+	int		dest;
 	int		i;
-	int		i_local;
+	int		mod;
 }	t_env;
 
 typedef struct s_search_bin

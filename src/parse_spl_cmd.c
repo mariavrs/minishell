@@ -6,43 +6,16 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/13 17:34:07 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/28 22:12:12 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	wrd_collect(char *line, int count)
-{
-	int	quo_flag;
-
-	quo_flag = 0;
-	while (line[count] && !is_in_str(line[count], STR_WHSPACE)
-		&& !is_in_str(line[count], STR_REDIR))
-	{
-		if (is_in_str(line[count], STR_QUOTE))
-		{
-			quo_flag = quo_check(line[count], quo_flag);
-			ft_strlcpy(line + count, line + count + 1, ft_strlen(line + count));
-			while (line[count] && quo_flag)
-			{
-				quo_flag = quo_check(line[count], quo_flag);
-				if (!quo_flag)
-					ft_strlcpy(line + count, line + count + 1,
-						ft_strlen(line + count));
-				else
-					count++;
-			}
-		}
-		else
-			count++;
-	}
-	return (count);
-}
-
 int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 {
-	int	eword;
+	char	*arg;
+	int		eword;
 
 	while (is_in_str(*line, STR_WHSPACE))
 		line++;
@@ -57,45 +30,43 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 	else
 	{
 		argc++;
-		eword = wrd_collect(line, 0);
-		if ((line[eword] && parse_cmd_argv(line + eword + 1, argc, msh))
-			|| (!line[eword] && parse_cmd_argv(line + eword, argc, msh)))
+		eword = 0;
+		arg = get_next_word(line, msh, &eword);
+		if (!arg || parse_cmd_argv(line + eword, argc, msh))
 			return (1);
-		line[eword] = '\0';
-		msh->argv[argc - 1] = line;
+		msh->argv[argc - 1] = arg;
 	}
 	return (0);
 }
 
 int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 {
-	int		i_tmp;
-	char	tmp;
+	char	*filename;
+	int		l_start;
 	int		status_lcl;
 
-	i_tmp = *i;
-	*i += wrd_collect(&line[*i], 0);
-	tmp = line[*i];
-	line[*i] = '\0';
+	l_start = *i;
+	filename = NULL;
+	filename = get_next_word(line, msh, i);
+	if (!filename)
+		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	if (rdr->mode == '>' || rdr->mode == '+')
-		status_lcl = redir_out(&line[i_tmp], rdr);
+		status_lcl = redir_out(filename, rdr);
 	else
-		status_lcl = redir_in(&line[i_tmp], rdr, msh);
-	line[*i] = tmp;
-	while (i_tmp < *i)
-		line[i_tmp++] = ' ';
-	return (status_lcl);
+		status_lcl = redir_in(filename, rdr, msh);
+	while (l_start < *i)
+		line[l_start++] = ' ';
+	return (ft_free_str(&filename), status_lcl);
 }
 
-int	parse_redir(char *line, t_redir *rdr, t_msh *msh)
+int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 {
-	int	i;
-
-	i = 0;
 	while (line[i])
 	{
 		while (line[i] && line[i] != '<' && line[i] != '>')
 			i++;
+		if (!line[i])
+			return (0);
 		if (line[i] && line[i] != line[i + 1])
 			rdr->mode = line[i];
 		else if (line[i] == '>' && line[i + 1] == '>')
@@ -103,15 +74,11 @@ int	parse_redir(char *line, t_redir *rdr, t_msh *msh)
 		else if (line[i] == '<' && line[i + 1] == '<')
 			rdr->mode = '-';
 		while (line[i] == '<' || line[i] == '>')
-		{
-			line[i] = ' ';
-			i++;
-		}
+			line[i++] = ' ';
 		while (is_in_str(line[i], STR_WHSPACE))
 			i++;
-		if (line[i])
-			if (run_redir(line, &i, rdr, msh))
-				return (1);
+		if (run_redir(line, &i, rdr, msh))
+			return (1);
 	}
 	return (0);
 }
@@ -126,18 +93,18 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	rdr.stdout_cpy = 0;
 	skip = 0;
 	trim_whitespaces(&line, &eline);
-	*eline = '\0';
 	msh->argv = NULL;
-	msh->spl_cmd = NULL;
-	msh->spl_cmd = param_expansion(line, msh);
+	msh->spl_cmd = ft_malloc_str(eline - line + 2, &msh->exit_status);
 	if (!msh->spl_cmd)
-		return (ft_putstr_fd("minishell: malloc error\n", 2));
-	status_lcl = parse_redir(msh->spl_cmd, &rdr, msh);
-	if (!status_lcl && !(*line >= '0' && *line <= '9'))
+		return ;
+	ft_strlcpy(msh->spl_cmd, line, eline - line + 1);
+	if (!(*msh->spl_cmd >= '0' && *msh->spl_cmd <= '9'))
 		status_lcl = first_wrd_check(&skip, msh->spl_cmd, msh);
 	if (!status_lcl && msh->spl_cmd[skip])
+		status_lcl = parse_redir(msh->spl_cmd, skip, &rdr, msh);
+	if (!status_lcl && line[skip])
 		status_lcl = parse_cmd_argv(&msh->spl_cmd[skip], 0, msh);
-	if (!status_lcl && msh->spl_cmd[skip])
+	if (!status_lcl && line[skip])
 		run_cmd_exec(msh);
 	else
 		msh->exit_status = status_lcl;

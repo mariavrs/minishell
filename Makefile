@@ -6,7 +6,7 @@
 #    By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/03/29 19:42:15 by ede-smet         ###   ########.fr        #
+#    Updated: 2023/03/30 01:52:35 by ede-smet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,12 +19,12 @@ BUILT_DIR = builtins/
 UTILS_DIR = utils/
 
 SRC_LIST = minishell.c syntax_check.c parse_and_run_pipe_list.c run_pipe_utils.c \
-	parser_utils.c parse_spl_cmd.c parser_utils_spl_cmd.c spl_cmd_exec.c \
-	spl_cmd_redir.c spl_cmd_local_var.c env_var_add_replace.c \
-	param_expansion.c param_expansion_utils.c signal.c\
-	$(BUILT_DIR)ft_echo.c $(BUILT_DIR)ft_cd.c $(BUILT_DIR)ft_pwd.c $(BUILT_DIR)ft_export.c \
+	parser_utils.c parse_spl_cmd.c ft_get_next_word.c spl_cmd_exec.c \
+	spl_cmd_redir.c spl_cmd_local_var.c env_declare_get_full_var.c \
+	env_declare_put_var.c param_expansion.c param_expansion_utils.c signal.c\
+	$(BUILT_DIR)ft_echo.c $(BUILT_DIR)ft_cd.c $(BUILT_DIR)ft_pwd.c $(BUILT_DIR)ft_export.c $(BUILT_DIR)ft_export_util.c\
 	$(BUILT_DIR)ft_unset.c $(BUILT_DIR)env/ft_env.c $(BUILT_DIR)env/env_func.c $(BUILT_DIR)env/env_utils.c $(BUILT_DIR)ft_exit.c \
-	$(UTILS_DIR)ft_ll_atoi.c $(UTILS_DIR)ft_free.c 
+	$(UTILS_DIR)ft_ll_atoi.c $(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_malloc.c 
 DEPS_LIST = mini_fun.h mini_struct.h
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_LIST))

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/01 15:28:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:46:22 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,23 +104,23 @@ int	put_exit_status(char *str, char **line, t_msh *msh)
 	return (ln);
 }
 
-char	*param_expansion(char *line, t_msh *msh)
+char	*param_expansion(char *line, t_msh *msh, int quo_flag)
 {
 	char	*str;
 	int		i;
-	int		quo_flag;
 
 	i = 0;
-	str = NULL;
-	str = malloc(sizeof(char) * (final_line_len(line, msh) + 1));
+	str = ft_malloc_str(final_line_len(line, msh) + 1, &msh->exit_status);
 	if (!str)
-		return (msh->exit_status = 1, NULL);
-	quo_flag = quo_check(*line, 0);
+		return (NULL);
 	while (*line)
 	{
 		while (*line && !(*line == '$' && quo_flag != 1))
 		{
-			str[i++] = *line;
+			if (!((is_in_str(*line, STR_QUOTE) && quo_flag == 0)
+					|| (*line == '\'' && quo_flag == 1)
+					|| (*line == '\"' && quo_flag == 2)))
+				str[i++] = *line;
 			quo_flag = quo_check(*(line++), quo_flag);
 		}
 		if (*line && *(line + 1) == '?')
@@ -130,5 +130,5 @@ char	*param_expansion(char *line, t_msh *msh)
 		else if (*line)
 			line += var_value(line + 1, str, &i, msh) + 1;
 	}
-	return (str[i] = '\0', str);
+	return (str);
 }

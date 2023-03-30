@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/29 20:39:00 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/30 01:51:51 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ char			*env_get(char **env, char *var);
 int				env_del(char ***env, char *var);
 int				pos_sep(char *str);
 int				env_size(char **env);
-char			*get_var_name(char *input);
-int				check_append_charset(char *str);
+int				remove_line_in_env(char ***env, char *line, int name_ln);
+int				get_and_put_var(t_env *env, t_msh *msh, char *name);
 
 // signal functions
 void			sig_handler(int sig);
@@ -63,7 +63,7 @@ void			run_pipe_left(int fd[2], char *line, char *del, t_msh *msh);
 void			run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh);
 
 void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
-int				wrd_collect(char *line, int count);
+char			*get_next_word(char *line, t_msh *msh, int *i);
 
 void			run_cmd_exec(t_msh *msh);
 int				search_bin(char **argv, t_msh *msh);
@@ -72,15 +72,23 @@ int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
 int				redir_out(char *filename, t_redir *rdr);
 void			redir_clean(t_redir *rdr);
 
-char			*param_expansion(char *line, t_msh *msh);
+char			*param_expansion(char *line, t_msh *msh, int quo_flag);
 int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
 
 int				first_wrd_check(int *skip, char *line, t_msh *msh);
 
+int				find_in_envp2(t_env *env, t_msh *msh);
 int				find_in_envp(t_env env, char **envp);
 int				env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag);
 int				env_lcl_replace(t_env env, char **envp);
+
+int				get_full_var_str(char *line, t_env *env, t_msh *msh);
+int				put_env_var(t_env *env, t_msh *msh);
+int				get_env_mod(char c);
+int				get_env_dest(t_env env);
+
+char			*ft_malloc_str(int size, int *exit_status);
 
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);

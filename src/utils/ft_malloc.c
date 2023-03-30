@@ -1,13 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils_spl_cmd.c                             :+:      :+:    :+:   */
+/*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/22 16:49:12 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 15:34:16 by mvorslov         ###   ########.fr       */
+/*   Created: 2023/03/27 13:58:04 by mvorslov          #+#    #+#             */
+/*   Updated: 2023/03/27 16:44:56 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/mini_fun.h"
+#include "../../include/mini_fun.h"
+
+char	*ft_malloc_str(int size, int *exit_status)
+{
+	char	*str;
+
+	str = NULL;
+	str = malloc(sizeof(char) * size);
+	if (!str)
+		return (*exit_status = 1, ft_putstr_fd("minishell: malloc error\n", 2),
+			NULL);
+	ft_bzero(str, size);
+	return (str);
+}
