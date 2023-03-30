@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 19:34:08 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/29 20:49:51 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/30 13:31:48 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ void	sig_handler(int sig)
 	if (sig == 1)
 	{
 		signal(SIGINT, &ctrl_d_handler);
-		signal(SIGQUIT, &ctrl_bslash_handler);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	if (sig == 2)
 	{
 		signal(SIGINT, &ctrl_c_handler);
-		signal(SIGQUIT, SIG_IGN);
+		signal(SIGQUIT, &ctrl_bslash_handler);
 	}
 	if (sig == 3)
 	{

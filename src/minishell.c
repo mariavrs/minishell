@@ -6,11 +6,13 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/29 20:49:39 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/30 13:23:53 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+pid_t	g_pid = 0;
 
 int	sline_cmp_len(t_msh *msh)
 {
