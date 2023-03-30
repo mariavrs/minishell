@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 20:09:29 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/29 20:10:12 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/30 22:31:50 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ int	put_env_var(t_env *env, t_msh *msh)
 	else if (env->dest == ENV_LCL && env->src != env->dest)
 		return (env_lcl_add(*env, msh, msh->envp_lcl, ENV_LCL));
 	else if (env->dest == ENV_EXP && env->src != env->dest)
-		return (env_lcl_add(*env, msh, msh->envp_lcl, ENV_EXP));
+		return (env_lcl_add(*env, msh, msh->envp, ENV_EXP));
 	return (0);
 }
