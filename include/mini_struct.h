@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/30 01:53:27 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 14:10:18 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ typedef struct s_msh
 	char	*spl_cmd;
 	int		spl_cmd_len;
 	char	**argv;
-	int		argc;
-	int		exit_status;
 }	t_msh;
 
 typedef struct s_stx

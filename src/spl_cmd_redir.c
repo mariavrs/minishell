@@ -6,13 +6,13 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 00:26:20 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 14:16:15 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	g_khd;
+extern int	g_exit_status;
 
 void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
 {
@@ -36,7 +36,7 @@ int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
 	rdr->fd = open(hd.hdoc,
 			O_CREAT | O_WRONLY | O_APPEND | O_TRUNC, 0444);
 	if (rdr->fd < 0)
-		return (perror("minishell: open"), 1);
+		return (perror("minishell: heredoc"), 1);
 	hd.line_in = NULL;
 	hd.line_in = readline("> ");
 	while (hd.line_in && (ft_strncmp(hd.line_in, delim,
@@ -48,7 +48,7 @@ int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
 	close(rdr->fd);
 	rdr->fd = open(hd.hdoc, O_RDONLY);
 	if (rdr->fd < 0)
-		return (ft_free_str(&hd.line_in), perror("minishell: open"), 1);
+		return (ft_free_str(&hd.line_in), perror("minishell: heredoc"), 1);
 	unlink(hd.hdoc);
 	ft_free_str(&hd.hdoc);
 	return (ft_free_str(&hd.line_in), 0);
@@ -60,7 +60,7 @@ int	redir_in(char *filename, t_redir *rdr, t_msh *msh)
 	{
 		rdr->fd = open(filename, O_RDONLY);
 		if (rdr->fd < 0)
-			return (perror("minishell: open"), 1);
+			return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
 	}
 	else if (rdr->mode == '-')
 	{
@@ -80,7 +80,7 @@ int	redir_out(char *filename, t_redir *rdr)
 	else if (rdr->mode == '+')
 		rdr->fd = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 	if (rdr->fd < 0)
-		return (perror("minishell: open"), 1);
+		return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
 	if (!rdr->stdout_cpy)
 		rdr->stdout_cpy = dup(STDOUT_FILENO);
 	dup2(rdr->fd, STDOUT_FILENO);

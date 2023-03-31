@@ -6,13 +6,13 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 13:13:33 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 14:14:06 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	g_exit_status = 0;
+int	g_exit_status;
 
 int	sline_cmp_len(t_msh *msh)
 {
@@ -46,7 +46,7 @@ void	parse_exec_prep(t_msh *msh)
 	if (!syntax_check_prep(line, eline))
 		parse_list(line, eline, msh);
 	else
-		msh->exit_status = 2;
+		g_exit_status = 2;
 }
 
 void	init_termios(void)
@@ -89,7 +89,6 @@ int	main(int argc, char **argv, char **envp)
 	if (!msh.envp_lcl)
 		return (ft_putstr_fd("malloc error\n", 2), 1);
 	msh.envp_lcl[0] = NULL;
-	msh.exit_status = 0;
 	msh.ex_sline = NULL;
 	while (1)
 	{
@@ -103,10 +102,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_free_str(&msh.sline);
 		}
 		else
-		{
-			ft_putstr_fd("exit\n", 1);
-			ft_free_exit(&msh);
-			exit(0);
-		}
+			return (ft_putstr_fd("exit\n", 1),
+				ft_free_exit(&msh), g_exit_status);
 	}
 }

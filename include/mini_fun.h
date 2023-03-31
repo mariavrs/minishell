@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 00:42:26 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 14:10:03 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
 char			*get_next_word(char *line, t_msh *msh, int *i);
 
 void			run_cmd_exec(t_msh *msh);
-int				search_bin(char **argv, t_msh *msh);
+void			search_bin(t_msh *msh);
 
 int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
 int				redir_out(char *filename, t_redir *rdr);
@@ -88,11 +88,14 @@ int				put_env_var(t_env *env, t_msh *msh);
 int				get_env_mod(char c);
 int				get_env_dest(t_env env);
 
-char			*ft_malloc_str(int size, int *exit_status);
+char			*ft_malloc_str(int size);
 
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_exit(t_msh *msh);
+
+void			error_unexpected_token(char *str);
+void			error_search_bin(char *argv, char *err_msg);
 
 #endif
