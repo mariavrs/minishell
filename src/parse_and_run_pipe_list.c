@@ -6,11 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/04 19:24:42 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 11:02:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+extern int	g_exit_status;
 
 void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 {
@@ -18,9 +20,9 @@ void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 
 	pipe(fd);
 	if (pipe(fd) == -1)
-		return (perror("pipe"));
+		return (perror("minishell"));
 	run_pipe_left(fd, line, del, msh);
-	if (!msh->exit_status)
+	if (!g_exit_status)
 		run_pipe_right(fd, eline, del, msh);
 	else
 		close_fd(fd[0], fd[1]);
@@ -80,7 +82,7 @@ void	parse_list(char *line, char *eline, t_msh *msh)
 	if (list_delim_locator(line, eline, &del) == 1)
 		return (parse_pipe(line, eline, msh));
 	parse_list(line, del, msh);
-	if ((msh->exit_status == 0 && *del == '&')
-		|| (msh->exit_status != 0 && *del == '|'))
+	if ((g_exit_status == 0 && *del == '&')
+		|| (g_exit_status != 0 && *del == '|'))
 		parse_list(del + 2, eline, msh);
 }

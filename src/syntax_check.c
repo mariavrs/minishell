@@ -6,46 +6,32 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 18:09:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/02/23 15:27:09 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/30 23:50:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
-
-void	puterror_unexpected_token(char *str)
-{
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-	if (*str == '\n')
-		write(2, "newline", 7);
-	else
-	{
-		write(2, str++, 1);
-		if (*str == *(str - 1))
-			write(2, str, 1);
-	}
-	write(2, "\'\n", 2);
-}
 
 int	stx_list_brackets_check(t_stx *stx, char **line)
 {
 	if (**line == '(')
 	{
 		if (stx->special_ch && stx->special_ch != '&')
-			return (puterror_unexpected_token(*line), 1);
+			return (error_unexpected_token(*line), 1);
 		stx->brackets_flag++;
 		stx->special_ch = '(';
 	}
 	else if (**line == ')')
 	{
 		if (stx->special_ch == '(' || stx->brackets_flag == 0)
-			return (puterror_unexpected_token(*line), 1);
+			return (error_unexpected_token(*line), 1);
 		stx->brackets_flag--;
 		stx->special_ch = ')';
 	}
 	else
 	{
 		if (stx->special_ch != 'a' && stx->special_ch != ')')
-			return (puterror_unexpected_token(*line), 1);
+			return (error_unexpected_token(*line), 1);
 		stx->special_ch = '&';
 		*line += 1;
 	}
@@ -58,13 +44,13 @@ int	stx_pipe_redir_check(t_stx *stx, char **line)
 	if (**line == '|')
 	{
 		if (stx->special_ch != 'a')
-			return (puterror_unexpected_token(*line), 1);
+			return (error_unexpected_token(*line), 1);
 		stx->special_ch = '|';
 	}
 	else if (is_in_str(**line, STR_REDIR))
 	{
 		if (stx->special_ch == ')' || stx->special_ch == '>')
-			return (puterror_unexpected_token(*line), 1);
+			return (error_unexpected_token(*line), 1);
 		stx->special_ch = '>';
 	}
 	*line += 1;
@@ -98,7 +84,7 @@ int	syntax_check(t_stx stx, char *line, char *eline)
 	}
 	if (stx.quo_flag || stx.brackets_flag > 0
 		|| (stx.special_ch != 'a' && stx.special_ch != ')'))
-		return (puterror_unexpected_token("\n"), 1);
+		return (error_unexpected_token("\n"), 1);
 	return (0);
 }
 
