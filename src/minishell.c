@@ -6,13 +6,13 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 01:00:27 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:13:33 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-pid_t	g_pid = 0;
+int	g_exit_status = 0;
 
 int	sline_cmp_len(t_msh *msh)
 {
@@ -103,7 +103,10 @@ int	main(int argc, char **argv, char **envp)
 			ft_free_str(&msh.sline);
 		}
 		else
+		{
+			ft_putstr_fd("exit\n", 1);
+			ft_free_exit(&msh);
 			exit(0);
-			//ft_free_exit("");
+		}
 	}
 }

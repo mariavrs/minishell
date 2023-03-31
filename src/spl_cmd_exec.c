@@ -6,22 +6,22 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 00:42:23 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 12:58:00 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-extern pid_t	g_pid;
-
 void	run_bin(char *full_name, char **argv, t_msh *msh)
 {
-	g_pid = fork();
+	pid_t	id;
+
+	id = fork();
 	signal_manager(2);
-	if (g_pid == 0)
+	if (id == 0)
 		exit(execve(full_name, argv, msh->envp));
 	else
-		waitpid(g_pid, &msh->exit_status, 0);
+		waitpid(id, &msh->exit_status, 0);
 	msh->exit_status = WEXITSTATUS(msh->exit_status);
 }
 
