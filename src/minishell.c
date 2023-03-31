@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 02:44:22 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 11:37:35 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	g_exit_status = 0;
 	ft_parent_env_cpy(&(msh.envp), envp);
 	msh.envp_lcl = NULL;
 	msh.envp_lcl = malloc(sizeof(char *));
@@ -73,5 +72,8 @@ int	main(int argc, char **argv, char **envp)
 				parse_exec_prep(&msh);
 			ft_free_str(&msh.sline);
 		}
+		else
+			return (ft_putstr_fd("exit\n", 1),
+				ft_free_exit(&msh), g_exit_status);
 	}
 }
