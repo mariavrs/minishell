@@ -6,11 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 00:15:30 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 11:05:54 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+extern int	g_exit_status;
 
 void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
 {

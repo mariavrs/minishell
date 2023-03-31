@@ -6,11 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/28 19:26:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 02:44:22 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+int	g_exit_status;
 
 int	sline_cmp_len(t_msh *msh)
 {
@@ -44,7 +46,7 @@ void	parse_exec_prep(t_msh *msh)
 	if (!syntax_check_prep(line, eline))
 		parse_list(line, eline, msh);
 	else
-		msh->exit_status = 2;
+		g_exit_status = 2;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -53,13 +55,13 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	g_exit_status = 0;
 	ft_parent_env_cpy(&(msh.envp), envp);
 	msh.envp_lcl = NULL;
 	msh.envp_lcl = malloc(sizeof(char *));
 	if (!msh.envp_lcl)
 		return (ft_putstr_fd("malloc error\n", 2), 1);
 	msh.envp_lcl[0] = NULL;
-	msh.exit_status = 0;
 	msh.ex_sline = NULL;
 	while (1)
 	{
