@@ -6,11 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/03/30 01:39:21 by ede-smet         ###   ########.fr       */
-=======
-/*   Updated: 2023/03/31 10:58:59 by mvorslov         ###   ########.fr       */
->>>>>>> origin/Chip_sandbox
+/*   Updated: 2023/03/31 15:35:23 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +41,9 @@ int				get_and_put_var(t_env *env, t_msh *msh, char *name);
 long long int	ft_ll_atoi(const char *str);
 
 // Minishell
+
+void			signal_manager(int mode);
+
 void			parse_exec_prep(t_msh *msh);
 int				syntax_check_prep(char *line, char *eline);
 

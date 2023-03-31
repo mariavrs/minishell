@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 11:37:35 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 16:31:50 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,10 @@ int	main(int argc, char **argv, char **envp)
 	msh.ex_sline = NULL;
 	while (1)
 	{
+		signal_manager(MODE_INTR_CMD);
 		msh.sline = NULL;
 		msh.sline = readline("\033[1;36mminishell>> \033[0m");
+		signal_manager(MODE_NITR);
 		if (msh.sline)
 		{
 			if (ft_strlen(msh.sline) != 0)

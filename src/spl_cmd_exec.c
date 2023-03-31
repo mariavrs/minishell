@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 11:18:07 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 16:25:00 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,16 @@ void	run_bin(char *full_name, t_msh *msh)
 
 	pid = fork();
 	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
 		exit(execve(full_name, msh->argv, msh->envp));
+	}
 	else
 		waitpid(pid, &g_exit_status, 0);
-	g_exit_status = WEXITSTATUS(g_exit_status);
+	if (WIFEXITED(g_exit_status))
+		g_exit_status = WEXITSTATUS(g_exit_status);
+	else if (WIFSIGNALED(g_exit_status))
+		g_exit_status = 128 + WTERMSIG(g_exit_status);
 }
 
 char	*bin_get_full_name(char *path, char *argv, int name_len)

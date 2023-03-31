@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_struct.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 02:42:28 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 16:33:48 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 # define ENV_EXP 1
 # define ENV_CREATE 0
 # define ENV_APPEND 1
+# define MODE_NITR 0
+# define MODE_INTR_CMD 1
+# define MODE_INTR_HDC 2
 
 # include <stdio.h>
 # include <unistd.h>
