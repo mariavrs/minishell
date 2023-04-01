@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 19:34:08 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 23:21:36 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 14:30:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,6 @@ void	ctrl_c_noninter_handler(int sig)
 	ft_putchar_fd('\n', 1);
 }
 
-/* void	ctrl_c_heredoc_handler(int sig)
-{
-//	g_exit_status = 128 + sig;
-	ft_putstr_fd("^C", 1);
-	exit (128 + sig);
-} */
-
 void	ctrl_c_prompt_handler(int sig)
 {
 	g_exit_status = 128 + sig;
@@ -34,6 +27,13 @@ void	ctrl_c_prompt_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+}
+
+void	ctrl_c_heredoc_handler(int sig)
+{
+	rl_clear_history();
+	ft_putchar_fd('\n', 1);
+	exit (128 + sig);
 }
 
 void	ctrl_bslash_handler(int sig)

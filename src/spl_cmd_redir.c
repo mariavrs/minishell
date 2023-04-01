@@ -6,13 +6,39 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 22:03:11 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:36:14 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
 extern int	g_exit_status;
+
+int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
+{
+	t_heredoc	hd;
+	pid_t		pid;
+
+	heredoc_prep(&hd);
+	rdr->fd = open(hd.hdoc,
+			O_CREAT | O_WRONLY | O_APPEND | O_TRUNC, 0444);
+	if (rdr->fd < 0)
+		return (perror("minishell: heredoc"), 1);
+	signal_manager(MODE_INTR_HDC);
+	pid = fork();
+	if (pid == 0)
+		exit(heredoc_collect(delim, &hd, rdr, msh));
+	hd.status = heredoc_collect_status(pid);
+	signal_manager(MODE_NITR);
+	if (!hd.status)
+	{
+		rdr->fd = open(hd.hdoc, O_RDONLY);
+		if (rdr->fd < 0)
+			return (heredoc_clean(&hd), perror("minishell: heredoc"), 1);
+		return (heredoc_clean(&hd), 0);
+	}
+	return (heredoc_clean(&hd), hd.status);
+}
 
 int	redir_in(char *filename, t_redir *rdr, t_msh *msh)
 {

@@ -6,13 +6,21 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 17:17:30 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 11:19:16 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:28:48 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-void	full_var_join(t_env *env, t_msh *msh)
+int	get_env_mod(char c)
+{
+	if (c == '=')
+		return (ENV_CREATE);
+	else
+		return (ENV_APPEND);
+}
+
+static void	full_var_join(t_env *env, t_msh *msh)
 {
 	int	len_if_in_envp;
 
@@ -82,19 +90,4 @@ int	get_full_var_str(char *line, t_env *env, t_msh *msh)
 		return (1);
 	full_var_join(env, msh);
 	return (0);
-}
-
-int	find_in_envp(t_env env, char **envp)
-{
-	int	i;
-
-	i = -1;
-	while (envp[++i])
-		if (!ft_strncmp(env.full_var, envp[i], env.name_ln)
-			&& ((env.full_var[env.name_ln] == '=')
-				|| (env.full_var[env.name_ln] == '\0'))
-			&& ((envp[i][env.name_ln] == '=')
-			|| (envp[i][env.name_ln] == '\0')))
-			return (i);
-	return (-1);
 }

@@ -6,13 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:12 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/28 22:04:19 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:06:32 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	wrd_collect(char *line)
+static int	wrd_collect(char *line)
 {
 	int	count;
 	int	quo_flag;

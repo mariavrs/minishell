@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/01 13:47:57 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 14:42:27 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_exit_status;
 
-int	sline_cmp_len(t_msh *msh)
+static int	sline_cmp_len(t_msh *msh)
 {
 	int	s_len;
 	int	ex_s_len;
@@ -49,7 +49,7 @@ void	parse_exec_prep(t_msh *msh)
 		g_exit_status = 2;
 }
 
-int	msh_prep(t_msh *msh, char **envp)
+static int	msh_prep(t_msh *msh, char **envp)
 {
 	if (ft_parent_env_cpy(&(msh->envp), envp))
 		return (1);

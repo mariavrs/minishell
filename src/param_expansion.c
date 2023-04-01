@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 11:20:35 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:19:02 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_exit_status;
 
-int	var_value(char *line, char *str, int *i, t_msh *msh)
+static int	var_value(char *line, char *str, int *i, t_msh *msh)
 {
 	int	pos;
 	int	ln;
@@ -40,7 +40,7 @@ int	var_value(char *line, char *str, int *i, t_msh *msh)
 	return (ln);
 }
 
-int	var_len(char *line, int *len, t_msh *msh)
+static int	var_len(char *line, int *len, t_msh *msh)
 {
 	int	pos;
 	int	ln;
@@ -65,7 +65,7 @@ int	var_len(char *line, int *len, t_msh *msh)
 	return (ln);
 }
 
-int	final_line_len(char *line, t_msh *msh)
+static int	final_line_len(char *line, t_msh *msh)
 {
 	int	len;
 	int	quo_flag;
@@ -92,7 +92,7 @@ int	final_line_len(char *line, t_msh *msh)
 	return (len);
 }
 
-int	put_exit_status(char *str, char **line)
+static int	put_exit_status(char *str, char **line)
 {
 	char	*num;
 	int		ln;

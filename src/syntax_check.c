@@ -6,13 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 18:09:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/30 23:50:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 14:50:53 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	stx_list_brackets_check(t_stx *stx, char **line)
+static int	stx_list_brackets_check(t_stx *stx, char **line)
 {
 	if (**line == '(')
 	{
@@ -39,7 +39,7 @@ int	stx_list_brackets_check(t_stx *stx, char **line)
 	return (0);
 }
 
-int	stx_pipe_redir_check(t_stx *stx, char **line)
+static int	stx_pipe_redir_check(t_stx *stx, char **line)
 {
 	if (**line == '|')
 	{

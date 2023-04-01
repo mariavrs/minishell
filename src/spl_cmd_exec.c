@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 16:25:00 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:11:24 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_exit_status;
 
-void	run_bin(char *full_name, t_msh *msh)
+static void	run_bin(char *full_name, t_msh *msh)
 {
 	pid_t	pid;
 
@@ -32,7 +32,7 @@ void	run_bin(char *full_name, t_msh *msh)
 		g_exit_status = 128 + WTERMSIG(g_exit_status);
 }
 
-char	*bin_get_full_name(char *path, char *argv, int name_len)
+static char	*bin_get_full_name(char *path, char *argv, int name_len)
 {
 	int			path_len;
 	char		*full_name;
@@ -53,7 +53,7 @@ char	*bin_get_full_name(char *path, char *argv, int name_len)
 	return (full_name);
 }
 
-int	search_in_path(t_msh *msh)
+static int	search_in_path(t_msh *msh)
 {
 	t_path	pb;
 	int		i;
@@ -80,7 +80,7 @@ int	search_in_path(t_msh *msh)
 	return (1);
 }
 
-void	search_bin(t_msh *msh)
+static void	search_bin(t_msh *msh)
 {
 	struct stat	statbuf;
 

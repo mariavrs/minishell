@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_and_run_pipe_list.c                          :+:      :+:    :+:   */
+/*   pipe_list_parse_and_run.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 11:02:10 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:02:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 	if (!g_exit_status)
 		run_pipe_right(fd, eline, del, msh);
 	else
-		close_fd(fd[0], fd[1]);
+		close_pipe_fd(fd[0], fd[1]);
 }
 
 void	parse_pipe(char *line, char *eline, t_msh *msh)
@@ -47,7 +47,7 @@ void	parse_pipe(char *line, char *eline, t_msh *msh)
 	run_pipe(line, eline, del, msh);
 }
 
-int	list_delim_locator(char *line, char *eline, char **del)
+static int	list_delim_locator(char *line, char *eline, char **del)
 {
 	int	block_check;
 	int	quo_flag;

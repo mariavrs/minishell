@@ -6,11 +6,11 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 00:14:16 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:15:50 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/mini_fun.h"
+#include "../../include/mini_fun.h"
 
 void	error_search_bin(char *argv, char *err_msg)
 {
