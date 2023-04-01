@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 18:08:49 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 02:03:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,28 @@ void	parse_exec_prep(t_msh *msh)
 		g_exit_status = 2;
 }
 
+int	msh_prep(t_msh *msh, char **envp)
+{
+	if (ft_parent_env_cpy(&(msh->envp), envp))
+		return (1);
+	msh->envp_lcl = NULL;
+	msh->envp_lcl = malloc(sizeof(char *));
+	if (!msh->envp_lcl)
+		return (ft_free_dbl_str(&msh->envp),
+			ft_putstr_fd("malloc error\n", 2), 1);
+	msh->envp_lcl[0] = NULL;
+	msh->ex_sline = NULL;
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
 
 	(void)argc;
 	(void)argv;
-	ft_parent_env_cpy(&(msh.envp), envp);
-	msh.envp_lcl = NULL;
-	msh.envp_lcl = malloc(sizeof(char *));
-	if (!msh.envp_lcl)
-		return (ft_putstr_fd("malloc error\n", 2), 1);
-	msh.envp_lcl[0] = NULL;
-	msh.ex_sline = NULL;
+	if (msh_prep(&msh, envp))
+		return (1);
 	while (1)
 	{
 		signal_manager(MODE_INTR_CMD);
