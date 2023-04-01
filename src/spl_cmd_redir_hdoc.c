@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 00:00:55 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 01:53:51 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
 void	ctrl_c_heredoc_handler(int sig)
 {
 	ft_putchar_fd('\n', 1);
+	rl_clear_history();
 	exit (128 + sig);
 }
 
