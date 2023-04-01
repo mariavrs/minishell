@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/01 02:03:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 13:47:57 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ int	msh_prep(t_msh *msh, char **envp)
 			ft_putstr_fd("malloc error\n", 2), 1);
 	msh->envp_lcl[0] = NULL;
 	msh->ex_sline = NULL;
+	msh->argv = NULL;
+	msh->spl_cmd = NULL;
+	msh->sdtout_default = dup(STDOUT_FILENO);
 	return (0);
 }
 
