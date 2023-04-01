@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 01:53:51 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 14:00:22 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@ void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
 
 void	ctrl_c_heredoc_handler(int sig)
 {
-	ft_putchar_fd('\n', 1);
 	rl_clear_history();
+	ft_putchar_fd('\n', 1);
 	exit (128 + sig);
 }
 
 int	heredoc_collect(char *delim, t_heredoc *hd, t_redir *rdr, t_msh *msh)
 {
+	close(STDOUT_FILENO);
+	dup2(msh->sdtout_default, STDOUT_FILENO);
 	signal(SIGINT, &ctrl_c_heredoc_handler);
 	hd->line_in = NULL;
 	hd->line_in = readline("> ");
