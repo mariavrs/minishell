@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 15:35:23 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 19:06:02 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void			search_bin(t_msh *msh);
 
 int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
 int				redir_out(char *filename, t_redir *rdr);
+int				redir_heredoc(char *delim, t_redir *rdr, t_msh *msh);
 void			redir_clean(t_redir *rdr);
 
 char			*param_expansion(char *line, t_msh *msh, int quo_flag);

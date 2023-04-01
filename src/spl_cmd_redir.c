@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 11:05:54 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/03/31 22:03:11 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,10 @@
 
 extern int	g_exit_status;
 
-void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
-{
-	hd->line_out = NULL;
-	hd->line_out = param_expansion(hd->line_in, msh,
-			quo_check(*hd->line_in, 0));
-	ft_putstr_fd(hd->line_out, rdr->fd);
-	write(rdr->fd, "\n", 1);
-	ft_free_str(&hd->line_out);
-	ft_free_str(&hd->line_in);
-}
-
-int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
-{
-	t_heredoc	hd;
-
-	fstat(STDIN_FILENO, &hd.statbuf);
-	hd.hdoc_id = ft_itoa(hd.statbuf.st_atim.tv_sec);
-	hd.hdoc = ft_strjoin("/tmp/minishell-", hd.hdoc_id);
-	ft_free_str(&hd.hdoc_id);
-	rdr->fd = open(hd.hdoc,
-			O_CREAT | O_WRONLY | O_APPEND | O_TRUNC, 0444);
-	if (rdr->fd < 0)
-		return (perror("minishell: heredoc"), 1);
-	hd.line_in = NULL;
-	hd.line_in = readline("> ");
-	while (hd.line_in && ft_strncmp(hd.line_in, delim,
-			ft_strlen(delim) + 1))
-	{
-		write_to_heredoc(rdr, &hd, msh);
-		hd.line_in = readline("> ");
-	}
-	close(rdr->fd);
-	rdr->fd = open(hd.hdoc, O_RDONLY);
-	if (rdr->fd < 0)
-		return (ft_free_str(&hd.line_in), perror("minishell: heredoc"), 1);
-	unlink(hd.hdoc);
-	ft_free_str(&hd.hdoc);
-	return (ft_free_str(&hd.line_in), 0);
-}
-
 int	redir_in(char *filename, t_redir *rdr, t_msh *msh)
 {
+	int	hdc_stat;
+
 	if (rdr->mode == '<')
 	{
 		rdr->fd = open(filename, O_RDONLY);
@@ -64,8 +26,9 @@ int	redir_in(char *filename, t_redir *rdr, t_msh *msh)
 	}
 	else if (rdr->mode == '-')
 	{
-		if (redir_heredoc(filename, rdr, msh))
-			return (1);
+		hdc_stat = redir_heredoc(filename, rdr, msh);
+		if (hdc_stat)
+			return (hdc_stat);
 	}
 	if (!rdr->stdin_cpy)
 		rdr->stdin_cpy = dup(STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 11:14:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 00:00:37 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 
 int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 {
+	int	status_lcl;
+
 	while (line[i])
 	{
 		while (line[i] && line[i] != '<' && line[i] != '>')
@@ -80,8 +82,9 @@ int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 			line[i++] = ' ';
 		while (is_in_str(line[i], STR_WHSPACE))
 			i++;
-		if (run_redir(line, &i, rdr, msh))
-			return (1);
+		status_lcl = run_redir(line, &i, rdr, msh);
+		if (status_lcl)
+			return (status_lcl);
 	}
 	return (0);
 }
@@ -95,6 +98,7 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	rdr.stdin_cpy = 0;
 	rdr.stdout_cpy = 0;
 	skip = 0;
+	status_lcl = 0;
 	trim_whitespaces(&line, &eline);
 	msh->argv = NULL;
 	msh->spl_cmd = ft_malloc_str(eline - line + 2);
@@ -105,12 +109,11 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 		status_lcl = first_wrd_check(&skip, msh->spl_cmd, msh);
 	if (!status_lcl && msh->spl_cmd[skip])
 		status_lcl = parse_redir(msh->spl_cmd, skip, &rdr, msh);
-	if (!status_lcl && line[skip])
+	if (!status_lcl && msh->spl_cmd[skip])
 		status_lcl = parse_cmd_argv(&msh->spl_cmd[skip], 0, msh);
-	if (!status_lcl && line[skip] && msh->argv)
+	if (!status_lcl && msh->spl_cmd[skip] && msh->argv)
 		run_cmd_exec(msh);
 	else
 		g_exit_status = status_lcl;
-	redir_clean(&rdr);
-	ft_free_spl_cmd(msh);
+	return (redir_clean(&rdr), ft_free_spl_cmd(msh));
 }
