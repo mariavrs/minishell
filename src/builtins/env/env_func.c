@@ -112,7 +112,7 @@ int	env_del(char ***env, char *var)
 	ef.i = -1;
 	ef.j = -1;
 	if (env_not_exist(*env, var))
-		return (1);
+		return (0);
 	ef.env_tmp = NULL;
 	ef.env_tmp = malloc (env_size(*env) * sizeof(char *));
 	if (!ef.env_tmp)
