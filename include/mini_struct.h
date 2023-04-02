@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 14:43:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 18:54:18 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define ENV_EXP 1
 # define ENV_REPLC 0
 # define ENV_APPEND 1
-# define ENV_EXPND 2
+# define ENV_EXPND -1
 # define MODE_NITR 0
 # define MODE_INTR_CMD 1
 # define MODE_INTR_HDC 2
