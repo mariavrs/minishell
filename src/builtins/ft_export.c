@@ -6,39 +6,11 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 13:30:27 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 18:31:30 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
-
-static int	is_valid(char *str)
-{
-	int	i;
-	int	flag;
-
-	flag = 1;
-	i = 0;
-	if (str[0] >= '0' && str[0] <= '9')
-		return (1);
-	while (str[i] && flag && str[i] != '=')
-	{
-		if (str[i] == '+' || str[i] != '=')
-		{
-			if (str[i] == '+' && str[i + 1] && str[i + 1] == '=')
-				flag = 0;
-			else if (str[i] == '+')
-				return (1);
-			else if (!((str[i] >= 'a' && str[i] <= 'z')
-					|| (str[i] >= 'A' && str[i] <= 'Z')
-					|| str[i] == '_'
-					|| (str[i] >= '0' && str[i] <= '9')))
-				return (1);
-		}
-		i++;
-	}
-	return (0);
-}
 
 static void	export_env_print(t_msh *msh)
 {
@@ -79,14 +51,10 @@ int	ft_export(t_msh *msh, char **inputs)
 	i = 0;
 	if (!inputs[1])
 		return (export_env_print(msh), 0);
-	while (inputs[++i])
+	while (inputs[++i] && !err_flag)
 	{
-		if (!is_valid(inputs[i]) && *inputs[i] != '+' && *inputs[i] != '=')
-		{
-			if (get_and_put_var(&env, msh, inputs[i]))
-				return (1);
-		}
-		else
+		err_flag = get_and_put_var(&env, msh, inputs[i]);
+		if (err_flag == -1)
 			exp_error(inputs[i], " ", &err_flag);
 	}
 	return (err_flag);
