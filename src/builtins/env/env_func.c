@@ -30,7 +30,7 @@ char	*get_full_var(char *var, char *value)
 	size = ft_strlen(var) + ft_strlen(value) + 1;
 	full_var = ft_malloc_str(size + 1);
 	if (!full_var)
-		return (1);
+		return (NULL);
 	while (full_var && i < size - 1)
 	{
 		while (*var)
