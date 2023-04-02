@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 13:46:17 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 13:36:03 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 16:57:32 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int	fill_env(t_msh *msh, char *path)
 	if (unset_case(msh))
 		return (1);
 	c_pwd = current_pwd(msh);
+	if (!c_pwd)
+		return (1);
 	if (!ft_strlen(c_pwd) && check_if_pwd_equal_envp(msh, "PWD"))
 	{
 		if (if_pwd_is_empty_case(msh))
