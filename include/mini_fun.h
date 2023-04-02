@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 18:28:10 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 20:53:20 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ int				env_size(char **env);
 int				fill_env(t_msh *msh, char *path);
 char			*current_pwd(t_msh *msh);
 int				check_if_pwd_equal_envp(t_msh *msh, char *var);
-
-// export utils
-int				get_and_put_var(t_env *env, t_msh *msh, char *name);
 
 // Minishell Main
 void			signal_manager(int mode);
