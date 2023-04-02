@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 13:28:45 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 18:05:18 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	exp_error(char *var, char *check, int *flag)
 {
 	if (!check)
 		return (ft_putstr_fd("minishell: malloc error\n", 2));
-	ft_putstr_fd("export: ", 2);
+	ft_putstr_fd("minishell: export: ", 2);
 	write(2, "\'", 1);
 	ft_putstr_fd(var, 2);
 	write(2, "\'", 1);
