@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/28 21:53:35 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 02:47:06 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,30 @@ static int	cd_error(char **input, char *home)
 	if (!input)
 		return (1);
 	if (env_size(input) > 2)
-		return (write(2, "cd: too many arguments\n", 23), 1);
+		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
 	if (!home && !input[1])
-		return (write(2, "cd: HOME not set\n", 17), 1);
+		return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
 	return (0);
+}
+
+char	*current_pwd(t_msh *msh)
+{
+	if (!env_not_exist(msh->envp, "PWD"))
+		return (env_get(msh->envp, "PWD"));
+	else
+		return (env_get(msh->envp_lcl, "PWD"));
+}
+
+int	check_if_pwd_equal_envp(t_msh *msh, char *var)
+{
+	t_env	env;
+
+	env.name = var;
+	env.name_ln = ft_strlen(var);
+	env.i = find_in_envp2(&env, msh);
+	if (msh->envp[env.i][env.name_ln] == '=')
+		return (0);
+	return (1);
 }
 
 int	ft_cd(char **input, t_msh *msh)
@@ -31,23 +51,21 @@ int	ft_cd(char **input, t_msh *msh)
 	char	*error;
 
 	home = env_get(msh->envp, "HOME");
-	if (getcwd(current_dir, PATH_MAX) && cd_error(input, home))
+	if (cd_error(input, home))
 		return (ft_free_str(&home), 1);
+	dir = home;
 	if (input[1])
 		dir = input[1];
-	else
-		dir = home;
-	if (!env_edit(&msh->envp, "OLDPWD", current_dir) && chdir(dir) == 0)
+	if (chdir(dir) == 0)
 	{
 		getcwd(current_dir, PATH_MAX);
-		env_edit(&msh->envp, "PWD", current_dir);
+		if (fill_env(msh, current_dir))
+			return (ft_free_str(&home), 1);
 		return (ft_free_str(&home), 0);
 	}
-	else if (env_edit(&msh->envp, "OLDPWD", current_dir))
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
-	else
-	{
-		error = ft_strjoin("cd: ", input[1]);
-		return (perror(error), ft_free_str(&error), ft_free_str(&home), 1);
-	}
+	error = ft_strjoin("minishell: cd: ", input[1]);
+	if (!error)
+		return (ft_putstr_fd("minishell: malloc error\n", 2),
+			ft_free_str(&home), 1);
+	return (perror(error), ft_free_str(&error), ft_free_str(&home), 1);
 }

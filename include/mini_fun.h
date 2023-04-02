@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/30 01:39:21 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 01:45:12 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,22 @@ int				ft_unset(t_msh *msh, char **inputs);
 int				ft_exit(char **input, t_msh *msh);
 int				ft_env(t_msh msh, int mode);
 // Environment extra functions
-int				env_exist(char **env, char *var);
-void			ft_fill_env(char *env, char *var, char *value);
+int				env_not_exist(char **env, char *var);
 int				ft_count_elem(char **envp);
 int				ft_parent_env_cpy(char ***env, char **envp);
-int				env_edit(char ***env, char *var, char *value);
+int				env_edit(t_msh *msh, char *var, char *value, int flag);
+
 char			*env_get(char **env, char *var);
 int				env_del(char ***env, char *var);
 int				pos_sep(char *str);
 int				env_size(char **env);
 int				remove_line_in_env(char ***env, char *line, int name_ln);
 int				get_and_put_var(t_env *env, t_msh *msh, char *name);
+
+// cd utils
+int				fill_env(t_msh *msh, char *path);
+char			*current_pwd(t_msh *msh);
+int				check_if_pwd_equal_envp(t_msh *msh, char *var);
 
 // utils functions
 long long int	ft_ll_atoi(const char *str);
