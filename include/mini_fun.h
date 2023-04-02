@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/01 15:37:48 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 11:30:45 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ int				find_in_envp2(t_env *env, t_msh *msh);
 int				get_env_mod(char c);
 
 int				put_env_var(t_env *env, t_msh *msh);
-int				env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag);
-int				env_lcl_replace(t_env env, char **envp);
+int				env_add(t_env env, t_msh *msh, char **envp, int env_flag);
+int				env_replace(t_env env, char **envp);
 
 // General Utils
 long long int	ft_ll_atoi(const char *str);
