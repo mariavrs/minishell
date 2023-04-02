@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:12 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 15:06:32 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 16:58:08 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ char	*get_next_word(char *line, t_msh *msh, int *i)
 	int		l_start;
 
 	l_start = *i;
-	if (!line[l_start])
-		return (NULL);
 	*i += wrd_collect(&line[l_start]);
 	tmp = line[*i];
 	line[*i] = '\0';
