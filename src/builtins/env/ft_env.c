@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 15:34:42 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 22:20:08 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_parent_env_cpy(char ***env, char **envp)
 			return (ft_free_dbl_str(env),
 				ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	}
-	(*env)[i++] = NULL;
+	(*env)[i] = NULL;
 	return (0);
 }
 
