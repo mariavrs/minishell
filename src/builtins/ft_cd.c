@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 13:37:38 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 22:31:42 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	check_if_pwd_equal_envp(t_msh *msh, char *var)
 	env.name = var;
 	env.name_ln = ft_strlen(var);
 	env.i = find_in_envp(&env, msh);
-	if (msh->envp[env.i][env.name_ln] == '=')
+	if (msh->envp[env.i] && msh->envp[env.i][env.name_ln] == '=')
 		return (0);
 	return (1);
 }
