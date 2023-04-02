@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 01:45:12 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 03:04:22 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int				ft_export(t_msh *msh, char **inputs);
 int				ft_unset(t_msh *msh, char **inputs);
 int				ft_exit(char **input, t_msh *msh);
 int				ft_env(t_msh msh, int mode);
+
 // Environment extra functions
 int				env_not_exist(char **env, char *var);
 int				ft_count_elem(char **envp);
@@ -42,59 +43,75 @@ int				fill_env(t_msh *msh, char *path);
 char			*current_pwd(t_msh *msh);
 int				check_if_pwd_equal_envp(t_msh *msh, char *var);
 
-// utils functions
-long long int	ft_ll_atoi(const char *str);
+// Minishell Main
+void			signal_manager(int mode);
+void			ctrl_c_noninter_handler(int sig);
+void			ctrl_c_prompt_handler(int sig);
+void			ctrl_c_heredoc_handler(int sig);
+void			ctrl_bslash_handler(int sig);
 
-// Minishell
 void			parse_exec_prep(t_msh *msh);
 int				syntax_check_prep(char *line, char *eline);
+int				syntax_check(t_stx stx, char *line, char *eline);
 
+// Parse & Execute
 void			parse_list(char *line, char *eline, t_msh *msh);
-int				list_delim_locator(char *line, char *eline, char **del);
+
 void			parse_pipe(char *line, char *eline, t_msh *msh);
 void			run_pipe(char *line, char *eline, char *del, t_msh *msh);
+void			run_pipe_left(int fd[2], char *line, char *del, t_msh *msh);
+void			run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh);
+void			close_pipe_fd(int fd0, int fd1);
 
+void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
+
+int				first_wrd_check(int *skip, char *line, t_msh *msh);
+
+int				parse_redir(char *line, int i, t_redir *rdr, t_msh *msh);
+int				run_redir(char *line, int *i, t_redir *rdr, t_msh *msh);
+int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
+int				redir_out(char *filename, t_redir *rdr);
+int				redir_heredoc(char *delim, t_redir *rdr, t_msh *msh);
+void			redir_clean(t_redir *rdr);
+int				heredoc_prep(t_heredoc *hd);
+int				heredoc_collect_status(pid_t pid);
+int				heredoc_collect(char *delim, t_heredoc *hd,
+					t_redir *rdr, t_msh *msh);
+void			heredoc_clean(t_heredoc *hd);
+
+int				parse_cmd_argv(char *line, int argc, t_msh *msh);
+void			run_cmd_exec(t_msh *msh);
+
+// Parse & Execute Utils
+char			*get_next_word(char *line, t_msh *msh, int *i);
 int				is_in_str(char c, char *str);
 int				brackets_check(char *line, char *eline);
 int				trim_brackets(char **line, char **eline);
 int				trim_whitespaces(char **line, char **eline);
 int				quo_check(char del, int quo_flag);
 
-void			close_fd(int fd0, int fd1);
-void			run_pipe_left(int fd[2], char *line, char *del, t_msh *msh);
-void			run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh);
-
-void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
-char			*get_next_word(char *line, t_msh *msh, int *i);
-
-void			run_cmd_exec(t_msh *msh);
-int				search_bin(char **argv, t_msh *msh);
-
-int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
-int				redir_out(char *filename, t_redir *rdr);
-void			redir_clean(t_redir *rdr);
-
+// Expansion
 char			*param_expansion(char *line, t_msh *msh, int quo_flag);
 int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
 
-int				first_wrd_check(int *skip, char *line, t_msh *msh);
-
+// Environment Add/Replace
+int				get_full_var_str(char *line, t_env *env, t_msh *msh);
 int				find_in_envp2(t_env *env, t_msh *msh);
-int				find_in_envp(t_env env, char **envp);
+int				get_env_mod(char c);
+
+int				put_env_var(t_env *env, t_msh *msh);
 int				env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag);
 int				env_lcl_replace(t_env env, char **envp);
 
-int				get_full_var_str(char *line, t_env *env, t_msh *msh);
-int				put_env_var(t_env *env, t_msh *msh);
-int				get_env_mod(char c);
-int				get_env_dest(t_env env);
-
-char			*ft_malloc_str(int size, int *exit_status);
-
+// General Utils
+long long int	ft_ll_atoi(const char *str);
+char			*ft_malloc_str(int size);
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_exit(t_msh *msh);
+void			error_unexpected_token(char *str);
+void			error_search_bin(char *argv, char *err_msg);
 
 #endif

@@ -1,16 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_and_run_pipe_list.c                          :+:      :+:    :+:   */
+/*   pipe_list_parse_and_run.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/04 19:24:42 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:02:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+extern int	g_exit_status;
 
 void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 {
@@ -18,12 +20,12 @@ void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 
 	pipe(fd);
 	if (pipe(fd) == -1)
-		return (perror("pipe"));
+		return (perror("minishell"));
 	run_pipe_left(fd, line, del, msh);
-	if (!msh->exit_status)
+	if (!g_exit_status)
 		run_pipe_right(fd, eline, del, msh);
 	else
-		close_fd(fd[0], fd[1]);
+		close_pipe_fd(fd[0], fd[1]);
 }
 
 void	parse_pipe(char *line, char *eline, t_msh *msh)
@@ -45,7 +47,7 @@ void	parse_pipe(char *line, char *eline, t_msh *msh)
 	run_pipe(line, eline, del, msh);
 }
 
-int	list_delim_locator(char *line, char *eline, char **del)
+static int	list_delim_locator(char *line, char *eline, char **del)
 {
 	int	block_check;
 	int	quo_flag;
@@ -80,7 +82,7 @@ void	parse_list(char *line, char *eline, t_msh *msh)
 	if (list_delim_locator(line, eline, &del) == 1)
 		return (parse_pipe(line, eline, msh));
 	parse_list(line, del, msh);
-	if ((msh->exit_status == 0 && *del == '&')
-		|| (msh->exit_status != 0 && *del == '|'))
+	if ((g_exit_status == 0 && *del == '&')
+		|| (g_exit_status != 0 && *del == '|'))
 		parse_list(del + 2, eline, msh);
 }

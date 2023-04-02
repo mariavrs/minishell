@@ -6,13 +6,15 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/28 19:26:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 14:42:27 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	sline_cmp_len(t_msh *msh)
+int	g_exit_status;
+
+static int	sline_cmp_len(t_msh *msh)
 {
 	int	s_len;
 	int	ex_s_len;
@@ -44,7 +46,24 @@ void	parse_exec_prep(t_msh *msh)
 	if (!syntax_check_prep(line, eline))
 		parse_list(line, eline, msh);
 	else
-		msh->exit_status = 2;
+		g_exit_status = 2;
+}
+
+static int	msh_prep(t_msh *msh, char **envp)
+{
+	if (ft_parent_env_cpy(&(msh->envp), envp))
+		return (1);
+	msh->envp_lcl = NULL;
+	msh->envp_lcl = malloc(sizeof(char *));
+	if (!msh->envp_lcl)
+		return (ft_free_dbl_str(&msh->envp),
+			ft_putstr_fd("malloc error\n", 2), 1);
+	msh->envp_lcl[0] = NULL;
+	msh->ex_sline = NULL;
+	msh->argv = NULL;
+	msh->spl_cmd = NULL;
+	msh->sdtout_default = dup(STDOUT_FILENO);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -53,23 +72,22 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	ft_parent_env_cpy(&(msh.envp), envp);
-	msh.envp_lcl = NULL;
-	msh.envp_lcl = malloc(sizeof(char *));
-	if (!msh.envp_lcl)
-		return (ft_putstr_fd("malloc error\n", 2), 1);
-	msh.envp_lcl[0] = NULL;
-	msh.exit_status = 0;
-	msh.ex_sline = NULL;
+	if (msh_prep(&msh, envp))
+		return (1);
 	while (1)
 	{
+		signal_manager(MODE_INTR_CMD);
 		msh.sline = NULL;
 		msh.sline = readline("\033[1;36mminishell>> \033[0m");
+		signal_manager(MODE_NITR);
 		if (msh.sline)
 		{
 			if (ft_strlen(msh.sline) != 0)
 				parse_exec_prep(&msh);
 			ft_free_str(&msh.sline);
 		}
+		else
+			return (ft_putstr_fd("exit\n", 1),
+				ft_free_exit(&msh), g_exit_status);
 	}
 }

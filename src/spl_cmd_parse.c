@@ -1,16 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_spl_cmd.c                                    :+:      :+:    :+:   */
+/*   spl_cmd_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/28 22:12:12 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:02:54 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+extern int	g_exit_status;
 
 int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 {
@@ -21,11 +23,12 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 		line++;
 	if (!(*line))
 	{
+		if (!argc)
+			return (0);
 		msh->argv = malloc(sizeof(char *) * (argc + 1));
 		if (!msh->argv)
 			return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 		msh->argv[argc] = NULL;
-		msh->argc = argc;
 	}
 	else
 	{
@@ -61,6 +64,8 @@ int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 
 int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 {
+	int	status_lcl;
+
 	while (line[i])
 	{
 		while (line[i] && line[i] != '<' && line[i] != '>')
@@ -77,8 +82,9 @@ int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 			line[i++] = ' ';
 		while (is_in_str(line[i], STR_WHSPACE))
 			i++;
-		if (run_redir(line, &i, rdr, msh))
-			return (1);
+		status_lcl = run_redir(line, &i, rdr, msh);
+		if (status_lcl)
+			return (status_lcl);
 	}
 	return (0);
 }
@@ -92,9 +98,10 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	rdr.stdin_cpy = 0;
 	rdr.stdout_cpy = 0;
 	skip = 0;
+	status_lcl = 0;
 	trim_whitespaces(&line, &eline);
 	msh->argv = NULL;
-	msh->spl_cmd = ft_malloc_str(eline - line + 2, &msh->exit_status);
+	msh->spl_cmd = ft_malloc_str(eline - line + 2);
 	if (!msh->spl_cmd)
 		return ;
 	ft_strlcpy(msh->spl_cmd, line, eline - line + 1);
@@ -102,12 +109,11 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 		status_lcl = first_wrd_check(&skip, msh->spl_cmd, msh);
 	if (!status_lcl && msh->spl_cmd[skip])
 		status_lcl = parse_redir(msh->spl_cmd, skip, &rdr, msh);
-	if (!status_lcl && line[skip])
+	if (!status_lcl && msh->spl_cmd[skip])
 		status_lcl = parse_cmd_argv(&msh->spl_cmd[skip], 0, msh);
-	if (!status_lcl && line[skip])
+	if (!status_lcl && msh->spl_cmd[skip] && msh->argv)
 		run_cmd_exec(msh);
 	else
-		msh->exit_status = status_lcl;
-	redir_clean(&rdr);
-	ft_free_spl_cmd(msh);
+		g_exit_status = status_lcl;
+	return (redir_clean(&rdr), ft_free_spl_cmd(msh));
 }

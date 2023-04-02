@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/01 20:44:05 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/03/31 11:22:21 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
+
+extern int	g_exit_status;
 
 static int	is_numeric(char *str)
 {
@@ -60,7 +62,7 @@ int	ft_exit(char **input, t_msh *msh)
 		return (1);
 	if (!input[1])
 		return (exit_error(-1, NULL), ft_free_exit(msh)
-			, exit(msh->exit_status), msh->exit_status);
+			, exit(g_exit_status), g_exit_status);
 	i = ft_ll_atoi(input[1]);
 	mod = i % 256;
 	if (!is_numeric(input[1]) && input[2])

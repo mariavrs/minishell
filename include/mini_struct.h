@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/29 18:40:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 12:46:13 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 # define ENV_EXP 1
 # define ENV_CREATE 0
 # define ENV_APPEND 1
+# define MODE_NITR 0
+# define MODE_INTR_CMD 1
+# define MODE_INTR_HDC 2
 
 # include <stdio.h>
 # include <unistd.h>
@@ -46,8 +49,7 @@ typedef struct s_msh
 	char	*spl_cmd;
 	int		spl_cmd_len;
 	char	**argv;
-	int		argc;
-	int		exit_status;
+	int		sdtout_default;
 }	t_msh;
 
 typedef struct s_stx
@@ -71,6 +73,7 @@ typedef struct s_heredoc
 	char		*line_out;
 	char		*hdoc;
 	char		*hdoc_id;
+	int			status;
 	struct stat	statbuf;
 }	t_heredoc;
 

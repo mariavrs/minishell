@@ -6,13 +6,15 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/27 16:46:22 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:19:02 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	var_value(char *line, char *str, int *i, t_msh *msh)
+extern int	g_exit_status;
+
+static int	var_value(char *line, char *str, int *i, t_msh *msh)
 {
 	int	pos;
 	int	ln;
@@ -38,7 +40,7 @@ int	var_value(char *line, char *str, int *i, t_msh *msh)
 	return (ln);
 }
 
-int	var_len(char *line, int *len, t_msh *msh)
+static int	var_len(char *line, int *len, t_msh *msh)
 {
 	int	pos;
 	int	ln;
@@ -63,7 +65,7 @@ int	var_len(char *line, int *len, t_msh *msh)
 	return (ln);
 }
 
-int	final_line_len(char *line, t_msh *msh)
+static int	final_line_len(char *line, t_msh *msh)
 {
 	int	len;
 	int	quo_flag;
@@ -87,16 +89,15 @@ int	final_line_len(char *line, t_msh *msh)
 			line += var_len(line + 1, &len, msh) + 1;
 		}
 	}
-	msh->spl_cmd_len = len;
 	return (len);
 }
 
-int	put_exit_status(char *str, char **line, t_msh *msh)
+static int	put_exit_status(char *str, char **line)
 {
 	char	*num;
 	int		ln;
 
-	num = ft_itoa(msh->exit_status);
+	num = ft_itoa(g_exit_status);
 	ln = ft_strlen(num);
 	ft_strlcpy(str, num, ln + 1);
 	ft_free_str(&num);
@@ -110,7 +111,7 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag)
 	int		i;
 
 	i = 0;
-	str = ft_malloc_str(final_line_len(line, msh) + 1, &msh->exit_status);
+	str = ft_malloc_str(final_line_len(line, msh) + 1);
 	if (!str)
 		return (NULL);
 	while (*line)
@@ -124,7 +125,7 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag)
 			quo_flag = quo_check(*(line++), quo_flag);
 		}
 		if (*line && *(line + 1) == '?')
-			i += put_exit_status(&str[i], &line, msh);
+			i += put_exit_status(&str[i], &line);
 		else if (*line && *(line + 1) >= '0' && *(line + 1) <= '9')
 			line += 2;
 		else if (*line)

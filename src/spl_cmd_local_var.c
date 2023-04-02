@@ -6,26 +6,37 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/29 20:17:00 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:51:47 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	get_env_mod(char c)
+static void	get_env_dest(t_env *env)
 {
-	if (c == '=')
-		return (ENV_CREATE);
+	if (env->i < 0)
+		env->dest = ENV_LCL;
 	else
-		return (ENV_APPEND);
+		env->dest = env->src;
 }
 
-int	get_env_dest(t_env env)
+static int	env_var_declaration(t_env *env, int *skip, char *line, t_msh *msh)
 {
-	if (env.i < 0)
-		return (ENV_LCL);
-	else
-		return (env.src);
+	env->mod = get_env_mod(line[env->name_ln]);
+	env->value = get_next_word(&line[env->name_ln + env->mod + 1],
+			msh, skip);
+	if (!env->value)
+		return (*skip = 0, 1);
+	*skip += env->name_ln + env->mod + 1;
+	if (line[*skip])
+		return (ft_free_str(&env->value), 0);
+	if (get_full_var_str(line, env, msh))
+		return (*skip = 0, 1);
+	ft_free_str(&env->value);
+	get_env_dest(env);
+	if (put_env_var(env, msh))
+		return (ft_free_str(&env->full_var), *skip = 0, 1);
+	return (0);
 }
 
 int	first_wrd_check(int *skip, char *line, t_msh *msh)
@@ -36,22 +47,10 @@ int	first_wrd_check(int *skip, char *line, t_msh *msh)
 	while (is_valid_varname(line[++env.name_ln])
 		|| is_in_str(line[env.name_ln], "+="))
 	{
-		if (line[env.name_ln] == '=' || !ft_strncmp(&line[env.name_ln], "+=", 2))
+		if (line[env.name_ln] == '='
+			|| !ft_strncmp(&line[env.name_ln], "+=", 2))
 		{
-			env.mod = get_env_mod(line[env.name_ln]);
-			env.value = get_next_word(&line[env.name_ln + env.mod + 1], msh, skip);
-			if (!env.value)
-				return (*skip = 0, 1);
-			*skip += env.name_ln + env.mod + 1;
-			if (line[*skip])
-				return (ft_free_str(&env.value), 0);
-			if (get_full_var_str(line, &env, msh))
-				return (*skip = 0, 1);
-			ft_free_str(&env.value);
-			env.dest = get_env_dest(env);
-			if (put_env_var(&env, msh))
-				return (ft_free_str(&env.full_var), *skip = 0, 1);
-			return (0);
+			return (env_var_declaration(&env, skip, line, msh));
 		}
 	}
 	return (0);
