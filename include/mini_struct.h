@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 18:54:18 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 20:12:32 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ typedef struct s_msh
 	char	*spl_cmd;
 	int		spl_cmd_len;
 	char	**argv;
-	int		sdtout_default;
+	int		stdin_default;
+	int		stdout_default;
+	int		in_pipe_flag;
+	int		out_pipe_flag;
 }	t_msh;
 
 typedef struct s_stx

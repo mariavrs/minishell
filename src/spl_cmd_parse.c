@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 15:02:54 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 19:26:25 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	int		status_lcl;
 	int		skip;
 
-	rdr.stdin_cpy = 0;
-	rdr.stdout_cpy = 0;
+	rdr.stdin_cpy = -1;
+	rdr.stdout_cpy = -1;
 	skip = 0;
 	status_lcl = 0;
 	trim_whitespaces(&line, &eline);
