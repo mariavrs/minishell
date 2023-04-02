@@ -48,6 +48,8 @@ int	env_edit(t_msh *msh, char *var, char *value, int flag)
 	t_env	env;
 
 	env.full_var = get_full_var(var, value);
+	if (!env.full_var)
+		return (1);
 	env.name = ft_strdup(var);
 	if (!env.name)
 		return (ft_free_str(&env.full_var),
