@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 01:46:37 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 14:14:49 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	env_not_exist(char **env, char *var)
 	value = env_get(env, var);
 	if (!value)
 		return (1);
-	return (free(value), 0);
+	return (ft_free_str(&value), 0);
 }
 
 int	env_size(char **env)
