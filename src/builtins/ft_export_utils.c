@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export_util.c                                   :+:      :+:    :+:   */
+/*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 01:34:52 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 16:00:59 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 18:29:43 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	get_name_lenght(char *line)
 	return (-1);
 }
 
-int	remove_line_in_env(char ***env, char *line, int name_ln)
+static int	remove_line_in_env(char ***env, char *line, int name_ln)
 {
 	char	tmp;
 

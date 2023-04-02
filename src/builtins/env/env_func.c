@@ -20,29 +20,66 @@ typedef struct env_func
 	int		j;
 }	t_ef;
 
-int	env_edit(char ***env, char *var, char *value)
+char	*get_full_var(char *var, char *value)
 {
+	char	*full_var;
+	int		size;
 	int		i;
-	char	*env_var;
 
 	i = -1;
-	while ((*env)[++i])
+	size = ft_strlen(var) + ft_strlen(value) + 1;
+	full_var = ft_malloc_str(size + 1);
+	if (!full_var)
+		return (NULL);
+	while (full_var && i < size - 1)
 	{
-		env_var = ft_substr((*env)[i], 0, pos_sep((*env)[i]) - 1);
-		if (!env_var)
-			return (1);
-		if (!ft_strncmp(env_var, var, ft_strlen(var) + 1))
-		{
-			ft_free_str(&(*env)[i]);
-			(*env)[i] = malloc((ft_strlen(env_var) + ft_strlen(value) + 2)
-					* sizeof(char));
-			if (!(*env)[i])
-				return (ft_free_str(&env_var), 1);
-			ft_fill_env((*env)[i], env_var, value);
-		}
-		ft_free_str(&env_var);
+		while (*var)
+			full_var[++i] = *var++;
+		full_var[++i] = '=';
+		while (*value)
+			full_var[++i] = *value++;
 	}
-	return (0);
+	full_var[i + 1] = '\0';
+	return (full_var);
+}
+
+int	env_edit(t_msh *msh, char *var, char *value, int flag)
+{
+	t_env	env;
+
+	env.full_var = get_full_var(var, value);
+	if (!env.full_var)
+		return (1);
+	env.name = ft_strdup(var);
+	if (!env.name)
+		return (ft_free_str(&env.full_var),
+			ft_putstr_fd("minishell: malloc error\n", 2), 1);
+	env.name_ln = ft_strlen(env.name);
+	env.i = find_in_envp(&env, msh);
+	if (flag == ENV_EXP)
+		env_replace(env, msh->envp);
+	else if (flag == ENV_LCL)
+		env_replace(env, msh->envp_lcl);
+	return (ft_free_str(&env.name), 0);
+}
+
+char	*get_e_val(char *full_name)
+{
+	char	*e_val;
+
+	if (pos_sep(full_name) > 0)
+	{
+		e_val = ft_strdup(full_name + pos_sep(full_name));
+		if (!e_val)
+			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+	}
+	else
+	{
+		e_val = ft_strdup("");
+		if (!e_val)
+			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+	}
+	return (e_val);
 }
 
 char	*env_get(char **env, char *var)
@@ -55,9 +92,11 @@ char	*env_get(char **env, char *var)
 	while (env[++i])
 	{
 		e_var = ft_substr(env[i], 0, pos_sep(env[i]) - 1);
-		e_val = ft_strdup(env[i] + pos_sep(env[i]));
-		if (!e_var || !e_val)
+		if (!e_var)
 			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+		e_val = get_e_val(env[i]);
+		if (!e_val)
+			return (ft_free_str(&e_var), NULL);
 		if (!ft_strncmp(e_var, var, ft_strlen(var) + 1))
 			return (ft_free_str(&e_var), e_val);
 		ft_free_str(&e_var);
@@ -72,8 +111,8 @@ int	env_del(char ***env, char *var)
 
 	ef.i = -1;
 	ef.j = -1;
-	if (env_exist(*env, var))
-		return (1);
+	if (env_not_exist(*env, var))
+		return (0);
 	ef.env_tmp = NULL;
 	ef.env_tmp = malloc (env_size(*env) * sizeof(char *));
 	if (!ef.env_tmp)

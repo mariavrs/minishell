@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 15:46:51 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 18:31:30 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
-
-static void	exp_error(char *var, char *check, int *flag)
-{
-	if (!check)
-		return (ft_putstr_fd("minishell: malloc error\n", 2));
-	ft_putstr_fd("export: ", 2);
-	write(2, "\'", 1);
-	ft_putstr_fd(var, 2);
-	write(2, "\'", 1);
-	ft_putstr_fd(": not a valid identifier\n", 2);
-	*flag = 1;
-}
 
 static void	export_env_print(t_msh *msh)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 11:38:16 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 18:28:10 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,20 @@ int				ft_exit(char **input, t_msh *msh);
 int				ft_env(t_msh msh, int mode);
 
 // Environment extra functions
-int				env_exist(char **env, char *var);
-void			ft_fill_env(char *env, char *var, char *value);
-int				ft_count_elem(char **envp);
 int				ft_parent_env_cpy(char ***env, char **envp);
-int				env_edit(char ***env, char *var, char *value);
+int				env_not_exist(char **env, char *var);
+int				env_edit(t_msh *msh, char *var, char *value, int flag);
 char			*env_get(char **env, char *var);
 int				env_del(char ***env, char *var);
 int				pos_sep(char *str);
 int				env_size(char **env);
-int				remove_line_in_env(char ***env, char *line, int name_ln);
+
+// cd utils
+int				fill_env(t_msh *msh, char *path);
+char			*current_pwd(t_msh *msh);
+int				check_if_pwd_equal_envp(t_msh *msh, char *var);
+
+// export utils
 int				get_and_put_var(t_env *env, t_msh *msh, char *name);
 
 // Minishell Main
@@ -44,7 +48,6 @@ void			ctrl_c_noninter_handler(int sig);
 void			ctrl_c_prompt_handler(int sig);
 void			ctrl_c_heredoc_handler(int sig);
 void			ctrl_bslash_handler(int sig);
-
 void			parse_exec_prep(t_msh *msh);
 int				syntax_check_prep(char *line, char *eline);
 int				syntax_check(t_stx stx, char *line, char *eline);
@@ -108,5 +111,7 @@ void			ft_free_str(char **str);
 void			ft_free_exit(t_msh *msh);
 void			error_unexpected_token(char *str);
 void			error_search_bin(char *argv, char *err_msg);
+int				cd_error(char **input, char *home);
+void			exp_error(char *var, char *check, int *flag);
 
 #endif
