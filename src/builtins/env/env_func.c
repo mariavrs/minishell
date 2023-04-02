@@ -24,13 +24,11 @@ char	*get_full_var(char *var, char *value)
 {
 	char	*full_var;
 	int		size;
-	int		error;
 	int		i;
 
 	i = -1;
-	error = 0;
 	size = ft_strlen(var) + ft_strlen(value) + 1;
-	full_var = ft_malloc_str(size + 1, &error);
+	full_var = ft_malloc_str(size + 1);
 	while (full_var && i < size - 1)
 	{
 		while (*var)
