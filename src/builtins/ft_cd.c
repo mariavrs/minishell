@@ -6,22 +6,11 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 02:47:06 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 13:37:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
-
-static int	cd_error(char **input, char *home)
-{
-	if (!input)
-		return (1);
-	if (env_size(input) > 2)
-		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
-	if (!home && !input[1])
-		return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
-	return (0);
-}
 
 char	*current_pwd(t_msh *msh)
 {
@@ -37,7 +26,7 @@ int	check_if_pwd_equal_envp(t_msh *msh, char *var)
 
 	env.name = var;
 	env.name_ln = ft_strlen(var);
-	env.i = find_in_envp2(&env, msh);
+	env.i = find_in_envp(&env, msh);
 	if (msh->envp[env.i][env.name_ln] == '=')
 		return (0);
 	return (1);

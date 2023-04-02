@@ -51,11 +51,11 @@ int	env_edit(t_msh *msh, char *var, char *value, int flag)
 		return (ft_free_str(&env.full_var),
 			ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	env.name_ln = ft_strlen(env.name);
-	env.i = find_in_envp2(&env, msh);
+	env.i = find_in_envp(&env, msh);
 	if (flag == ENV_EXP)
-		env_lcl_replace(env, msh->envp);
+		env_replace(env, msh->envp);
 	else if (flag == ENV_LCL)
-		env_lcl_replace(env, msh->envp_lcl);
+		env_replace(env, msh->envp_lcl);
 	return (ft_free_str(&env.name), 0);
 }
 

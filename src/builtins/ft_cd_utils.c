@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 13:46:17 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 02:37:54 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 13:36:03 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	unset_case(t_msh *msh)
 		env.full_var = ft_strdup("PWD");
 		if (!env.full_var)
 			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
-		if (env_lcl_add(env, msh, msh->envp_lcl, ENV_LCL))
+		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
 			return (1);
 	}
 	if (env_not_exist(msh->envp, "OLDPWD"))
@@ -37,7 +37,7 @@ static int	unset_case(t_msh *msh)
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
 			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
-		if (env_lcl_add(env, msh, msh->envp_lcl, ENV_LCL))
+		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
 			return (1);
 	}
 	return (0);
@@ -54,7 +54,7 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
 			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
-		if (env_lcl_add(env, msh, msh->envp, ENV_EXP))
+		if (env_add(env, msh, msh->envp, ENV_EXP))
 			return (1);
 	}
 	else
@@ -64,7 +64,7 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
 			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
-		if (env_lcl_add(env, msh, msh->envp_lcl, ENV_LCL))
+		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
 			return (1);
 	}
 	return (0);

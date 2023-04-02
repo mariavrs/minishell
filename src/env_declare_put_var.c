@@ -6,20 +6,20 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 20:09:29 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/03/31 14:56:39 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 13:36:07 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-int	env_lcl_replace(t_env env, char **envp)
+int	env_replace(t_env env, char **envp)
 {
 	ft_free_str(&envp[env.i]);
 	envp[env.i] = env.full_var;
 	return (0);
 }
 
-int	env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag)
+int	env_add(t_env env, t_msh *msh, char **envp, int env_flag)
 {
 	char	**envp_tmp;
 
@@ -41,18 +41,18 @@ int	env_lcl_add(t_env env, t_msh *msh, char **envp, int env_flag)
 		msh->envp_lcl = envp;
 	else
 		msh->envp = envp;
-	return (env_lcl_replace(env, envp));
+	return (env_replace(env, envp));
 }
 
 int	put_env_var(t_env *env, t_msh *msh)
 {
 	if (env->dest == ENV_LCL && env->src == env->dest)
-		return (env_lcl_replace(*env, msh->envp_lcl));
+		return (env_replace(*env, msh->envp_lcl));
 	else if (env->dest == ENV_EXP && env->src == env->dest)
-		return (env_lcl_replace(*env, msh->envp));
+		return (env_replace(*env, msh->envp));
 	else if (env->dest == ENV_LCL && env->src != env->dest)
-		return (env_lcl_add(*env, msh, msh->envp_lcl, ENV_LCL));
+		return (env_add(*env, msh, msh->envp_lcl, ENV_LCL));
 	else if (env->dest == ENV_EXP && env->src != env->dest)
-		return (env_lcl_add(*env, msh, msh->envp, ENV_EXP));
+		return (env_add(*env, msh, msh->envp, ENV_EXP));
 	return (0);
 }

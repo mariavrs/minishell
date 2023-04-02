@@ -6,13 +6,13 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/19 15:16:31 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 13:16:51 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-int	ft_count_elem(char **envp)
+static int	ft_count_elem(char **envp)
 {
 	int	i;
 

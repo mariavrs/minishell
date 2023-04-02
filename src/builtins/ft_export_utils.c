@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 01:34:52 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/01 17:16:31 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 13:31:36 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	get_name_lenght(char *line)
 	return (0);
 }
 
-int	remove_line_in_env(char ***env, char *line, int name_ln)
+static int	remove_line_in_env(char ***env, char *line, int name_ln)
 {
 	char	tmp;
 
