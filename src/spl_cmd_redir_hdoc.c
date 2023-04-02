@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 20:35:26 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 21:00:26 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	heredoc_collect(char *delim, t_heredoc *hd, t_redir *rdr, t_msh *msh)
 		hd->line_in = readline("> ");
 	}
 	close(rdr->fd);
-	return (0);
+	return (rl_clear_history(), 0);
 }
 
 int	heredoc_collect_status(pid_t pid)
