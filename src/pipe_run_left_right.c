@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 15:33:41 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 20:12:04 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	run_pipe_left(int fd[2], char *line, char *del, t_msh *msh)
 		return (g_exit_status = 1, perror("minishell"));
 	else if (id == 0)
 	{
+		msh->out_pipe_flag = 1;
 		dup2(fd[1], STDOUT_FILENO);
 		close_pipe_fd(fd[0], fd[1]);
 		parse_pipe(line, del, msh);
@@ -48,6 +49,7 @@ void	run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh)
 			close_pipe_fd(fd[0], fd[1]));
 	else if (id == 0)
 	{
+		msh->in_pipe_flag = 1;
 		dup2(fd[0], STDIN_FILENO);
 		close_pipe_fd(fd[0], fd[1]);
 		parse_pipe(del + 1, eline, msh);

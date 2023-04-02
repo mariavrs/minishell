@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 20:53:20 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 22:50:13 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,16 @@ int				fill_env(t_msh *msh, char *path);
 char			*current_pwd(t_msh *msh);
 int				check_if_pwd_equal_envp(t_msh *msh, char *var);
 
-// Minishell Main
+// Signals
 void			signal_manager(int mode);
-void			ctrl_c_noninter_handler(int sig);
-void			ctrl_c_prompt_handler(int sig);
 void			ctrl_c_heredoc_handler(int sig);
-void			ctrl_bslash_handler(int sig);
+void			ctrl_c_heredoc_pipe_handler(int sig);
+
+// Parse & Execute
 void			parse_exec_prep(t_msh *msh);
 int				syntax_check_prep(char *line, char *eline);
 int				syntax_check(t_stx stx, char *line, char *eline);
 
-// Parse & Execute
 void			parse_list(char *line, char *eline, t_msh *msh);
 
 void			parse_pipe(char *line, char *eline, t_msh *msh);
@@ -72,7 +71,6 @@ int				heredoc_prep(t_heredoc *hd);
 int				heredoc_collect_status(pid_t pid);
 int				heredoc_collect(char *delim, t_heredoc *hd,
 					t_redir *rdr, t_msh *msh);
-void			heredoc_clean(t_heredoc *hd);
 
 int				parse_cmd_argv(char *line, int argc, t_msh *msh);
 void			run_cmd_exec(t_msh *msh);

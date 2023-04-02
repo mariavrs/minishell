@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 19:34:08 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 13:25:08 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 19:03:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,6 @@ void	ctrl_c_prompt_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
-}
-
-void	ctrl_c_heredoc_handler(int sig)
-{
-	rl_clear_history();
-	ft_putchar_fd('\n', 1);
-	exit (128 + sig);
 }
 
 void	ctrl_bslash_handler(int sig)
