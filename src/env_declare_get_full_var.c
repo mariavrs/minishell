@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 17:17:30 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 15:28:48 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 11:38:16 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	full_var_join(t_env *env, t_msh *msh)
 	}
 }
 
-int	find_in_envp2(t_env *env, t_msh *msh)
+int	find_in_envp(t_env *env, t_msh *msh)
 {
 	int	i;
 
@@ -75,7 +75,7 @@ int	find_in_envp2(t_env *env, t_msh *msh)
 int	get_full_var_str(char *line, t_env *env, t_msh *msh)
 {
 	env->name = line;
-	env->i = find_in_envp2(env, msh);
+	env->i = find_in_envp(env, msh);
 	env->value_ln = ft_strlen(env->value);
 	if (env->mod == ENV_APPEND && env->i < 0)
 		env->mod = ENV_CREATE;

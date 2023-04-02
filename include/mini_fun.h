@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 11:30:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 11:38:16 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int				is_valid_varname(char c);
 
 // Environment Add/Replace
 int				get_full_var_str(char *line, t_env *env, t_msh *msh);
-int				find_in_envp2(t_env *env, t_msh *msh);
+int				find_in_envp(t_env *env, t_msh *msh);
 int				get_env_mod(char c);
 
 int				put_env_var(t_env *env, t_msh *msh);
