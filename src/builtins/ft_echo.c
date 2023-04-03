@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 17:21:15 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/02 22:52:23 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	ft_print_line(char **input, int i)
 {
 	ft_putstr_fd(input[i], 1);
-	if (input[i][0] != '\0' && input[i + 1] && input[i + 1][0] != '\0')
+	if (input[i + 1])
 		ft_putstr_fd(" ", 1);
 }
 

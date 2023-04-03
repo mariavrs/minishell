@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:12 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 16:58:08 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 00:19:04 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ static int	wrd_collect(char *line)
 
 	count = 0;
 	quo_flag = 0;
-	if (line[count] == '$')
-		count++;
 	while (line[count] && !is_in_str(line[count], STR_WHSPACE)
 		&& !is_in_str(line[count], STR_REDIR))
 	{

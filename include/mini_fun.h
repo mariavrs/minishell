@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 22:50:13 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/03 14:32:39 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,12 @@ void			ctrl_c_heredoc_pipe_handler(int sig);
 
 // Parse & Execute
 void			parse_exec_prep(t_msh *msh);
-int				syntax_check_prep(char *line, char *eline);
-int				syntax_check(t_stx stx, char *line, char *eline);
+int				syntax_check(char *line, char *eline);
 
 void			parse_list(char *line, char *eline, t_msh *msh);
 
 void			parse_pipe(char *line, char *eline, t_msh *msh);
 void			run_pipe(char *line, char *eline, char *del, t_msh *msh);
-void			run_pipe_left(int fd[2], char *line, char *del, t_msh *msh);
-void			run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh);
-void			close_pipe_fd(int fd0, int fd1);
 
 void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
 
@@ -87,6 +83,7 @@ int				quo_check(char del, int quo_flag);
 char			*param_expansion(char *line, t_msh *msh, int quo_flag);
 int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
+int				check_if_varname(char *line, int quo_flag);
 
 // Environment Add/Replace
 int				get_full_var_str(char *line, t_env *env, t_msh *msh);
@@ -105,7 +102,7 @@ void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_exit(t_msh *msh);
 void			error_unexpected_token(char *str);
-void			error_search_bin(char *argv, char *err_msg);
+void			error_custom_arg(char *arg, char *err_msg);
 int				cd_error(char **input, char *home);
 void			exp_error(char *var, char *check, int *flag);
 

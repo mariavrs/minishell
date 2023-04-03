@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   mini_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 18:05:18 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/03 00:44:45 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-void	error_search_bin(char *argv, char *err_msg)
+void	error_custom_arg(char *argv, char *err_msg)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(argv, 2);
