@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 15:19:02 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 00:21:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,15 @@ static int	var_len(char *line, int *len, t_msh *msh)
 	return (ln);
 }
 
-static int	final_line_len(char *line, t_msh *msh)
+static int	final_line_len(char *line, t_msh *msh, int quo_flag)
 {
 	int	len;
-	int	quo_flag;
 
 	len = ft_strlen(line);
-	quo_flag = quo_check(*line, 0);
 	while (*line)
 	{
-		while (*line && !(*line == '$' && quo_flag != 1))
-			quo_flag = quo_check(*(line++), quo_flag);
+		while (*line && !check_if_varname(line, quo_flag))
+			quo_flag = quo_check(*(++line), quo_flag);
 		if (*line && *(line + 1) == '?')
 		{
 			len += 3;
@@ -111,22 +109,22 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag)
 	int		i;
 
 	i = 0;
-	str = ft_malloc_str(final_line_len(line, msh) + 1);
+	str = ft_malloc_str(final_line_len(line, msh, quo_flag) + 1);
 	if (!str)
 		return (NULL);
 	while (*line)
 	{
-		while (*line && !(*line == '$' && quo_flag != 1))
+		while (*line && !check_if_varname(line, quo_flag))
 		{
 			if (!((is_in_str(*line, STR_QUOTE) && quo_flag == 0)
 					|| (*line == '\'' && quo_flag == 1)
 					|| (*line == '\"' && quo_flag == 2)))
 				str[i++] = *line;
-			quo_flag = quo_check(*(line++), quo_flag);
+			quo_flag = quo_check(*(++line), quo_flag);
 		}
 		if (*line && *(line + 1) == '?')
 			i += put_exit_status(&str[i], &line);
-		else if (*line && *(line + 1) >= '0' && *(line + 1) <= '9')
+		else if (*line && ft_isdigit(*(line + 1)))
 			line += 2;
 		else if (*line)
 			line += var_value(line + 1, str, &i, msh) + 1;
