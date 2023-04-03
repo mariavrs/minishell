@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 21:00:26 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 15:27:58 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,24 @@ static void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
 
 static void	fd_and_signals(t_msh *msh)
 {
-	if (msh->in_pipe_flag || msh->out_pipe_flag)
-		signal(SIGINT, &ctrl_c_heredoc_pipe_handler);
-	else
+	int	in_tty;
+	int	out_tty;
+
+	in_tty = isatty(STDIN_FILENO);
+	out_tty = isatty(STDOUT_FILENO);
+	if (in_tty && out_tty)
 		signal(SIGINT, &ctrl_c_heredoc_handler);
-	if (msh->in_pipe_flag)
+	if (!out_tty)
 	{
-		close(STDIN_FILENO);
-		dup2(msh->stdin_default, STDIN_FILENO);
-	}
-	if (msh->out_pipe_flag)
-	{
+		signal(SIGINT, &ctrl_c_heredoc_pipe_handler);
 		close(STDOUT_FILENO);
 		dup2(msh->stdout_default, STDOUT_FILENO);
+	}
+	if (!in_tty)
+	{
+		signal(SIGINT, &ctrl_c_heredoc_pipe_handler);
+		close(STDIN_FILENO);
+		dup2(msh->stdin_default, STDIN_FILENO);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 01:48:53 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 15:37:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ typedef struct s_msh
 	char	**argv;
 	int		stdin_default;
 	int		stdout_default;
-	int		in_pipe_flag;
-	int		out_pipe_flag;
 }	t_msh;
 
 typedef struct s_redir
