@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 20:36:29 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/02 23:49:04 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	redir_in(char *filename, t_redir *rdr, t_msh *msh)
 	{
 		rdr->fd = open(filename, O_RDONLY);
 		if (rdr->fd < 0)
-			return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
+			return (error_custom_arg(filename, ": "), perror(""), 1);
 	}
 	else if (rdr->mode == '-')
 	{
@@ -76,7 +76,7 @@ int	redir_out(char *filename, t_redir *rdr)
 	else if (rdr->mode == '+')
 		rdr->fd = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 	if (rdr->fd < 0)
-		return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
+		return (error_custom_arg(filename, ": "), perror(""), 1);
 	if (rdr->stdout_cpy == -1)
 		rdr->stdout_cpy = dup(STDOUT_FILENO);
 	dup2(rdr->fd, STDOUT_FILENO);

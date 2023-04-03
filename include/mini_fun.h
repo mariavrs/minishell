@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 20:36:51 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 00:10:56 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int				quo_check(char del, int quo_flag);
 char			*param_expansion(char *line, t_msh *msh, int quo_flag);
 int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
+int				check_if_varname(char *line, int quo_flag);
 
 // Environment Add/Replace
 int				get_full_var_str(char *line, t_env *env, t_msh *msh);
@@ -108,7 +109,7 @@ void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_exit(t_msh *msh);
 void			error_unexpected_token(char *str);
-void			error_search_bin(char *argv, char *err_msg);
+void			error_custom_arg(char *arg, char *err_msg);
 int				cd_error(char **input, char *home);
 void			exp_error(char *var, char *check, int *flag);
 
