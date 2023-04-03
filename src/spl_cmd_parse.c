@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 00:51:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 00:57:16 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,31 @@
 
 extern int	g_exit_status;
 
-int	parse_cmd_argv(char *line, int argc, t_msh *msh)
+static int	get_next_arg(char *line, int argc, t_msh *msh)
 {
 	char	*arg;
 	int		eword;
 
+	eword = 0;
+	arg = get_next_word(line, msh, &eword);
+	if (!arg)
+		return (1);
+	if (!ft_strlen(arg) && !is_in_str(*line, STR_QUOTE))
+	{
+		if (parse_cmd_argv(line + eword, argc, msh))
+			return (1);
+	}
+	else
+	{
+		if (parse_cmd_argv(line + eword, ++argc, msh))
+			return (1);
+		msh->argv[argc - 1] = arg;
+	}
+	return (0);
+}
+
+int	parse_cmd_argv(char *line, int argc, t_msh *msh)
+{
 	while (is_in_str(*line, STR_WHSPACE))
 		line++;
 	if (!(*line))
@@ -31,14 +51,7 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 		msh->argv[argc] = NULL;
 	}
 	else
-	{
-		argc++;
-		eword = 0;
-		arg = get_next_word(line, msh, &eword);
-		if (!arg || parse_cmd_argv(line + eword, argc, msh))
-			return (1);
-		msh->argv[argc - 1] = arg;
-	}
+		return (get_next_arg(line, argc, msh));
 	return (0);
 }
 
