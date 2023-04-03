@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 20:12:32 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 01:48:53 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,6 @@ typedef struct s_msh
 	int		out_pipe_flag;
 }	t_msh;
 
-typedef struct s_stx
-{
-	char	special_ch;
-	int		quo_flag;
-	int		brackets_flag;
-}	t_stx;
-
 typedef struct s_redir
 {
 	int		stdin_cpy;
@@ -94,13 +87,5 @@ typedef struct s_env
 	int		i;
 	int		mod;
 }	t_env;
-
-typedef struct s_search_bin
-{
-	char	**path_split;
-	char	*path_val;
-	char	*full_name;
-	int		name_len;
-}	t_path;
 
 #endif

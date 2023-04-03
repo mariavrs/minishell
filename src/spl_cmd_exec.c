@@ -6,13 +6,21 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 00:46:15 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 01:49:28 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
 extern int	g_exit_status;
+
+typedef struct s_search_bin
+{
+	char	**path_split;
+	char	*path_val;
+	char	*full_name;
+	int		name_len;
+}	t_path;
 
 static void	run_bin(char *full_name, t_msh *msh)
 {

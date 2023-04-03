@@ -6,11 +6,18 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 18:09:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 14:50:53 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 01:54:05 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+typedef struct s_stx
+{
+	char	special_ch;
+	int		quo_flag;
+	int		brackets_flag;
+}	t_stx;
 
 static int	stx_list_brackets_check(t_stx *stx, char **line)
 {
@@ -59,7 +66,7 @@ static int	stx_pipe_redir_check(t_stx *stx, char **line)
 	return (0);
 }
 
-int	syntax_check(t_stx stx, char *line, char *eline)
+static int	full_check(t_stx stx, char *line, char *eline)
 {
 	while (line < eline)
 	{
@@ -88,12 +95,12 @@ int	syntax_check(t_stx stx, char *line, char *eline)
 	return (0);
 }
 
-int	syntax_check_prep(char *line, char *eline)
+int	syntax_check(char *line, char *eline)
 {
 	t_stx	stx;
 
 	stx.special_ch = '\0';
 	stx.quo_flag = 0;
 	stx.brackets_flag = 0;
-	return (syntax_check(stx, line, eline));
+	return (full_check(stx, line, eline));
 }

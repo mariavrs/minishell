@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 01:38:00 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 01:51:19 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ void			ctrl_c_heredoc_pipe_handler(int sig);
 
 // Parse & Execute
 void			parse_exec_prep(t_msh *msh);
-int				syntax_check_prep(char *line, char *eline);
-int				syntax_check(t_stx stx, char *line, char *eline);
+int				syntax_check(char *line, char *eline);
 
 void			parse_list(char *line, char *eline, t_msh *msh);
 
