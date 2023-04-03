@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 00:10:56 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 01:38:00 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,6 @@ void			parse_list(char *line, char *eline, t_msh *msh);
 
 void			parse_pipe(char *line, char *eline, t_msh *msh);
 void			run_pipe(char *line, char *eline, char *del, t_msh *msh);
-void			run_pipe_left(int fd[2], char *line, char *del, t_msh *msh);
-void			run_pipe_right(int fd[2], char *eline, char *del, t_msh *msh);
-void			close_pipe_fd(int fd0, int fd1);
 
 void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
 

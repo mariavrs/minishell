@@ -6,7 +6,7 @@
 #    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/04/02 19:16:16 by mvorslov         ###   ########.fr        #
+#    Updated: 2023/04/03 01:42:56 by mvorslov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ DEPS_DIR = include
 BUILT_DIR = builtins/
 UTILS_DIR = utils/
 
-SRC_LIST = minishell.c syntax_check.c pipe_list_parse_and_run.c pipe_run_left_right.c \
+SRC_LIST = minishell.c syntax_check.c pipe_list_parse.c pipe_exec.c \
 	parser_utils.c spl_cmd_parse.c ft_get_next_word.c spl_cmd_exec.c \
 	spl_cmd_redir.c spl_cmd_local_var.c env_declare_get_full_var.c \
 	env_declare_put_var.c param_expansion.c param_expansion_utils.c signal.c \

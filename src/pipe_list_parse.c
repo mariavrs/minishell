@@ -1,32 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_list_parse_and_run.c                          :+:      :+:    :+:   */
+/*   pipe_list_parse.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 15:02:10 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 01:41:05 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
 extern int	g_exit_status;
-
-void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
-{
-	int		fd[2];
-
-	pipe(fd);
-	if (pipe(fd) == -1)
-		return (perror("minishell"));
-	run_pipe_left(fd, line, del, msh);
-	if (!g_exit_status)
-		run_pipe_right(fd, eline, del, msh);
-	else
-		close_pipe_fd(fd[0], fd[1]);
-}
 
 void	parse_pipe(char *line, char *eline, t_msh *msh)
 {
