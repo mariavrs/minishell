@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 19:26:25 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 00:51:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,13 @@ int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 {
 	int	status_lcl;
+	int	quo_flag;
 
+	quo_flag = quo_check(*line, 0);
 	while (line[i])
 	{
-		while (line[i] && line[i] != '<' && line[i] != '>')
-			i++;
+		while (line[i] && ((line[i] != '<' && line[i] != '>') || quo_flag))
+			quo_flag = quo_check(line[++i], quo_flag);
 		if (!line[i])
 			return (0);
 		if (line[i] && line[i] != line[i + 1])
