@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 01:41:52 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 02:59:00 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ static void	run_pipe_right(t_pp *pipe_info, char *eline, char *del, t_msh *msh)
 		ft_free_exit(msh);
 		exit(g_exit_status);
 	}
-	close_pipe_fd(pipe_info->fd[0], pipe_info->fd[1]);
 	waitpid(pipe_info->pid[0], &pipe_info->status[0], 0);
 	g_exit_status = WEXITSTATUS(pipe_info->status[0]);
+	close_pipe_fd(pipe_info->fd[0], pipe_info->fd[1]);
 	waitpid(pipe_info->pid[1], &pipe_info->status[1], 0);
 	g_exit_status = WEXITSTATUS(pipe_info->status[1]);
 }
@@ -73,7 +73,7 @@ void	run_pipe(char *line, char *eline, char *del, t_msh *msh)
 	if (pipe(pipe_info.fd) == -1)
 		return (perror("minishell"));
 	run_pipe_left(&pipe_info, line, del, msh);
-	if (!g_exit_status)
+	if (pipe_info.pid[0] > 0)
 		run_pipe_right(&pipe_info, eline, del, msh);
 	else
 		close_pipe_fd(pipe_info.fd[0], pipe_info.fd[1]);
