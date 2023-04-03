@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 15:28:14 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 01:07:43 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 13:36:53 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	check_if_varname(char *line, int quo_flag)
 {
 	if (*line == '$' && quo_flag != 1
-		&& (is_valid_varname(*(line + 1)) || *(line + 1) == '?'))
+		&& (is_valid_varname(*(line + 1)) || *(line + 1) == '?')
+		&& !ft_isdigit(*(line + 1)))
 		return (1);
 	return (0);
 }

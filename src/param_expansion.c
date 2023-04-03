@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 00:21:31 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 13:35:06 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ static int	final_line_len(char *line, t_msh *msh, int quo_flag)
 			len += 3;
 			line += 2;
 		}
-		else if (*line && *(line + 1) >= '0' && *(line + 1) <= '9')
-			line += 2;
 		else if (*line)
 		{
 			len--;
@@ -124,8 +122,6 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag)
 		}
 		if (*line && *(line + 1) == '?')
 			i += put_exit_status(&str[i], &line);
-		else if (*line && ft_isdigit(*(line + 1)))
-			line += 2;
 		else if (*line)
 			line += var_value(line + 1, str, &i, msh) + 1;
 	}
