@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 15:11:24 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 00:46:15 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,20 +90,20 @@ static void	search_bin(t_msh *msh)
 		{
 			if (statbuf.st_mode & S_IFDIR)
 				return (g_exit_status = 126,
-					error_search_bin(msh->argv[0], ": Is a directory\n"));
+					error_custom_arg(msh->argv[0], ": Is a directory\n"));
 			else
 				run_bin(msh->argv[0], msh);
 		}
 		else
 		{
 			return (g_exit_status = 127,
-				error_search_bin(msh->argv[0], ": No such file or directory\n"));
+				error_custom_arg(msh->argv[0], ": No such file or directory\n"));
 		}
 	}
 	else if (search_in_path(msh))
 	{
 		return (g_exit_status = 127,
-			error_search_bin(msh->argv[0], ": command not found\n"));
+			error_custom_arg(msh->argv[0], ": command not found\n"));
 	}
 }
 
