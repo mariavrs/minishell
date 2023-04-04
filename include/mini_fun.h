@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 14:32:39 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:37:45 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ int				ft_env(t_msh msh, int mode);
 
 // Environment extra functions
 int				ft_parent_env_cpy(char ***env, char **envp);
-int				env_not_exist(char **env, char *var);
+int				env_not_exist(t_msh *msh, char *var, int flag);
 int				env_edit(t_msh *msh, char *var, char *value, int flag);
-char			*env_get(char **env, char *var);
-int				env_del(char ***env, char *var);
+int				del(t_msh *msh, t_env env, char **envp);
+int				env_get(char **value, char *name, t_msh *msh);
+int				env_del(t_msh *msh, char *var);
+int				del(t_msh *msh, t_env env, char **envp);
+char			*get_e_val(char *full_name);
 int				pos_sep(char *str);
 int				env_size(char **env);
 
@@ -104,6 +107,6 @@ void			ft_free_exit(t_msh *msh);
 void			error_unexpected_token(char *str);
 void			error_custom_arg(char *arg, char *err_msg);
 int				cd_error(char **input, char *home);
-void			exp_error(char *var, char *check, int *flag);
+void			exp_error(char *var, int *flag);
 
 #endif
