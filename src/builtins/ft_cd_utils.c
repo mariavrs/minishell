@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 13:46:17 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 16:57:32 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:27:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 
 static int	fill_env_pwd(t_msh *msh, char *path)
 {
-	if (!env_not_exist(msh->envp, "PWD"))
-		return (env_edit(msh, "PWD", path, ENV_EXP));
-	else
+	if (env_not_exist(msh, "PWD", ENV_EXP))
 		return (env_edit(msh, "PWD", path, ENV_LCL));
+	else
+		return (env_edit(msh, "PWD", path, ENV_EXP));
 }
 
 static int	unset_case(t_msh *msh)
 {
 	t_env	env;
 
-	if (env_not_exist(msh->envp, "PWD"))
+	if (env_not_exist(msh, "PWD", ENV_EXP)
+		&& env_not_exist(msh, "PWD", ENV_LCL))
 	{
 		env.full_var = ft_strdup("PWD");
 		if (!env.full_var)
@@ -32,7 +33,8 @@ static int	unset_case(t_msh *msh)
 		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
 			return (1);
 	}
-	if (env_not_exist(msh->envp, "OLDPWD"))
+	if (env_not_exist(msh, "OLDPWD", ENV_EXP)
+		&& env_not_exist(msh, "OLDPWD", ENV_LCL))
 	{
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
@@ -47,73 +49,64 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 {
 	t_env	env;
 
-	if (!env_not_exist(msh->envp, "OLDPWD"))
+	if (env_not_exist(msh, "OLDPWD", ENV_EXP))
 	{
-		if (env_del(&msh->envp, "OLDPWD"))
-			return (1);
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
 			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
-		if (env_add(env, msh, msh->envp, ENV_EXP))
-			return (1);
+		env.name = "OLDPWD";
+		env.name_ln = ft_strlen(env.name);
+		env.i = find_in_envp(&env, msh);
+		env_replace(env, msh->envp_lcl);
 	}
 	else
 	{
-		if (env_del(&msh->envp_lcl, "OLDPWD"))
-			return (1);
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
 			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
-		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
-			return (1);
+		env.name = "OLDPWD";
+		env.name_ln = ft_strlen(env.name);
+		env.i = find_in_envp(&env, msh);
+		env_replace(env, msh->envp);
 	}
 	return (0);
 }
 
-static int	fill_right_env(t_msh *msh, char *c_pwd, char *path, int flag)
+static int	set_env(t_msh *msh, t_env *env, char *name, char *full_var_str)
 {
-	if (flag == ENV_EXP)
-	{
-		if (env_edit(msh, "OLDPWD", c_pwd, ENV_EXP))
-			return (1);
-		if (fill_env_pwd(msh, path))
-			return (1);
-	}
-	else if (flag == ENV_LCL)
-	{
-		if (env_edit(msh, "OLDPWD", c_pwd, ENV_LCL))
-			return (1);
-		if (fill_env_pwd(msh, path))
-			return (1);
-	}
+	if (!full_var_str)
+		return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
+	env->name = name;
+	env->name_ln = ft_strlen(env->name);
+	env->full_var = full_var_str;
+	env->i = find_in_envp(env, msh);
+	env->dest = env->src;
+	put_env_var(env, msh);
 	return (0);
 }
 
 int	fill_env(t_msh *msh, char *path)
 {
-	char	*c_pwd;
+	t_env	env;
 
 	if (unset_case(msh))
 		return (1);
-	c_pwd = current_pwd(msh);
-	if (!c_pwd)
+	env.value = current_pwd(msh);
+	if (!env.value)
 		return (1);
-	if (!ft_strlen(c_pwd) && check_if_pwd_equal_envp(msh, "PWD"))
+	if (!ft_strlen(env.value) && !check_if_pwd_equal_envp(msh, "PWD"))
 	{
 		if (if_pwd_is_empty_case(msh))
-			return (ft_free_str(&c_pwd), 1);
+			return (ft_free_str(&env.value), 1);
 		if (fill_env_pwd(msh, path))
-			return (ft_free_str(&c_pwd), 1);
-	}
-	else if (!env_not_exist(msh->envp, "OLDPWD"))
-	{
-		if (fill_right_env(msh, c_pwd, path, ENV_EXP))
-			return (ft_free_str(&c_pwd), 1);
+			return (ft_free_str(&env.value), 1);
 	}
 	else
 	{
-		if (fill_right_env(msh, c_pwd, path, ENV_LCL))
-			return (ft_free_str(&c_pwd), 1);
+		if (set_env(msh, &env, "OLDPWD", ft_strjoin("OLDPWD=", env.value)))
+			return (1);
+		if (set_env(msh, &env, "PWD", ft_strjoin("PWD=", path)))
+			return (1);
 	}
-	return (ft_free_str(&c_pwd), 0);
+	return (ft_free_str(&env.value), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 22:31:42 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/04 12:58:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,17 @@
 
 char	*current_pwd(t_msh *msh)
 {
-	if (!env_not_exist(msh->envp, "PWD"))
-		return (env_get(msh->envp, "PWD"));
-	else
-		return (env_get(msh->envp_lcl, "PWD"));
+	char	*c_pwd;
+
+	if (env_get(&c_pwd, "PWD", msh))
+		return (NULL);
+	if (!c_pwd)
+	{
+		c_pwd = ft_strdup("\0");
+		if (!c_pwd)
+			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+	}
+	return (c_pwd);
 }
 
 int	check_if_pwd_equal_envp(t_msh *msh, char *var)
@@ -27,9 +34,13 @@ int	check_if_pwd_equal_envp(t_msh *msh, char *var)
 	env.name = var;
 	env.name_ln = ft_strlen(var);
 	env.i = find_in_envp(&env, msh);
-	if (msh->envp[env.i] && msh->envp[env.i][env.name_ln] == '=')
-		return (0);
-	return (1);
+	if (env.src == ENV_EXP)
+		if (msh->envp[env.i] && msh->envp[env.i][env.name_ln] == '=')
+			return (1);
+	if (env.src == ENV_LCL)
+		if (msh->envp_lcl[env.i] && msh->envp_lcl[env.i][env.name_ln] == '=')
+			return (1);
+	return (0);
 }
 
 int	ft_cd(char **input, t_msh *msh)
@@ -39,7 +50,8 @@ int	ft_cd(char **input, t_msh *msh)
 	char	*home;
 	char	*error;
 
-	home = env_get(msh->envp, "HOME");
+	if (env_get(&home, "HOME", msh) == 1)
+		return (1);
 	if (cd_error(input, home))
 		return (ft_free_str(&home), 1);
 	dir = home;
