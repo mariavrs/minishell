@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 01:49:28 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 16:04:47 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,7 @@ static int	search_in_path(t_msh *msh)
 	int		i;
 
 	i = -1;
-	pb.path_val = env_get(msh->envp_lcl, "PATH");
-	if (!pb.path_val)
-		pb.path_val = env_get(msh->envp, "PATH");
+	env_get(&pb.path_val, "PATH", msh);
 	if (!pb.path_val)
 		return (1);
 	pb.path_split = ft_split(pb.path_val, ':');
