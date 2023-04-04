@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 00:44:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/04 15:27:10 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@ int	cd_error(char **input, char *home)
 	return (0);
 }
 
-void	exp_error(char *var, char *check, int *flag)
+void	exp_error(char *var, int *flag)
 {
-	if (!check)
-		return (ft_putstr_fd("minishell: malloc error\n", 2));
 	ft_putstr_fd("minishell: export: ", 2);
 	write(2, "\'", 1);
 	ft_putstr_fd(var, 2);

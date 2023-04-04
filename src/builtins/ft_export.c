@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 20:53:34 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:36:25 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,11 @@ static int	get_name_lenght(char *line)
 	int	i;
 
 	i = 0;
-	while (is_valid_varname(line[i]))
+	while (is_valid_varname(line[i]) && !ft_isdigit(line[0]))
 		i++;
 	if (line[i] == '=' || !ft_strncmp(&line[i], "+=", 2) || line[i] == '\0')
 		return (i);
 	return (-1);
-}
-
-static int	remove_line_in_env(char ***env, char *line, int name_ln)
-{
-	char	tmp;
-
-	tmp = line[name_ln];
-	line[name_ln] = '\0';
-	if (env_del(env, line))
-		return (line[name_ln] = tmp, 1);
-	return (line[name_ln] = tmp, 0);
 }
 
 static int	get_and_put_var(t_env *env, t_msh *msh, char *name)
@@ -40,12 +29,13 @@ static int	get_and_put_var(t_env *env, t_msh *msh, char *name)
 	env->name_ln = get_name_lenght(name);
 	if (env->name_ln >= 0)
 	{
+		env->name = name;
 		env->mod = get_env_mod(name[env->name_ln]);
 		env->value = name + env->name_ln + env->mod + 1;
 		if (get_full_var_str(name, env, msh))
 			return (1);
 		if (env->src == ENV_LCL)
-			if (remove_line_in_env(&msh->envp_lcl, name, env->name_ln))
+			if (del(msh, *env, msh->envp_lcl))
 				return (1);
 		env->dest = ENV_EXP;
 		if (put_env_var(env, msh))
@@ -95,11 +85,10 @@ int	ft_export(t_msh *msh, char **inputs)
 	i = 0;
 	if (!inputs[1])
 		return (export_env_print(msh), 0);
-	while (inputs[++i] && !err_flag)
+	while (inputs[++i])
 	{
-		err_flag = get_and_put_var(&env, msh, inputs[i]);
-		if (err_flag == -1)
-			exp_error(inputs[i], " ", &err_flag);
+		if (get_and_put_var(&env, msh, inputs[i]) == -1)
+			exp_error(inputs[i], &err_flag);
 	}
 	return (err_flag);
 }
