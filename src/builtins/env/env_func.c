@@ -12,14 +12,6 @@
 
 #include "../../../include/mini_fun.h"
 
-typedef struct env_func
-{
-	char	*env_var;
-	char	**env_tmp;
-	int		i;
-	int		j;
-}	t_ef;
-
 char	*get_full_var(char *var, char *value)
 {
 	char	*full_var;
@@ -81,8 +73,8 @@ int	env_get(char **value, char *name, t_msh *msh)
 	else
 		env.value++;
 	*value = ft_strdup(env.value);
-	if (!value)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+	if (!(*value))
+		return (1);
 	return (0);
 }
 
