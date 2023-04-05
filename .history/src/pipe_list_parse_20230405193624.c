@@ -25,23 +25,20 @@ void	exec_pipeline(t_msh *msh)
 t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
 {
 	t_cmd	*cmd;
-	t_cmd	*cmd_tail;
 	char	*del;
 	int		quo_flag;
 
 	trim_whitespaces(&line, &eline);
-	del = eline - 1;
+	del = line;
 	quo_flag = 0;
-	while (del >= line && (*del != '|' || quo_flag))
+	while (del < eline && (*del != '|' || quo_flag))
 	{
 		quo_flag = quo_check(*del, quo_flag);
-		del--;
+		del++;
 	}
-	if (del < line)
-		return (parse_simple_cmd(del + 1, eline, msh));
-	cmd_tail = parse_pipe(line, del, msh);
-	cmd = parse_simple_cmd(del + 1, eline, msh);
-	cmd->next = cmd_tail;
+	cmd = parse_simple_cmd(line, del, msh);
+	if (del < eline)
+		cmd->next = parse_pipe(del + 1, eline, msh);
 	return (cmd);
 }
 

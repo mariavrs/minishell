@@ -90,3 +90,4 @@ int	main(int argc, char **argv, char **envp)
 				ft_free_exit(&msh), g_exit_status);
 	}
 }
+a64l

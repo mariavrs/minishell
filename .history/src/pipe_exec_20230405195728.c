@@ -36,10 +36,7 @@ static void	run_pipe_left(t_pp *pipe_info, t_msh *msh, t_cmd *cmd)
 	{
 		dup2(pipe_info->fd[1], STDOUT_FILENO);
 		close_pipe_fd(pipe_info->fd[0], pipe_info->fd[1]);
-		if (cmd->next)
-			run_pipe(msh, cmd);
-		else
-			run_cmd_exec(msh, cmd);
+		run_cmd_exec(msh, cmd);
 //		ft_free_exit(msh);
 		exit(g_exit_status);
 	}
@@ -55,8 +52,11 @@ static void	run_pipe_right(t_pp *pipe_info, t_msh *msh, t_cmd *cmd)
 	{
 		dup2(pipe_info->fd[0], STDIN_FILENO);
 		close_pipe_fd(pipe_info->fd[0], pipe_info->fd[1]);
-		run_cmd_exec(msh, cmd);
-		ft_free_exit(msh);
+		if (cmd->next)
+			run_pipe(msh, cmd->next);
+		else
+			run_cmd_exec(msh, cmd);
+//		ft_free_exit(msh);
 		exit(g_exit_status);
 	}
 }
@@ -68,11 +68,10 @@ void	run_pipe(t_msh *msh, t_cmd *cmd)
 	pipe(pipe_info.fd);
 	if (pipe(pipe_info.fd) == -1)
 		return (perror("minishell"));
-	run_pipe_left(&pipe_info, msh, cmd->next);
+	run_pipe_left(&pipe_info, msh, cmd);
 	if (pipe_info.pid[0] == -1)
-		close_pipe_fd(pipe_info.fd[0], pipe_info.fd[1]);
-	else
-		run_pipe_right(&pipe_info, msh, cmd);
+		return (close_pipe_fd(pipe_info.fd[0], pipe_info.fd[1]));
+	run_pipe_right(&pipe_info, msh, cmd->next);
 	close_pipe_fd(pipe_info.fd[0], pipe_info.fd[1]);
 	waitpid(pipe_info.pid[0], &pipe_info.status[0], 0);
 	g_exit_status = WEXITSTATUS(pipe_info.status[0]);

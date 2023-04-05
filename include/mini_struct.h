@@ -41,26 +41,28 @@
 # include <sys/types.h>
 # include <stdlib.h>
 
+typedef struct s_spl_cmd
+{
+/* 	int		stdin_cpy;
+	int		stdout_cpy; */
+	int		fd_in;
+	int		fd_out;
+	char	rdr_mode;
+	char	*spl_cmd;
+	char	**argv;
+	struct s_spl_cmd	*next;
+}	t_cmd;
+
 typedef struct s_msh
 {
 	char	**envp;
 	char	**envp_lcl;
 	char	*sline;
 	char	*ex_sline;
-	char	*spl_cmd;
-	int		spl_cmd_len;
-	char	**argv;
 	int		stdin_default;
 	int		stdout_default;
+	t_cmd	*pipeline;
 }	t_msh;
-
-typedef struct s_redir
-{
-	int		stdin_cpy;
-	int		stdout_cpy;
-	int		fd;
-	char	mode;
-}	t_redir;
 
 typedef struct s_heredoc
 {

@@ -59,6 +59,11 @@ static void	run_pipe_right(t_pp *pipe_info, t_msh *msh, t_cmd *cmd)
 		ft_free_exit(msh);
 		exit(g_exit_status);
 	}
+	close_pipe_fd(pipe_info->fd[0], pipe_info->fd[1]);
+	waitpid(pipe_info->pid[0], &pipe_info->status[0], 0);
+	g_exit_status = WEXITSTATUS(pipe_info->status[0]);
+	waitpid(pipe_info->pid[1], &pipe_info->status[1], 0);
+	g_exit_status = WEXITSTATUS(pipe_info->status[1]);
 }
 
 void	run_pipe(t_msh *msh, t_cmd *cmd)
@@ -73,9 +78,4 @@ void	run_pipe(t_msh *msh, t_cmd *cmd)
 		close_pipe_fd(pipe_info.fd[0], pipe_info.fd[1]);
 	else
 		run_pipe_right(&pipe_info, msh, cmd);
-	close_pipe_fd(pipe_info.fd[0], pipe_info.fd[1]);
-	waitpid(pipe_info.pid[0], &pipe_info.status[0], 0);
-	g_exit_status = WEXITSTATUS(pipe_info.status[0]);
-	waitpid(pipe_info.pid[1], &pipe_info.status[1], 0);
-	g_exit_status = WEXITSTATUS(pipe_info.status[1]);
 }

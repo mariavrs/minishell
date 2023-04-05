@@ -39,17 +39,32 @@ void	ft_free_dbl_str(char ***str)
 	*str = NULL;
 }
 
-void	ft_free_spl_cmd(t_msh *msh)
+void	ft_free_cmd(t_cmd **cmd)
 {
-	if (!msh)
+	if (!(*cmd))
 		return ;
-	ft_free_str(&msh->spl_cmd);
-	ft_free_dbl_str(&msh->argv);
+	ft_free_str(&(*cmd)->spl_cmd);
+	ft_free_dbl_str(&(*cmd)->argv);
+	free(*cmd);
+	*cmd = NULL;
+}
+
+void	ft_free_pipeline(t_cmd **cmd)
+{
+	t_cmd *tmp;
+
+	tmp = *cmd;
+	while (*cmd)
+	{
+		tmp = (*cmd)->next;
+		ft_free_cmd(&(*cmd));
+		*cmd = tmp;
+	}
 }
 
 void	ft_free_exit(t_msh *msh)
 {
-	ft_free_spl_cmd(msh);
+	ft_free_pipeline(&msh->pipeline);
 	ft_free_str(&msh->sline);
 	ft_free_str(&msh->ex_sline);
 	ft_free_dbl_str(&msh->envp);

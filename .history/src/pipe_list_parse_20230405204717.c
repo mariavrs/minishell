@@ -38,7 +38,7 @@ t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
 		del--;
 	}
 	if (del < line)
-		return (parse_simple_cmd(del + 1, eline, msh));
+		return (parse_simple_cmd(del + 1, eline, msh);
 	cmd_tail = parse_pipe(line, del, msh);
 	cmd = parse_simple_cmd(del + 1, eline, msh);
 	cmd->next = cmd_tail;

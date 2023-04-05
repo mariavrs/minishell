@@ -31,18 +31,18 @@ int	heredoc_prep(t_heredoc *hd)
 	return (0);
 }
 
-static void	write_to_heredoc(t_redir *rdr, t_heredoc *hd, t_msh *msh)
+static void	write_to_heredoc(t_msh *msh, t_cmd *cmd, t_heredoc *hd)
 {
 	hd->line_out = NULL;
 	hd->line_out = param_expansion(hd->line_in, msh,
 			quo_check(*hd->line_in, 0));
-	ft_putstr_fd(hd->line_out, rdr->fd);
-	write(rdr->fd, "\n", 1);
+	ft_putstr_fd(hd->line_out, cmd->fd_in);
+	write(cmd->fd_in, "\n", 1);
 	ft_free_str(&hd->line_out);
 	ft_free_str(&hd->line_in);
 }
 
-static void	fd_and_signals(t_msh *msh)
+/* static void	fd_and_signals(t_msh *msh)
 {
 	int	in_tty;
 	int	out_tty;
@@ -63,20 +63,20 @@ static void	fd_and_signals(t_msh *msh)
 		close(STDIN_FILENO);
 		dup2(msh->stdin_default, STDIN_FILENO);
 	}
-}
+} */
 
-int	heredoc_collect(char *delim, t_heredoc *hd, t_redir *rdr, t_msh *msh)
+int	heredoc_collect(t_msh *msh, t_cmd *cmd, t_heredoc *hd, char *eof)
 {
-	fd_and_signals(msh);
+	signal(SIGINT, &ctrl_c_heredoc_handler);
 	hd->line_in = NULL;
 	hd->line_in = readline("> ");
 	while (hd->line_in
-		&& ft_strncmp(hd->line_in, delim, ft_strlen(delim) + 1))
+		&& ft_strncmp(hd->line_in, eof, ft_strlen(eof) + 1))
 	{
-		write_to_heredoc(rdr, hd, msh);
+		write_to_heredoc(msh, cmd, hd);
 		hd->line_in = readline("> ");
 	}
-	close(rdr->fd);
+//	close(cmd->fd_in);
 	return (rl_clear_history(), 0);
 }
 

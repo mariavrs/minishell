@@ -39,7 +39,7 @@ void	signal_manager(int mode)
 {
 	if (mode == MODE_NITR)
 	{
-		signal(SIGINT, &ctrl_c_noninter_handler);
+		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, &ctrl_bslash_handler);
 	}
 	else if (mode == MODE_INTR_CMD)

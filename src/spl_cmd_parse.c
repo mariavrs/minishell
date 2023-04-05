@@ -14,7 +14,7 @@
 
 extern int	g_exit_status;
 
-static int	get_next_arg(char *line, int argc, t_msh *msh)
+static int	get_next_arg(t_msh *msh, t_cmd *cmd, char *line, int argc)
 {
 	char	*arg;
 	int		eword;
@@ -25,19 +25,19 @@ static int	get_next_arg(char *line, int argc, t_msh *msh)
 		return (1);
 	if (!ft_strlen(arg) && !is_in_str(*line, STR_QUOTE))
 	{
-		if (parse_cmd_argv(line + eword, argc, msh))
+		if (parse_cmd_argv(msh, cmd, line + eword, argc))
 			return (1);
 	}
 	else
 	{
-		if (parse_cmd_argv(line + eword, ++argc, msh))
+		if (parse_cmd_argv(msh, cmd, line + eword, ++argc))
 			return (1);
-		msh->argv[argc - 1] = arg;
+		cmd->argv[argc - 1] = arg;
 	}
 	return (0);
 }
 
-int	parse_cmd_argv(char *line, int argc, t_msh *msh)
+int	parse_cmd_argv(t_msh *msh, t_cmd *cmd, char *line, int argc)
 {
 	while (is_in_str(*line, STR_WHSPACE))
 		line++;
@@ -45,17 +45,17 @@ int	parse_cmd_argv(char *line, int argc, t_msh *msh)
 	{
 		if (!argc)
 			return (0);
-		msh->argv = malloc(sizeof(char *) * (argc + 1));
-		if (!msh->argv)
+		cmd->argv = malloc(sizeof(char *) * (argc + 1));
+		if (!cmd->argv)
 			return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
-		msh->argv[argc] = NULL;
+		cmd->argv[argc] = NULL;
 	}
 	else
-		return (get_next_arg(line, argc, msh));
+		return (get_next_arg(msh, cmd, line, argc));
 	return (0);
 }
 
-int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
+int	run_redir(t_cmd *cmd, char *line, int *i, t_msh *msh)
 {
 	char	*filename;
 	int		l_start;
@@ -66,16 +66,16 @@ int	run_redir(char *line, int *i, t_redir *rdr, t_msh *msh)
 	filename = get_next_word(line, msh, i);
 	if (!filename)
 		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
-	if (rdr->mode == '>' || rdr->mode == '+')
-		status_lcl = redir_out(filename, rdr);
+	if (cmd->rdr_mode == '>' || cmd->rdr_mode == '+')
+		status_lcl = redir_out(cmd, filename);
 	else
-		status_lcl = redir_in(filename, rdr, msh);
+		status_lcl = redir_in(msh, cmd, filename);
 	while (l_start < *i)
 		line[l_start++] = ' ';
 	return (ft_free_str(&filename), status_lcl);
 }
 
-int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
+int	parse_redir(t_msh *msh, t_cmd *cmd, char *line, int i)
 {
 	int	status_lcl;
 	int	quo_flag;
@@ -88,47 +88,52 @@ int	parse_redir(char *line, int i, t_redir *rdr, t_msh *msh)
 		if (!line[i])
 			return (0);
 		if (line[i] && line[i] != line[i + 1])
-			rdr->mode = line[i];
+			cmd->rdr_mode = line[i];
 		else if (line[i] == '>' && line[i + 1] == '>')
-			rdr->mode = '+';
+			cmd->rdr_mode = '+';
 		else if (line[i] == '<' && line[i + 1] == '<')
-			rdr->mode = '-';
+			cmd->rdr_mode = '-';
 		while (line[i] == '<' || line[i] == '>')
 			line[i++] = ' ';
 		while (is_in_str(line[i], STR_WHSPACE))
 			i++;
-		status_lcl = run_redir(line, &i, rdr, msh);
+		status_lcl = run_redir(cmd, line, &i, msh);
 		if (status_lcl)
 			return (status_lcl);
 	}
 	return (0);
 }
 
-void	parse_simple_cmd(char *line, char *eline, t_msh *msh)
+t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 {
-	t_redir	rdr;
+	t_cmd	*cmd;
 	int		status_lcl;
 	int		skip;
 
-	rdr.stdin_cpy = -1;
-	rdr.stdout_cpy = -1;
+	cmd = NULL;
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+	cmd->next = NULL;
+	cmd->fd_in = -1;
+	cmd->fd_out = -1;
 	skip = 0;
 	status_lcl = 0;
 	trim_whitespaces(&line, &eline);
-	msh->argv = NULL;
-	msh->spl_cmd = ft_malloc_str(eline - line + 2);
-	if (!msh->spl_cmd)
-		return ;
-	ft_strlcpy(msh->spl_cmd, line, eline - line + 1);
-	if (!(*msh->spl_cmd >= '0' && *msh->spl_cmd <= '9'))
-		status_lcl = first_wrd_check(&skip, msh->spl_cmd, msh);
-	if (!status_lcl && msh->spl_cmd[skip])
-		status_lcl = parse_redir(msh->spl_cmd, skip, &rdr, msh);
-	if (!status_lcl && msh->spl_cmd[skip])
-		status_lcl = parse_cmd_argv(&msh->spl_cmd[skip], 0, msh);
-	if (!status_lcl && msh->spl_cmd[skip] && msh->argv)
-		run_cmd_exec(msh);
-	else
+	cmd->argv = NULL;
+	cmd->spl_cmd = ft_malloc_str(eline - line + 2);
+	if (!cmd->spl_cmd)
+		return (free(cmd), cmd = NULL);
+	ft_strlcpy(cmd->spl_cmd, line, eline - line + 1);
+	if (!(*cmd->spl_cmd >= '0' && *cmd->spl_cmd <= '9'))
+		status_lcl = first_wrd_check(&skip, cmd->spl_cmd, msh);
+	if (!status_lcl && cmd->spl_cmd[skip])
+		status_lcl = parse_redir(msh, cmd, cmd->spl_cmd, skip);
+	if (!status_lcl && cmd->spl_cmd[skip])
+		status_lcl = parse_cmd_argv(msh, cmd, &cmd->spl_cmd[skip], 0);
+	if (status_lcl)
 		g_exit_status = status_lcl;
-	return (redir_clean(&rdr), ft_free_spl_cmd(msh));
+	return (ft_free_str(&cmd->spl_cmd), cmd);
 }
+
+//create a proper ft_clean fn to use if error; ^^^

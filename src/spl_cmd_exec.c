@@ -22,7 +22,7 @@ typedef struct s_search_bin
 	int		name_len;
 }	t_path;
 
-static void	run_bin(char *full_name, t_msh *msh)
+static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 {
 	pid_t	pid;
 
@@ -30,7 +30,7 @@ static void	run_bin(char *full_name, t_msh *msh)
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		exit(execve(full_name, msh->argv, msh->envp));
+		exit(execve(full_name, cmd->argv, msh->envp));
 	}
 	else
 		waitpid(pid, &g_exit_status, 0);
@@ -61,7 +61,7 @@ static char	*bin_get_full_name(char *path, char *argv, int name_len)
 	return (full_name);
 }
 
-static int	search_in_path(t_msh *msh)
+static int	search_in_path(t_msh *msh, t_cmd *cmd)
 {
 	t_path	pb;
 	int		i;
@@ -77,60 +77,68 @@ static int	search_in_path(t_msh *msh)
 	if (!pb.path_split)
 		return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
 	pb.full_name = NULL;
-	pb.name_len = ft_strlen(msh->argv[0]);
+	pb.name_len = ft_strlen(cmd->argv[0]);
 	while (pb.path_split[++i] && !pb.full_name)
-		pb.full_name = bin_get_full_name(pb.path_split[i], msh->argv[0],
+		pb.full_name = bin_get_full_name(pb.path_split[i], cmd->argv[0],
 				pb.name_len);
 	ft_free_dbl_str(&pb.path_split);
 	if (pb.full_name)
-		return (run_bin(pb.full_name, msh),
+		return (run_bin(pb.full_name, msh, cmd),
 			ft_free_str(&pb.full_name), 0);
 	return (1);
 }
 
-static void	search_bin(t_msh *msh)
+static void	search_bin(t_msh *msh, t_cmd *cmd)
 {
 	struct stat	statbuf;
 
-	if (ft_strchr(msh->argv[0], '/'))
+	if (ft_strchr(cmd->argv[0], '/'))
 	{
-		if (!stat(msh->argv[0], &statbuf))
+		if (!stat(cmd->argv[0], &statbuf))
 		{
 			if (statbuf.st_mode & S_IFDIR)
 				return (g_exit_status = 126,
-					error_custom_arg(msh->argv[0], ": Is a directory\n"));
+					error_custom_arg(cmd->argv[0], ": Is a directory\n"));
 			else
-				run_bin(msh->argv[0], msh);
+				run_bin(cmd->argv[0], msh, cmd);
 		}
 		else
 		{
 			return (g_exit_status = 127,
-				error_custom_arg(msh->argv[0], ": No such file or directory\n"));
+				error_custom_arg(cmd->argv[0], ": No such file or directory\n"));
 		}
 	}
-	else if (search_in_path(msh))
+	else if (search_in_path(msh, cmd))
 	{
 		return (g_exit_status = 127,
-			error_custom_arg(msh->argv[0], ": command not found\n"));
+			error_custom_arg(cmd->argv[0], ": command not found\n"));
 	}
 }
 
-void	run_cmd_exec(t_msh *msh)
+void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 {
-	if (!ft_strncmp(msh->argv[0], "cd", 3))
-		g_exit_status = ft_cd(msh->argv, msh);
-	else if (!ft_strncmp(msh->argv[0], "echo", 5))
-		g_exit_status = ft_echo(msh->argv);
-	else if (!ft_strncmp(msh->argv[0], "env", 4))
+	if (!cmd->argv)
+		return ;
+	if (cmd->fd_in >= 0)
+		dup2(cmd->fd_in, STDIN_FILENO);
+	if (cmd->fd_out >= 0)
+		dup2(cmd->fd_out, STDOUT_FILENO);
+	if (!ft_strncmp(cmd->argv[0], "cd", 3))
+		g_exit_status = ft_cd(cmd->argv, msh);
+	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
+		g_exit_status = ft_echo(cmd->argv);
+	else if (!ft_strncmp(cmd->argv[0], "env", 4))
 		g_exit_status = ft_env(*msh, 0);
-	else if (!ft_strncmp(msh->argv[0], "exit", 5))
-		g_exit_status = ft_exit(msh->argv, msh);
-	else if (!ft_strncmp(msh->argv[0], "export", 7))
-		g_exit_status = ft_export(msh, msh->argv);
-	else if (!ft_strncmp(msh->argv[0], "pwd", 4))
+	else if (!ft_strncmp(cmd->argv[0], "exit", 5))
+		g_exit_status = ft_exit(cmd->argv, msh);
+	else if (!ft_strncmp(cmd->argv[0], "export", 7))
+		g_exit_status = ft_export(msh, cmd->argv);
+	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
 		g_exit_status = ft_pwd();
-	else if (!ft_strncmp(msh->argv[0], "unset", 6))
-		g_exit_status = ft_unset(msh, msh->argv);
+	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
+		g_exit_status = ft_unset(msh, cmd->argv);
 	else
-		search_bin(msh);
+		search_bin(msh, cmd);
+	dup2(msh->stdin_default, STDIN_FILENO);
+	dup2(msh->stdout_default, STDOUT_FILENO);
 }
