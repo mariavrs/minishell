@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/04 21:37:30 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:30:23 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,23 +71,4 @@ int	del(t_msh *msh, t_env env, char **envp)
 	else if (env.src == ENV_LCL)
 		msh->envp_lcl = envp_new;
 	return (0);
-}
-
-char	*get_e_val(char *full_name)
-{
-	char	*e_val;
-
-	if (pos_sep(full_name) > 0)
-	{
-		e_val = ft_strdup(full_name + pos_sep(full_name));
-		if (!e_val)
-			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
-	}
-	else
-	{
-		e_val = ft_strdup("");
-		if (!e_val)
-			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
-	}
-	return (e_val);
 }

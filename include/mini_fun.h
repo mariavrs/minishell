@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/05 15:08:11 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:30:28 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int				del(t_msh *msh, t_env env, char **envp);
 int				env_get(char **value, char *name, t_msh *msh);
 int				env_del(t_msh *msh, char *var);
 int				del(t_msh *msh, t_env env, char **envp);
-char			*get_e_val(char *full_name);
 int				pos_sep(char *str);
 int				env_size(char **env);
 
