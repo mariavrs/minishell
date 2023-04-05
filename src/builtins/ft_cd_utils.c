@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 13:46:17 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/06 00:05:30 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:35:21 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ int	fill_env(t_msh *msh, char *path)
 	else
 	{
 		if (set_env(msh, &env, "OLDPWD", ft_strjoin("OLDPWD=", env.value)))
-			return (1);
+			return (ft_free_str(&env.value), 1);
 		if (set_env(msh, &env, "PWD", ft_strjoin("PWD=", path)))
-			return (1);
+			return (ft_free_str(&env.value), 1);
 	}
 	return (ft_free_str(&env.value), 0);
 }
