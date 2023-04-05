@@ -52,8 +52,7 @@ int	env_edit(t_msh *msh, char *var, char *value, int flag)
 		return (1);
 	env.name = ft_strdup(var);
 	if (!env.name)
-		return (ft_free_str(&env.full_var),
-			ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (ft_free_str(&env.full_var), 1);
 	env.name_ln = ft_strlen(env.name);
 	env.i = find_in_envp(&env, msh);
 	if (flag == ENV_EXP)
