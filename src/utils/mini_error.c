@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/04 15:27:10 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/05 17:52:14 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,21 @@ void	error_unexpected_token(char *str)
 	write(2, "\'\n", 2);
 }
 
-int	cd_error(char **input, char *home)
+int	error_cd(t_msh *msh, char *home)
 {
-	if (!input)
+	if (!home)
 		return (1);
-	if (env_size(input) > 2)
+	if (!msh->argv)
+		return (1);
+	if (env_size(msh->argv) > 2)
 		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
-	if (!home && !input[1])
+	if (env_not_exist(msh, "HOME", ENV_EXP)
+		&&env_not_exist(msh, "HOME", ENV_LCL) && !msh->argv[1])
 		return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
 	return (0);
 }
 
-void	exp_error(char *var, int *flag)
+void	error_export(char *var, int *flag)
 {
 	ft_putstr_fd("minishell: export: ", 2);
 	write(2, "\'", 1);
