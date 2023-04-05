@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/05 18:52:52 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/05 23:18:42 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	ft_export(t_msh *msh)
 	t_env	env;
 	int		err_flag;
 	int		i;
+	int		status;
 
 	env.name_ln = -1;
 	err_flag = 0;
@@ -87,10 +88,16 @@ int	ft_export(t_msh *msh)
 		return (export_env_print(msh), 0);
 	while (msh->argv[++i])
 	{
-		if (msh->argv[i][0] == '='
-			|| msh->argv[i][0] == '\0'
-			|| get_and_put_var(&env, msh, msh->argv[i]) == -1)
+		if (msh->argv[i][0] == '=' || msh->argv[i][0] == '\0')
 			error_export(msh->argv[i], &err_flag);
+		else
+		{
+			status = get_and_put_var(&env, msh, msh->argv[i]);
+			if (status == -1)
+				error_export(msh->argv[i], &err_flag);
+			else if (status == 1)
+				return (1);
+		}
 	}
 	return (err_flag);
 }
