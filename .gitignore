@@ -54,3 +54,4 @@ dkms.conf
 # Ohers
 .lh/
 .vscode/
+.history/
