@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/05 23:49:08 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:19:59 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*get_value(t_msh *msh, char *var)
 {
 	char	*value;
 
+	value = NULL;
 	if (env_get(&value, var, msh))
 		return (NULL);
 	if (!value)
