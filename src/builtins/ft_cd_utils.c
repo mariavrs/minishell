@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 13:46:17 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/05 14:23:43 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/06 00:05:30 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	unset_case(t_msh *msh)
 	{
 		env.full_var = ft_strdup("PWD");
 		if (!env.full_var)
-			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
+			return (1);
 		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
 			return (1);
 	}
@@ -38,7 +38,7 @@ static int	unset_case(t_msh *msh)
 	{
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
-			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
+			return (1);
 		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
 			return (1);
 	}
@@ -53,7 +53,7 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 	{
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
-			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
+			return (1);
 		env.name = "OLDPWD";
 		env.name_ln = ft_strlen(env.name);
 		env.i = find_in_envp(&env, msh);
@@ -63,7 +63,7 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 	{
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
-			return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
+			return (1);
 		env.name = "OLDPWD";
 		env.name_ln = ft_strlen(env.name);
 		env.i = find_in_envp(&env, msh);
@@ -75,7 +75,7 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 static int	set_env(t_msh *msh, t_env *env, char *name, char *full_var_str)
 {
 	if (!full_var_str)
-		return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
+		return (1);
 	env->name = name;
 	env->name_ln = ft_strlen(env->name);
 	env->full_var = full_var_str;
