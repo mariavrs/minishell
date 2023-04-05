@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/05 17:52:14 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:16:32 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	error_unexpected_token(char *str)
 int	error_cd(t_msh *msh, char *home)
 {
 	if (!home)
-		return (1);
+		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
 	if (!msh->argv)
 		return (1);
 	if (env_size(msh->argv) > 2)
