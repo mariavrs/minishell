@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 16:04:47 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:08:05 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,19 +116,19 @@ static void	search_bin(t_msh *msh)
 void	run_cmd_exec(t_msh *msh)
 {
 	if (!ft_strncmp(msh->argv[0], "cd", 3))
-		g_exit_status = ft_cd(msh->argv, msh);
+		g_exit_status = ft_cd(msh);
 	else if (!ft_strncmp(msh->argv[0], "echo", 5))
-		g_exit_status = ft_echo(msh->argv);
+		g_exit_status = ft_echo(msh);
 	else if (!ft_strncmp(msh->argv[0], "env", 4))
 		g_exit_status = ft_env(*msh, 0);
 	else if (!ft_strncmp(msh->argv[0], "exit", 5))
-		g_exit_status = ft_exit(msh->argv, msh);
+		g_exit_status = ft_exit(msh);
 	else if (!ft_strncmp(msh->argv[0], "export", 7))
-		g_exit_status = ft_export(msh, msh->argv);
+		g_exit_status = ft_export(msh);
 	else if (!ft_strncmp(msh->argv[0], "pwd", 4))
 		g_exit_status = ft_pwd();
 	else if (!ft_strncmp(msh->argv[0], "unset", 6))
-		g_exit_status = ft_unset(msh, msh->argv);
+		g_exit_status = ft_unset(msh);
 	else
 		search_bin(msh);
 }

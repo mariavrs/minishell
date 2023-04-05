@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/04 21:36:25 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:06:58 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	export_env_print(t_msh *msh)
 	}
 }
 
-int	ft_export(t_msh *msh, char **inputs)
+int	ft_export(t_msh *msh)
 {
 	t_env	env;
 	int		err_flag;
@@ -83,12 +83,12 @@ int	ft_export(t_msh *msh, char **inputs)
 	env.name_ln = -1;
 	err_flag = 0;
 	i = 0;
-	if (!inputs[1])
+	if (!msh->argv[1])
 		return (export_env_print(msh), 0);
-	while (inputs[++i])
+	while (msh->argv[++i])
 	{
-		if (get_and_put_var(&env, msh, inputs[i]) == -1)
-			exp_error(inputs[i], &err_flag);
+		if (get_and_put_var(&env, msh, msh->argv[i]) == -1)
+			error_export(msh->argv[i], &err_flag);
 	}
 	return (err_flag);
 }

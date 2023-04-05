@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/03/31 11:22:21 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:08:46 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,22 @@ static int	border_llong_check(char *str)
 	return (0);
 }
 
-int	ft_exit(char **input, t_msh *msh)
+int	ft_exit(t_msh *msh)
 {
 	long long int	i;
 	int				mod;
 
-	if (!input)
+	if (!msh->argv)
 		return (1);
-	if (!input[1])
+	if (!msh->argv[1])
 		return (exit_error(-1, NULL), ft_free_exit(msh)
 			, exit(g_exit_status), g_exit_status);
-	i = ft_ll_atoi(input[1]);
+	i = ft_ll_atoi(msh->argv[1]);
 	mod = i % 256;
-	if (!is_numeric(input[1]) && input[2])
+	if (!is_numeric(msh->argv[1]) && msh->argv[2])
 		return (exit_error(0, NULL), 1);
-	else if (border_llong_check(input[1]) || is_numeric(input[1]))
-		return (exit_error(1, input[1]), ft_free_exit(msh), exit(2), 2);
+	else if (border_llong_check(msh->argv[1]) || is_numeric(msh->argv[1]))
+		return (exit_error(1, msh->argv[1]), ft_free_exit(msh), exit(2), 2);
 	else if (i < 0)
 		return (exit_error(-1, NULL),
 			ft_free_exit(msh), exit(256 + mod), 256 + mod);

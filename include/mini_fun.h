@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/04 21:37:45 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:08:11 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 # include "mini_struct.h"
 
 // Builtins prototypes
-int				ft_echo(char *input[]);
-int				ft_cd(char **input, t_msh *msh);
+int				ft_echo(t_msh *msh);
+int				ft_cd(t_msh *msh);
 int				ft_pwd(void);
-int				ft_export(t_msh *msh, char **inputs);
-int				ft_unset(t_msh *msh, char **inputs);
-int				ft_exit(char **input, t_msh *msh);
+int				ft_export(t_msh *msh);
+int				ft_unset(t_msh *msh);
+int				ft_exit(t_msh *msh);
 int				ft_env(t_msh msh, int mode);
 
 // Environment extra functions
@@ -39,7 +39,7 @@ int				env_size(char **env);
 
 // cd utils
 int				fill_env(t_msh *msh, char *path);
-char			*current_pwd(t_msh *msh);
+char			*get_value(t_msh *msh, char *var);
 int				check_if_pwd_equal_envp(t_msh *msh, char *var);
 
 // Signals
@@ -106,7 +106,7 @@ void			ft_free_str(char **str);
 void			ft_free_exit(t_msh *msh);
 void			error_unexpected_token(char *str);
 void			error_custom_arg(char *arg, char *err_msg);
-int				cd_error(char **input, char *home);
-void			exp_error(char *var, int *flag);
+int				error_cd(t_msh *msh, char *home);
+void			error_export(char *var, int *flag);
 
 #endif

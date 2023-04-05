@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 22:52:23 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:09:51 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,22 @@ static int	option_control(char *str)
 	return (0);
 }
 
-int	ft_echo(char *input[])
+int	ft_echo(t_msh *msh)
 {
 	int	i;
 
 	i = 1;
-	if (!input)
+	if (!msh->argv)
 		return (1);
-	while (input[i] && !option_control(input[i]))
+	while (msh->argv[i] && !option_control(msh->argv[i]))
 		i++;
 	if (i != 1)
-		while (input[i])
-			ft_print_line(input, i++);
+		while (msh->argv[i])
+			ft_print_line(msh->argv, i++);
 	else
 	{
-		while (input[i])
-			ft_print_line(input, i++);
+		while (msh->argv[i])
+			ft_print_line(msh->argv, i++);
 		ft_putchar_fd('\n', 1);
 	}
 	return (0);
