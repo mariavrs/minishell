@@ -60,6 +60,7 @@ static int	msh_prep(t_msh *msh, char **envp)
 			ft_putstr_fd("malloc error\n", 2), 1);
 	msh->envp_lcl[0] = NULL;
 	msh->ex_sline = NULL;
+	msh->pipeline = NULL;
 	msh->stdin_default = dup(STDIN_FILENO);
 	msh->stdout_default = dup(STDOUT_FILENO);
 	return (0);

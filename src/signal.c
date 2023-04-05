@@ -29,6 +29,13 @@ void	ctrl_c_prompt_handler(int sig)
 	rl_redisplay();
 }
 
+void	ctrl_c_heredoc_handler(int sig)
+{
+	rl_clear_history();
+	ft_putchar_fd('\n', 1);
+	exit (128 + sig);
+}
+
 void	ctrl_bslash_handler(int sig)
 {
 	g_exit_status = 128 + sig;
@@ -39,7 +46,7 @@ void	signal_manager(int mode)
 {
 	if (mode == MODE_NITR)
 	{
-		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, &ctrl_c_noninter_handler);
 		signal(SIGQUIT, &ctrl_bslash_handler);
 	}
 	else if (mode == MODE_INTR_CMD)

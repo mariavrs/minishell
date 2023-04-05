@@ -40,7 +40,7 @@ static void	run_pipe_left(t_pp *pipe_info, t_msh *msh, t_cmd *cmd)
 			run_pipe(msh, cmd);
 		else
 			run_cmd_exec(msh, cmd);
-//		ft_free_exit(msh);
+		ft_free_exit(msh);
 		exit(g_exit_status);
 	}
 }

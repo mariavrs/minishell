@@ -45,7 +45,6 @@ int				get_and_put_var(t_env *env, t_msh *msh, char *name);
 // Signals
 void			signal_manager(int mode);
 void			ctrl_c_heredoc_handler(int sig);
-void			ctrl_c_heredoc_pipe_handler(int sig);
 
 // Parse & Execute
 void			parse_exec_prep(t_msh *msh);

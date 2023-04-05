@@ -76,8 +76,8 @@ int	heredoc_collect(t_msh *msh, t_cmd *cmd, t_heredoc *hd, char *eof)
 		write_to_heredoc(msh, cmd, hd);
 		hd->line_in = readline("> ");
 	}
-//	close(cmd->fd_in);
-	return (rl_clear_history(), 0);
+	close(cmd->fd_in);
+	return (ft_free_exit(msh), 0);
 }
 
 int	heredoc_collect_status(pid_t pid)
