@@ -14,10 +14,10 @@
 
 char	*current_pwd(t_msh *msh)
 {
-	if (!env_not_exist(msh->envp, "PWD"))
-		return (env_get(msh->envp, "PWD"));
+	if (!env_not_exist(msh, msh->envp, "PWD"))
+		return (env_get(msh, msh->envp, "PWD"));
 	else
-		return (env_get(msh->envp_lcl, "PWD"));
+		return (env_get(msh, msh->envp_lcl, "PWD"));
 }
 
 int	check_if_pwd_equal_envp(t_msh *msh, char *var)
@@ -39,7 +39,7 @@ int	ft_cd(char **input, t_msh *msh)
 	char	*home;
 	char	*error;
 
-	home = env_get(msh->envp, "HOME");
+	home = env_get(msh, msh->envp, "HOME");
 	if (cd_error(input, home))
 		return (ft_free_str(&home), 1);
 	dir = home;
@@ -54,7 +54,7 @@ int	ft_cd(char **input, t_msh *msh)
 	}
 	error = ft_strjoin("minishell: cd: ", input[1]);
 	if (!error)
-		return (ft_putstr_fd("minishell: malloc error\n", 2),
+		return (malloc_error(msh),
 			ft_free_str(&home), 1);
 	return (perror(error), ft_free_str(&error), ft_free_str(&home), 1);
 }

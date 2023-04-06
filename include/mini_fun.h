@@ -26,11 +26,10 @@ int				ft_exit(char **input, t_msh *msh);
 int				ft_env(t_msh msh, int mode);
 
 // Environment extra functions
-int				ft_parent_env_cpy(char ***env, char **envp);
-int				env_not_exist(char **env, char *var);
+int				env_not_exist(t_msh *msh, char **env, char *var);
 int				env_edit(t_msh *msh, char *var, char *value, int flag);
-char			*env_get(char **env, char *var);
-int				env_del(char ***env, char *var);
+char			*env_get(t_msh *msh, char **env, char *var);
+int				env_del(t_msh *msh, char ***env, char *var);
 int				pos_sep(char *str);
 int				env_size(char **env);
 
@@ -47,7 +46,6 @@ void			signal_manager(int mode);
 void			ctrl_c_heredoc_handler(int sig);
 
 // Parse & Execute
-void			parse_exec_prep(t_msh *msh);
 int				syntax_check(char *line, char *eline);
 
 void			parse_list(char *line, char *eline, t_msh *msh);
@@ -65,7 +63,7 @@ int				redir_in(t_msh *msh, t_cmd *cmd, char *filename);
 int				redir_out(t_cmd *cmd, char *filename);
 int				redir_heredoc(t_msh *msh, t_cmd *cmd, char *eof);
 void			redir_clean(t_msh *msh, t_cmd *cmd);
-int				heredoc_prep(t_heredoc *hd);
+int				heredoc_prep(t_msh *msh, t_heredoc *hd);
 int				heredoc_collect_status(pid_t pid);
 int				heredoc_collect(t_msh *msh, t_cmd *cmd, t_heredoc *hd, char *eof);
 
@@ -97,16 +95,17 @@ int				env_replace(t_env env, char **envp);
 
 // General Utils
 long long int	ft_ll_atoi(const char *str);
-char			*ft_malloc_str(int size);
+char			*ft_malloc_str(t_msh *msh, int size);
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_cmd(t_cmd **cmd);
 void			ft_free_pipeline(t_cmd **cmd);
 void			ft_free_exit(t_msh *msh);
+void			malloc_error(t_msh *msh);
 void			error_unexpected_token(char *str);
 void			error_custom_arg(char *arg, char *err_msg);
 int				cd_error(char **input, char *home);
-void			exp_error(char *var, char *check, int *flag);
+void			exp_error(t_msh *msh, char *var, char *check, int *flag);
 
 #endif

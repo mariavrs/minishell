@@ -20,6 +20,7 @@ void	exec_pipeline(t_msh *msh)
 		run_cmd_exec(msh, msh->pipeline);
 	else
 		run_pipe(msh, msh->pipeline);
+	ft_free_pipeline(&msh->pipeline);
 }
 
 t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
@@ -32,6 +33,7 @@ t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
 	trim_whitespaces(&line, &eline);
 	del = eline - 1;
 	quo_flag = 0;
+	cmd = NULL;
 	while (del >= line && (*del != '|' || quo_flag))
 	{
 		quo_flag = quo_check(*del, quo_flag);
@@ -40,8 +42,14 @@ t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
 	if (del < line)
 		return (parse_simple_cmd(del + 1, eline, msh));
 	cmd_tail = parse_pipe(line, del, msh);
-	cmd = parse_simple_cmd(del + 1, eline, msh);
-	cmd->next = cmd_tail;
+	if (cmd_tail)
+		cmd = parse_simple_cmd(del + 1, eline, msh);
+	if (!cmd)
+	{
+		ft_free_pipeline(&cmd_tail);
+	}
+	else
+		cmd->next = cmd_tail;
 	return (cmd);
 }
 
@@ -74,16 +82,18 @@ static int	list_delim_locator(char *line, char *eline, char **del)
 void	parse_list(char *line, char *eline, t_msh *msh)
 {
 	char	*del;
-//	int		stop_sig;
 
+	if (msh->malloc_err)
+		return ;
 	trim_whitespaces(&line, &eline);
 	trim_brackets(&line, &eline);
 	if (!list_delim_locator(line, eline, &del))
 	{
-//		stop_sig;
 		msh->pipeline = parse_pipe(line, eline, msh);
-		exec_pipeline(msh);
-		ft_free_pipeline(&msh->pipeline);
+		if (msh->pipeline)
+			exec_pipeline(msh);
+		else if (msh->malloc_err)
+			ft_putstr_fd("not enough heap memory to perform execution\n", 2);
 		return ;
 	}
 	parse_list(line, del, msh);

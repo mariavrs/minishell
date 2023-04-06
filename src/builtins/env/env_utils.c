@@ -12,11 +12,11 @@
 
 #include "../../../include/mini_fun.h"
 
-int	env_not_exist(char **env, char *var)
+int	env_not_exist(t_msh *msh, char **env, char *var)
 {
 	char	*value;
 
-	value = env_get(env, var);
+	value = env_get(msh, env, var);
 	if (!value)
 		return (1);
 	return (ft_free_str(&value), 0);

@@ -23,7 +23,7 @@ static void	export_env_print(t_msh *msh)
 	{
 		var = ft_substr(msh->envp[i], 0, pos_sep(msh->envp[i]) - 1);
 		if (!var)
-			return (ft_putstr_fd("minishell: malloc error\n", 2));
+			return (malloc_error(msh));
 		write(1, "declare -x ", 11);
 		if (pos_sep(msh->envp[i]) <= (int)ft_strlen(msh->envp[i]))
 			value = msh->envp[i] + pos_sep(msh->envp[i]);
@@ -55,7 +55,7 @@ int	ft_export(t_msh *msh, char **inputs)
 	{
 		err_flag = get_and_put_var(&env, msh, inputs[i]);
 		if (err_flag == -1)
-			exp_error(inputs[i], " ", &err_flag);
+			exp_error(msh, inputs[i], " ", &err_flag);
 	}
 	return (err_flag);
 }

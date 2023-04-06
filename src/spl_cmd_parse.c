@@ -47,7 +47,7 @@ int	parse_cmd_argv(t_msh *msh, t_cmd *cmd, char *line, int argc)
 			return (0);
 		cmd->argv = malloc(sizeof(char *) * (argc + 1));
 		if (!cmd->argv)
-			return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+			return (malloc_error(msh), 1);
 		cmd->argv[argc] = NULL;
 	}
 	else
@@ -65,7 +65,7 @@ int	run_redir(t_cmd *cmd, char *line, int *i, t_msh *msh)
 	filename = NULL;
 	filename = get_next_word(line, msh, i);
 	if (!filename)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(msh), 1);
 	if (cmd->rdr_mode == '>' || cmd->rdr_mode == '+')
 		status_lcl = redir_out(cmd, filename);
 	else
@@ -113,7 +113,7 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	cmd = NULL;
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+		return (malloc_error(msh), NULL);
 	cmd->next = NULL;
 	cmd->fd_in = -1;
 	cmd->fd_out = -1;
@@ -121,7 +121,7 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	status_lcl = 0;
 	trim_whitespaces(&line, &eline);
 	cmd->argv = NULL;
-	cmd->spl_cmd = ft_malloc_str(eline - line + 2);
+	cmd->spl_cmd = ft_malloc_str(msh, eline - line + 2);
 	if (!cmd->spl_cmd)
 		return (free(cmd), cmd = NULL);
 	ft_strlcpy(cmd->spl_cmd, line, eline - line + 1);
@@ -133,7 +133,8 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 		status_lcl = parse_cmd_argv(msh, cmd, &cmd->spl_cmd[skip], 0);
 	if (status_lcl)
 		g_exit_status = status_lcl;
+	if (status_lcl >= 128 || msh->malloc_err == 1)
+		return (ft_free_cmd(&cmd), NULL);
 	return (ft_free_str(&cmd->spl_cmd), cmd);
 }
 
-//create a proper ft_clean fn to use if error; ^^^

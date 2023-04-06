@@ -14,15 +14,14 @@
 
 extern int	g_exit_status;
 
-char	*ft_malloc_str(int size)
+char	*ft_malloc_str(t_msh *msh, int size)
 {
 	char	*str;
 
 	str = NULL;
 	str = malloc(sizeof(char) * size);
 	if (!str)
-		return (g_exit_status = 1, ft_putstr_fd("minishell: malloc error\n", 2),
-			NULL);
+		return (g_exit_status = 1, malloc_error(msh), NULL);
 	ft_bzero(str, size);
 	return (str);
 }

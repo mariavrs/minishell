@@ -14,7 +14,7 @@
 
 static int	fill_env_pwd(t_msh *msh, char *path)
 {
-	if (!env_not_exist(msh->envp, "PWD"))
+	if (!env_not_exist(msh, msh->envp, "PWD"))
 		return (env_edit(msh, "PWD", path, ENV_EXP));
 	else
 		return (env_edit(msh, "PWD", path, ENV_LCL));
@@ -24,7 +24,7 @@ static int	unset_case(t_msh *msh)
 {
 	t_env	env;
 
-	if (env_not_exist(msh->envp, "PWD"))
+	if (env_not_exist(msh, msh->envp, "PWD"))
 	{
 		env.full_var = ft_strdup("PWD");
 		if (!env.full_var)
@@ -32,7 +32,7 @@ static int	unset_case(t_msh *msh)
 		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
 			return (1);
 	}
-	if (env_not_exist(msh->envp, "OLDPWD"))
+	if (env_not_exist(msh, msh->envp, "OLDPWD"))
 	{
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
@@ -47,9 +47,9 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 {
 	t_env	env;
 
-	if (!env_not_exist(msh->envp, "OLDPWD"))
+	if (!env_not_exist(msh, msh->envp, "OLDPWD"))
 	{
-		if (env_del(&msh->envp, "OLDPWD"))
+		if (env_del(msh, &msh->envp, "OLDPWD"))
 			return (1);
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
@@ -59,7 +59,7 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 	}
 	else
 	{
-		if (env_del(&msh->envp_lcl, "OLDPWD"))
+		if (env_del(msh, &msh->envp_lcl, "OLDPWD"))
 			return (1);
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
@@ -105,7 +105,7 @@ int	fill_env(t_msh *msh, char *path)
 		if (fill_env_pwd(msh, path))
 			return (ft_free_str(&c_pwd), 1);
 	}
-	else if (!env_not_exist(msh->envp, "OLDPWD"))
+	else if (!env_not_exist(msh, msh->envp, "OLDPWD"))
 	{
 		if (fill_right_env(msh, c_pwd, path, ENV_EXP))
 			return (ft_free_str(&c_pwd), 1);

@@ -40,7 +40,7 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 		g_exit_status = 128 + WTERMSIG(g_exit_status);
 }
 
-static char	*bin_get_full_name(char *path, char *argv, int name_len)
+static char	*bin_get_full_name(t_msh *msh, char *path, char *argv, int name_len)
 {
 	int			path_len;
 	char		*full_name;
@@ -57,7 +57,7 @@ static char	*bin_get_full_name(char *path, char *argv, int name_len)
 			ft_free_str(&full_name);
 	}
 	else
-		ft_putstr_fd("minishell: malloc error\n", 2);
+		malloc_error(msh);
 	return (full_name);
 }
 
@@ -67,9 +67,9 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	int		i;
 
 	i = -1;
-	pb.path_val = env_get(msh->envp_lcl, "PATH");
+	pb.path_val = env_get(msh, msh->envp_lcl, "PATH");
 	if (!pb.path_val)
-		pb.path_val = env_get(msh->envp, "PATH");
+		pb.path_val = env_get(msh, msh->envp, "PATH");
 	if (!pb.path_val)
 		return (1);
 	pb.path_split = ft_split(pb.path_val, ':');
@@ -79,7 +79,7 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	pb.full_name = NULL;
 	pb.name_len = ft_strlen(cmd->argv[0]);
 	while (pb.path_split[++i] && !pb.full_name)
-		pb.full_name = bin_get_full_name(pb.path_split[i], cmd->argv[0],
+		pb.full_name = bin_get_full_name(msh, pb.path_split[i], cmd->argv[0],
 				pb.name_len);
 	ft_free_dbl_str(&pb.path_split);
 	if (pb.full_name)

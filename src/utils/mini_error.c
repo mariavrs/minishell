@@ -12,6 +12,12 @@
 
 #include "../../include/mini_fun.h"
 
+void	malloc_error(t_msh *msh)
+{
+	ft_putstr_fd("minishell: malloc error\n", 2);
+	msh->malloc_err = 1;
+}
+
 void	error_custom_arg(char *argv, char *err_msg)
 {
 	ft_putstr_fd("minishell: ", 2);
@@ -44,10 +50,10 @@ int	cd_error(char **input, char *home)
 	return (0);
 }
 
-void	exp_error(char *var, char *check, int *flag)
+void	exp_error(t_msh *msh, char *var, char *check, int *flag)
 {
 	if (!check)
-		return (ft_putstr_fd("minishell: malloc error\n", 2));
+		return (malloc_error(msh));
 	ft_putstr_fd("minishell: export: ", 2);
 	write(2, "\'", 1);
 	ft_putstr_fd(var, 2);

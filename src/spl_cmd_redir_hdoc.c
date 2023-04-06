@@ -14,7 +14,7 @@
 
 extern int	g_exit_status;
 
-int	heredoc_prep(t_heredoc *hd)
+int	heredoc_prep(t_msh *msh, t_heredoc *hd)
 {
 	hd->status = 0;
 	if (fstat(STDIN_FILENO, &hd->statbuf) == -1)
@@ -23,11 +23,11 @@ int	heredoc_prep(t_heredoc *hd)
 	hd->hdoc_id = NULL;
 	hd->hdoc_id = ft_itoa(hd->statbuf.st_atim.tv_sec);
 	if (!hd->hdoc_id)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(msh), 1);
 	hd->hdoc = ft_strjoin("/tmp/minishell-", hd->hdoc_id);
 	ft_free_str(&hd->hdoc_id);
 	if (!hd->hdoc)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(msh), 1);
 	return (0);
 }
 
@@ -41,29 +41,6 @@ static void	write_to_heredoc(t_msh *msh, t_cmd *cmd, t_heredoc *hd)
 	ft_free_str(&hd->line_out);
 	ft_free_str(&hd->line_in);
 }
-
-/* static void	fd_and_signals(t_msh *msh)
-{
-	int	in_tty;
-	int	out_tty;
-
-	in_tty = isatty(STDIN_FILENO);
-	out_tty = isatty(STDOUT_FILENO);
-	if (in_tty && out_tty)
-		signal(SIGINT, &ctrl_c_heredoc_handler);
-	if (!out_tty)
-	{
-		signal(SIGINT, &ctrl_c_heredoc_pipe_handler);
-		close(STDOUT_FILENO);
-		dup2(msh->stdout_default, STDOUT_FILENO);
-	}
-	if (!in_tty)
-	{
-		signal(SIGINT, &ctrl_c_heredoc_pipe_handler);
-		close(STDIN_FILENO);
-		dup2(msh->stdin_default, STDIN_FILENO);
-	}
-} */
 
 int	heredoc_collect(t_msh *msh, t_cmd *cmd, t_heredoc *hd, char *eof)
 {

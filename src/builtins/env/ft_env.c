@@ -12,38 +12,6 @@
 
 #include "../../include/mini_fun.h"
 
-static int	ft_count_elem(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (*envp++)
-		i++;
-	return (i);
-}
-
-int	ft_parent_env_cpy(char ***env, char **envp)
-{
-	int		nb_env;
-	int		i;
-
-	i = -1;
-	nb_env = ft_count_elem(envp);
-	(*env) = NULL;
-	(*env) = malloc((nb_env + 1) * sizeof(char *));
-	if (!(*env))
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
-	while (envp[++i])
-	{
-		(*env)[i] = ft_strdup(envp[i]);
-		if (!(*env)[i])
-			return (ft_free_dbl_str(env),
-				ft_putstr_fd("minishell: malloc error\n", 2), 1);
-	}
-	(*env)[i++] = NULL;
-	return (0);
-}
-
 int	ft_env(t_msh msh, int mode)
 {
 	int		i;

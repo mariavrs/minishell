@@ -21,9 +21,9 @@ int	ft_unset(t_msh *msh, char **inputs)
 	{
 		if (!(ft_strlen(inputs[i]) == 1 && inputs[i][0] == '_'))
 		{
-			if (env_del(&msh->envp, inputs[i]))
+			if (env_del(msh, &msh->envp, inputs[i]))
 				return (1);
-			if (env_del(&msh->envp_lcl, inputs[i]))
+			if (env_del(msh, &msh->envp_lcl, inputs[i]))
 				return (1);
 		}
 	}

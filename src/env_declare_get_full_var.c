@@ -85,7 +85,7 @@ int	full_var_if_expand(t_env *env, t_msh *msh)
 	else
 		env->full_var = ft_strdup(env->name);
 	if (!env->full_var)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(msh), 1);
 	return (0);
 }
 
@@ -104,7 +104,7 @@ int	get_full_var_str(char *line, t_env *env, t_msh *msh)
 		env->full_var_ln = ft_strlen(msh->envp[env->i]) + 1 + env->value_ln;
 	if (env->mod == ENV_EXPND)
 		return (full_var_if_expand(env, msh));
-	env->full_var = ft_malloc_str(env->full_var_ln + 1);
+	env->full_var = ft_malloc_str(msh, env->full_var_ln + 1);
 	if (!env->full_var)
 		return (1);
 	full_var_join(env, msh);

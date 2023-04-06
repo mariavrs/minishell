@@ -20,7 +20,7 @@ typedef struct env_func
 	int		j;
 }	t_ef;
 
-char	*get_full_var(char *var, char *value)
+char	*get_full_var(t_msh *msh, char *var, char *value)
 {
 	char	*full_var;
 	int		size;
@@ -28,7 +28,7 @@ char	*get_full_var(char *var, char *value)
 
 	i = -1;
 	size = ft_strlen(var) + ft_strlen(value) + 1;
-	full_var = ft_malloc_str(size + 1);
+	full_var = ft_malloc_str(msh, size + 1);
 	if (!full_var)
 		return (NULL);
 	while (full_var && i < size - 1)
@@ -47,13 +47,13 @@ int	env_edit(t_msh *msh, char *var, char *value, int flag)
 {
 	t_env	env;
 
-	env.full_var = get_full_var(var, value);
+	env.full_var = get_full_var(msh, var, value);
 	if (!env.full_var)
 		return (1);
 	env.name = ft_strdup(var);
 	if (!env.name)
 		return (ft_free_str(&env.full_var),
-			ft_putstr_fd("minishell: malloc error\n", 2), 1);
+			malloc_error(msh), 1);
 	env.name_ln = ft_strlen(env.name);
 	env.i = find_in_envp(&env, msh);
 	if (flag == ENV_EXP)
@@ -63,7 +63,7 @@ int	env_edit(t_msh *msh, char *var, char *value, int flag)
 	return (ft_free_str(&env.name), 0);
 }
 
-char	*get_e_val(char *full_name)
+char	*get_e_val(t_msh *msh, char *full_name)
 {
 	char	*e_val;
 
@@ -71,18 +71,18 @@ char	*get_e_val(char *full_name)
 	{
 		e_val = ft_strdup(full_name + pos_sep(full_name));
 		if (!e_val)
-			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+			return (malloc_error(msh), NULL);
 	}
 	else
 	{
 		e_val = ft_strdup("");
 		if (!e_val)
-			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
+			return (malloc_error(msh), NULL);
 	}
 	return (e_val);
 }
 
-char	*env_get(char **env, char *var)
+char	*env_get(t_msh *msh, char **env, char *var)
 {
 	char	*e_var;
 	char	*e_val;
@@ -93,8 +93,8 @@ char	*env_get(char **env, char *var)
 	{
 		e_var = ft_substr(env[i], 0, pos_sep(env[i]) - 1);
 		if (!e_var)
-			return (ft_putstr_fd("minishell: malloc error\n", 2), NULL);
-		e_val = get_e_val(env[i]);
+			return (malloc_error(msh), NULL);
+		e_val = get_e_val(msh, env[i]);
 		if (!e_val)
 			return (ft_free_str(&e_var), NULL);
 		if (!ft_strncmp(e_var, var, ft_strlen(var) + 1))
@@ -105,25 +105,25 @@ char	*env_get(char **env, char *var)
 	return (NULL);
 }
 
-int	env_del(char ***env, char *var)
+int	env_del(t_msh *msh, char ***env, char *var)
 {
 	t_ef	ef;
 
 	ef.i = -1;
 	ef.j = -1;
-	if (env_not_exist(*env, var))
+	if (env_not_exist(msh, *env, var))
 		return (0);
 	ef.env_tmp = NULL;
 	ef.env_tmp = malloc (env_size(*env) * sizeof(char *));
 	if (!ef.env_tmp)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(msh), 1);
 	while ((*env)[++ef.i])
 	{
 		ef.env_tmp[ef.j + 1] = NULL;
 		ef.env_var = ft_substr((*env)[ef.i], 0, pos_sep((*env)[ef.i]) - 1);
 		if (!ef.env_var)
 			return (ft_free_dbl_str(&ef.env_tmp),
-				ft_putstr_fd("minishell: malloc error\n", 2), 1);
+				malloc_error(msh), 1);
 		if (ft_strncmp(ef.env_var, var, ft_strlen(var) + 1))
 			ef.env_tmp[++ef.j] = (*env)[ef.i];
 		else

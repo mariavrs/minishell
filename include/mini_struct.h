@@ -61,6 +61,7 @@ typedef struct s_msh
 	char	*ex_sline;
 	int		stdin_default;
 	int		stdout_default;
+	int		malloc_err;
 	t_cmd	*pipeline;
 }	t_msh;
 

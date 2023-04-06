@@ -107,7 +107,7 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag)
 	int		i;
 
 	i = 0;
-	str = ft_malloc_str(final_line_len(line, msh, quo_flag) + 1);
+	str = ft_malloc_str(msh, final_line_len(line, msh, quo_flag) + 1);
 	if (!str)
 		return (NULL);
 	while (*line)

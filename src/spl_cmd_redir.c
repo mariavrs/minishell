@@ -26,7 +26,7 @@ int	redir_heredoc(t_msh *msh, t_cmd *cmd, char *eof)
 	t_heredoc	hd;
 	pid_t		pid;
 
-	heredoc_prep(&hd);
+	heredoc_prep(msh, &hd);
 	cmd->fd_in = open(hd.hdoc,
 			O_CREAT | O_WRONLY | O_APPEND | O_TRUNC, 0444);
 	if (cmd->fd_in < 0)
@@ -66,9 +66,6 @@ int	redir_in(t_msh *msh, t_cmd *cmd, char *filename)
 		if (hdc_stat)
 			return (hdc_stat);
 	}
-/* 	if (rdr->stdin_cpy == -1)
-		rdr->stdin_cpy = dup(STDIN_FILENO);
-	dup2(rdr->fd, STDIN_FILENO); */
 	return (0);
 }
 
@@ -82,9 +79,6 @@ int	redir_out(t_cmd *cmd, char *filename)
 		cmd->fd_out = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 	if (cmd->fd_out < 0)
 		return (error_custom_arg(filename, ": "), perror(""), 1);
-/* 	if (rdr->stdout_cpy == -1)
-		rdr->stdout_cpy = dup(STDOUT_FILENO);
-	dup2(rdr->fd, STDOUT_FILENO); */
 	return (0);
 }
 

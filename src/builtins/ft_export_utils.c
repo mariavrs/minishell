@@ -24,13 +24,13 @@ static int	get_name_lenght(char *line)
 	return (-1);
 }
 
-static int	remove_line_in_env(char ***env, char *line, int name_ln)
+static int	remove_line_in_env(t_msh *msh, char ***env, char *line, int name_ln)
 {
 	char	tmp;
 
 	tmp = line[name_ln];
 	line[name_ln] = '\0';
-	if (env_del(env, line))
+	if (env_del(msh, env, line))
 		return (line[name_ln] = tmp, 1);
 	return (line[name_ln] = tmp, 0);
 }
@@ -45,7 +45,7 @@ int	get_and_put_var(t_env *env, t_msh *msh, char *name)
 		if (get_full_var_str(name, env, msh))
 			return (1);
 		if (env->src == ENV_LCL)
-			if (remove_line_in_env(&msh->envp_lcl, name, env->name_ln))
+			if (remove_line_in_env(msh, &msh->envp_lcl, name, env->name_ln))
 				return (1);
 		env->dest = ENV_EXP;
 		if (put_env_var(env, msh))
