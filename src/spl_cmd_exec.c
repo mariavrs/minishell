@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 01:49:28 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:08:05 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 		g_exit_status = 128 + WTERMSIG(g_exit_status);
 }
 
-static char	*bin_get_full_name(t_msh *msh, char *path, char *argv, int name_len)
+static char	*bin_get_full_name(char *path, char *argv, int name_len)
 {
 	int			path_len;
 	char		*full_name;
@@ -57,7 +57,7 @@ static char	*bin_get_full_name(t_msh *msh, char *path, char *argv, int name_len)
 			ft_free_str(&full_name);
 	}
 	else
-		malloc_error(msh);
+		malloc_error();
 	return (full_name);
 }
 
@@ -67,19 +67,17 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	int		i;
 
 	i = -1;
-	pb.path_val = env_get(msh, msh->envp_lcl, "PATH");
-	if (!pb.path_val)
-		pb.path_val = env_get(msh, msh->envp, "PATH");
+	env_get(&pb.path_val, "PATH", msh);
 	if (!pb.path_val)
 		return (1);
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
 	if (!pb.path_split)
-		return (ft_putstr_fd("minishell: malloc error \n", 2), 1);
+		return (malloc_error(), 1);
 	pb.full_name = NULL;
 	pb.name_len = ft_strlen(cmd->argv[0]);
 	while (pb.path_split[++i] && !pb.full_name)
-		pb.full_name = bin_get_full_name(msh, pb.path_split[i], cmd->argv[0],
+		pb.full_name = bin_get_full_name(pb.path_split[i], cmd->argv[0],
 				pb.name_len);
 	ft_free_dbl_str(&pb.path_split);
 	if (pb.full_name)
@@ -124,13 +122,13 @@ void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 	if (cmd->fd_out >= 0)
 		dup2(cmd->fd_out, STDOUT_FILENO);
 	if (!ft_strncmp(cmd->argv[0], "cd", 3))
-		g_exit_status = ft_cd(cmd->argv, msh);
+		g_exit_status = ft_cd(msh, cmd->argv);
 	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
-		g_exit_status = ft_echo(cmd->argv);
+		g_exit_status = ft_echo(msh, cmd->argv);
 	else if (!ft_strncmp(cmd->argv[0], "env", 4))
-		g_exit_status = ft_env(*msh, 0);
+		g_exit_status = ft_env(msh, cmd->argv, 0);
 	else if (!ft_strncmp(cmd->argv[0], "exit", 5))
-		g_exit_status = ft_exit(cmd->argv, msh);
+		g_exit_status = ft_exit(msh, cmd->argv);
 	else if (!ft_strncmp(cmd->argv[0], "export", 7))
 		g_exit_status = ft_export(msh, cmd->argv);
 	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))

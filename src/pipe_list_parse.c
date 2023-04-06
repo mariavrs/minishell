@@ -83,7 +83,7 @@ void	parse_list(char *line, char *eline, t_msh *msh)
 {
 	char	*del;
 
-	if (msh->malloc_err)
+	if (msh->malloc_err_parse)
 		return ;
 	trim_whitespaces(&line, &eline);
 	trim_brackets(&line, &eline);
@@ -92,7 +92,7 @@ void	parse_list(char *line, char *eline, t_msh *msh)
 		msh->pipeline = parse_pipe(line, eline, msh);
 		if (msh->pipeline)
 			exec_pipeline(msh);
-		else if (msh->malloc_err)
+		else if (msh->malloc_err_parse)
 			ft_putstr_fd("not enough heap memory to perform execution\n", 2);
 		return ;
 	}

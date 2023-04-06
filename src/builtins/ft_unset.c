@@ -6,24 +6,22 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 17:03:35 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:09:22 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-int	ft_unset(t_msh *msh, char **inputs)
+int	ft_unset(t_msh *msh, char **argv)
 {
-	int	i;
+	int		i;
 
 	i = 0;
-	while (inputs[++i])
+	while (argv[++i])
 	{
-		if (!(ft_strlen(inputs[i]) == 1 && inputs[i][0] == '_'))
+		if (!(ft_strlen(argv[i]) == 1 && argv[i][0] == '_'))
 		{
-			if (env_del(msh, &msh->envp, inputs[i]))
-				return (1);
-			if (env_del(msh, &msh->envp_lcl, inputs[i]))
+			if (env_del(msh, argv[i]))
 				return (1);
 		}
 	}

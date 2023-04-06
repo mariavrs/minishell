@@ -32,7 +32,7 @@ static void	parse_exec_prep(t_msh *msh)
 	char	*line;
 	char	*eline;
 
-	msh->malloc_err = 0;
+	msh->malloc_err_parse = 0;
 	line = msh->sline;
 	eline = line + ft_strlen(line);
 	if (trim_whitespaces(&line, &eline))
@@ -62,13 +62,13 @@ static int	ft_parent_env_cpy(char ***env, char **envp)
 	(*env) = NULL;
 	(*env) = malloc((nb_env + 1) * sizeof(char *));
 	if (!(*env))
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(), 1);
 	while (envp[++i])
 	{
 		(*env)[i] = ft_strdup(envp[i]);
 		if (!(*env)[i])
 			return (ft_free_dbl_str(env),
-				ft_putstr_fd("minishell: malloc error\n", 2), 1);
+				malloc_error(), 1);
 	}
 	(*env)[i++] = NULL;
 	return (0);
@@ -81,14 +81,13 @@ static int	msh_prep(t_msh *msh, char **envp)
 	msh->envp_lcl = NULL;
 	msh->envp_lcl = malloc(sizeof(char *));
 	if (!msh->envp_lcl)
-		return (ft_free_dbl_str(&msh->envp),
-			ft_putstr_fd("malloc error\n", 2), 1);
+		return (ft_free_dbl_str(&msh->envp), malloc_error(), 1);
 	msh->envp_lcl[0] = NULL;
 	msh->ex_sline = NULL;
 	msh->pipeline = NULL;
 	msh->stdin_default = dup(STDIN_FILENO);
 	msh->stdout_default = dup(STDOUT_FILENO);
-	msh->malloc_err = 0;
+	msh->malloc_err_parse = 0;
 	return (0);
 }
 

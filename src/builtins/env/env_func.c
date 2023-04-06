@@ -12,15 +12,7 @@
 
 #include "../../../include/mini_fun.h"
 
-typedef struct env_func
-{
-	char	*env_var;
-	char	**env_tmp;
-	int		i;
-	int		j;
-}	t_ef;
-
-char	*get_full_var(t_msh *msh, char *var, char *value)
+static char	*get_full_var(char *var, char *value)
 {
 	char	*full_var;
 	int		size;
@@ -28,7 +20,7 @@ char	*get_full_var(t_msh *msh, char *var, char *value)
 
 	i = -1;
 	size = ft_strlen(var) + ft_strlen(value) + 1;
-	full_var = ft_malloc_str(msh, size + 1);
+	full_var = ft_malloc_str(size + 1);
 	if (!full_var)
 		return (NULL);
 	while (full_var && i < size - 1)
@@ -47,13 +39,12 @@ int	env_edit(t_msh *msh, char *var, char *value, int flag)
 {
 	t_env	env;
 
-	env.full_var = get_full_var(msh, var, value);
+	env.full_var = get_full_var(var, value);
 	if (!env.full_var)
 		return (1);
 	env.name = ft_strdup(var);
 	if (!env.name)
-		return (ft_free_str(&env.full_var),
-			malloc_error(msh), 1);
+		return (ft_free_str(&env.full_var), 1);
 	env.name_ln = ft_strlen(env.name);
 	env.i = find_in_envp(&env, msh);
 	if (flag == ENV_EXP)
@@ -63,73 +54,40 @@ int	env_edit(t_msh *msh, char *var, char *value, int flag)
 	return (ft_free_str(&env.name), 0);
 }
 
-char	*get_e_val(t_msh *msh, char *full_name)
+int	env_get(char **value, char *name, t_msh *msh)
 {
-	char	*e_val;
+	t_env	env;
 
-	if (pos_sep(full_name) > 0)
-	{
-		e_val = ft_strdup(full_name + pos_sep(full_name));
-		if (!e_val)
-			return (malloc_error(msh), NULL);
-	}
-	else
-	{
-		e_val = ft_strdup("");
-		if (!e_val)
-			return (malloc_error(msh), NULL);
-	}
-	return (e_val);
-}
-
-char	*env_get(t_msh *msh, char **env, char *var)
-{
-	char	*e_var;
-	char	*e_val;
-	int		i;
-
-	i = -1;
-	while (env[++i])
-	{
-		e_var = ft_substr(env[i], 0, pos_sep(env[i]) - 1);
-		if (!e_var)
-			return (malloc_error(msh), NULL);
-		e_val = get_e_val(msh, env[i]);
-		if (!e_val)
-			return (ft_free_str(&e_var), NULL);
-		if (!ft_strncmp(e_var, var, ft_strlen(var) + 1))
-			return (ft_free_str(&e_var), e_val);
-		ft_free_str(&e_var);
-		ft_free_str(&e_val);
-	}
-	return (NULL);
-}
-
-int	env_del(t_msh *msh, char ***env, char *var)
-{
-	t_ef	ef;
-
-	ef.i = -1;
-	ef.j = -1;
-	if (env_not_exist(msh, *env, var))
+	*value = NULL;
+	env.name = name;
+	env.name_ln = ft_strlen(name);
+	env.i = find_in_envp(&env, msh);
+	if (env.i == -1)
 		return (0);
-	ef.env_tmp = NULL;
-	ef.env_tmp = malloc (env_size(*env) * sizeof(char *));
-	if (!ef.env_tmp)
-		return (malloc_error(msh), 1);
-	while ((*env)[++ef.i])
-	{
-		ef.env_tmp[ef.j + 1] = NULL;
-		ef.env_var = ft_substr((*env)[ef.i], 0, pos_sep((*env)[ef.i]) - 1);
-		if (!ef.env_var)
-			return (ft_free_dbl_str(&ef.env_tmp),
-				malloc_error(msh), 1);
-		if (ft_strncmp(ef.env_var, var, ft_strlen(var) + 1))
-			ef.env_tmp[++ef.j] = (*env)[ef.i];
-		else
-			ft_free_str(&(*env)[ef.i]);
-		ft_free_str(&ef.env_var);
-	}
-	return (ef.env_tmp[++ef.j] = NULL, free(*env),
-		*env = ef.env_tmp, 0);
+	if (env.src == ENV_EXP)
+		env.value = msh->envp[env.i] + env.name_ln;
+	else
+		env.value = msh->envp_lcl[env.i] + env.name_ln;
+	if (env.value[0] == '\0' || (env.value[0] == '=' && env.value[1] == '\0'))
+		return (0);
+	else
+		env.value++;
+	*value = ft_strdup(env.value);
+	if (!(*value))
+		return (1);
+	return (0);
+}
+
+int	env_del(t_msh *msh, char *var)
+{
+	t_env	env;
+
+	env.name = var;
+	env.name_ln = ft_strlen(var);
+	env.i = find_in_envp(&env, msh);
+	if (env.src == ENV_EXP)
+		return (del(msh, env, msh->envp));
+	else if (env.src == ENV_LCL)
+		return (del(msh, env, msh->envp_lcl));
+	return (0);
 }

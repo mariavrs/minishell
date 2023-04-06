@@ -23,11 +23,11 @@ int	heredoc_prep(t_msh *msh, t_heredoc *hd)
 	hd->hdoc_id = NULL;
 	hd->hdoc_id = ft_itoa(hd->statbuf.st_atim.tv_sec);
 	if (!hd->hdoc_id)
-		return (malloc_error(msh), 1);
+		return (malloc_error(), msh->malloc_err_parse = 1);
 	hd->hdoc = ft_strjoin("/tmp/minishell-", hd->hdoc_id);
 	ft_free_str(&hd->hdoc_id);
 	if (!hd->hdoc)
-		return (malloc_error(msh), 1);
+		return (malloc_error(), msh->malloc_err_parse = 1);
 	return (0);
 }
 

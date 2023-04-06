@@ -43,8 +43,6 @@
 
 typedef struct s_spl_cmd
 {
-/* 	int		stdin_cpy;
-	int		stdout_cpy; */
 	int		fd_in;
 	int		fd_out;
 	char	rdr_mode;
@@ -61,7 +59,7 @@ typedef struct s_msh
 	char	*ex_sline;
 	int		stdin_default;
 	int		stdout_default;
-	int		malloc_err;
+	int		malloc_err_parse;
 	t_cmd	*pipeline;
 }	t_msh;
 

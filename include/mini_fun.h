@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 01:51:19 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:30:28 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,27 @@
 # include "mini_struct.h"
 
 // Builtins prototypes
-int				ft_echo(char *input[]);
-int				ft_cd(char **input, t_msh *msh);
+int				ft_echo(t_msh *msh, char **argv);
+int				ft_cd(t_msh *msh, char **argv);
 int				ft_pwd(void);
-int				ft_export(t_msh *msh, char **inputs);
-int				ft_unset(t_msh *msh, char **inputs);
-int				ft_exit(char **input, t_msh *msh);
-int				ft_env(t_msh msh, int mode);
+int				ft_export(t_msh *msh, char **argv);
+int				ft_unset(t_msh *msh, char **argv);
+int				ft_exit(t_msh *msh, char **argv);
+int				ft_env(t_msh *msh, char **argv, int mode);
 
 // Environment extra functions
-int				env_not_exist(t_msh *msh, char **env, char *var);
+int				env_not_exist(t_msh *msh, char *var, int flag);
 int				env_edit(t_msh *msh, char *var, char *value, int flag);
-char			*env_get(t_msh *msh, char **env, char *var);
-int				env_del(t_msh *msh, char ***env, char *var);
+int				del(t_msh *msh, t_env env, char **envp);
+int				env_get(char **value, char *name, t_msh *msh);
+int				env_del(t_msh *msh, char *var);
 int				pos_sep(char *str);
 int				env_size(char **env);
 
 // cd utils
 int				fill_env(t_msh *msh, char *path);
-char			*current_pwd(t_msh *msh);
+char			*get_value(t_msh *msh, char *var);
 int				check_if_pwd_equal_envp(t_msh *msh, char *var);
-
-// export utils
-int				get_and_put_var(t_env *env, t_msh *msh, char *name);
 
 // Signals
 void			signal_manager(int mode);
@@ -95,17 +93,17 @@ int				env_replace(t_env env, char **envp);
 
 // General Utils
 long long int	ft_ll_atoi(const char *str);
-char			*ft_malloc_str(t_msh *msh, int size);
+char			*ft_malloc_str(int size);
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_cmd(t_cmd **cmd);
 void			ft_free_pipeline(t_cmd **cmd);
 void			ft_free_exit(t_msh *msh);
-void			malloc_error(t_msh *msh);
+void			malloc_error();
 void			error_unexpected_token(char *str);
 void			error_custom_arg(char *arg, char *err_msg);
-int				cd_error(char **input, char *home);
-void			exp_error(t_msh *msh, char *var, char *check, int *flag);
+int				error_cd(t_msh *msh, char **argv, char *home);
+void			error_export(char *var, int *flag);
 
 #endif

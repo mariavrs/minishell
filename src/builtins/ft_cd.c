@@ -6,18 +6,26 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 13:37:38 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:19:59 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-char	*current_pwd(t_msh *msh)
+char	*get_value(t_msh *msh, char *var)
 {
-	if (!env_not_exist(msh, msh->envp, "PWD"))
-		return (env_get(msh, msh->envp, "PWD"));
-	else
-		return (env_get(msh, msh->envp_lcl, "PWD"));
+	char	*value;
+
+	value = NULL;
+	if (env_get(&value, var, msh))
+		return (NULL);
+	if (!value)
+	{
+		value = ft_strdup("\0");
+		if (!value)
+			return (malloc_error(), NULL);
+	}
+	return (value);
 }
 
 int	check_if_pwd_equal_envp(t_msh *msh, char *var)
@@ -27,34 +35,46 @@ int	check_if_pwd_equal_envp(t_msh *msh, char *var)
 	env.name = var;
 	env.name_ln = ft_strlen(var);
 	env.i = find_in_envp(&env, msh);
-	if (msh->envp[env.i][env.name_ln] == '=')
-		return (0);
-	return (1);
+	if (env.src == ENV_EXP)
+		if (msh->envp[env.i] && msh->envp[env.i][env.name_ln] == '=')
+			return (1);
+	if (env.src == ENV_LCL)
+		if (msh->envp_lcl[env.i] && msh->envp_lcl[env.i][env.name_ln] == '=')
+			return (1);
+	return (0);
 }
 
-int	ft_cd(char **input, t_msh *msh)
+static int	fill_dir(char **argv, char **dir, char **home)
+{
+	if (argv[1])
+		*dir = argv[1];
+	else
+		*dir = *home;
+	return (0);
+}
+
+int	ft_cd(t_msh *msh, char **argv)
 {
 	char	current_dir[PATH_MAX];
 	char	*dir;
 	char	*home;
 	char	*error;
 
-	home = env_get(msh, msh->envp, "HOME");
-	if (cd_error(input, home))
+	home = get_value(msh, "HOME");
+	if (error_cd(msh, argv, home))
 		return (ft_free_str(&home), 1);
-	dir = home;
-	if (input[1])
-		dir = input[1];
+	if (home[0] == '\0' && !argv[1])
+		return (ft_free_str(&home), 0);
+	if (fill_dir(argv, &dir, &home))
+		return (1);
 	if (chdir(dir) == 0)
 	{
-		getcwd(current_dir, PATH_MAX);
-		if (fill_env(msh, current_dir))
-			return (ft_free_str(&home), 1);
+		if (!getcwd(current_dir, PATH_MAX) || fill_env(msh, current_dir))
+			return (malloc_error(), ft_free_str(&home), 1);
 		return (ft_free_str(&home), 0);
 	}
-	error = ft_strjoin("minishell: cd: ", input[1]);
+	error = ft_strjoin("minishell: cd: ", dir);
 	if (!error)
-		return (malloc_error(msh),
-			ft_free_str(&home), 1);
+		return (malloc_error(), ft_free_str(&home), 1);
 	return (perror(error), ft_free_str(&error), ft_free_str(&home), 1);
 }

@@ -14,14 +14,14 @@
 
 extern int	g_exit_status;
 
-char	*ft_malloc_str(t_msh *msh, int size)
+char	*ft_malloc_str(int size)
 {
 	char	*str;
 
 	str = NULL;
 	str = malloc(sizeof(char) * size);
 	if (!str)
-		return (g_exit_status = 1, malloc_error(msh), NULL);
+		return (g_exit_status = 1, malloc_error(), NULL);
 	ft_bzero(str, size);
 	return (str);
 }

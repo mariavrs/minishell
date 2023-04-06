@@ -6,11 +6,45 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/02 18:31:30 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/05 23:18:42 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
+
+static int	get_name_lenght(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (is_valid_varname(line[i]) && !ft_isdigit(line[0]))
+		i++;
+	if (line[i] == '=' || !ft_strncmp(&line[i], "+=", 2) || line[i] == '\0')
+		return (i);
+	return (-1);
+}
+
+static int	get_and_put_var(t_env *env, t_msh *msh, char *name)
+{
+	env->name_ln = get_name_lenght(name);
+	if (env->name_ln >= 0)
+	{
+		env->name = name;
+		env->mod = get_env_mod(name[env->name_ln]);
+		env->value = name + env->name_ln + env->mod + 1;
+		if (get_full_var_str(name, env, msh))
+			return (1);
+		if (env->src == ENV_LCL)
+			if (del(msh, *env, msh->envp_lcl))
+				return (1);
+		env->dest = ENV_EXP;
+		if (put_env_var(env, msh))
+			return (1);
+	}
+	else
+		return (-1);
+	return (0);
+}
 
 static void	export_env_print(t_msh *msh)
 {
@@ -23,7 +57,7 @@ static void	export_env_print(t_msh *msh)
 	{
 		var = ft_substr(msh->envp[i], 0, pos_sep(msh->envp[i]) - 1);
 		if (!var)
-			return (malloc_error(msh));
+			return (malloc_error());
 		write(1, "declare -x ", 11);
 		if (pos_sep(msh->envp[i]) <= (int)ft_strlen(msh->envp[i]))
 			value = msh->envp[i] + pos_sep(msh->envp[i]);
@@ -40,22 +74,30 @@ static void	export_env_print(t_msh *msh)
 	}
 }
 
-int	ft_export(t_msh *msh, char **inputs)
+int	ft_export(t_msh *msh, char **argv)
 {
 	t_env	env;
 	int		err_flag;
 	int		i;
+	int		status;
 
 	env.name_ln = -1;
 	err_flag = 0;
 	i = 0;
-	if (!inputs[1])
+	if (!argv[1])
 		return (export_env_print(msh), 0);
-	while (inputs[++i] && !err_flag)
+	while (argv[++i])
 	{
-		err_flag = get_and_put_var(&env, msh, inputs[i]);
-		if (err_flag == -1)
-			exp_error(msh, inputs[i], " ", &err_flag);
+		if (argv[i][0] == '=' || argv[i][0] == '\0')
+			error_export(argv[i], &err_flag);
+		else
+		{
+			status = get_and_put_var(&env, msh, argv[i]);
+			if (status == -1)
+				error_export(argv[i], &err_flag);
+			else if (status == 1)
+				return (1);
+		}
 	}
 	return (err_flag);
 }

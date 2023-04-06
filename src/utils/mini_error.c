@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   mini_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 00:44:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:16:32 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-void	malloc_error(t_msh *msh)
+void	malloc_error()
 {
 	ft_putstr_fd("minishell: malloc error\n", 2);
-	msh->malloc_err = 1;
 }
 
 void	error_custom_arg(char *argv, char *err_msg)
@@ -39,21 +38,22 @@ void	error_unexpected_token(char *str)
 	write(2, "\'\n", 2);
 }
 
-int	cd_error(char **input, char *home)
+int	error_cd(t_msh *msh, char **argv, char *home)
 {
-	if (!input)
+	if (!home)
+		return (malloc_error(), 1);
+	if (!argv)
 		return (1);
-	if (env_size(input) > 2)
+	if (env_size(argv) > 2)
 		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
-	if (!home && !input[1])
+	if (env_not_exist(msh, "HOME", ENV_EXP)
+		&&env_not_exist(msh, "HOME", ENV_LCL) && !argv[1])
 		return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
 	return (0);
 }
 
-void	exp_error(t_msh *msh, char *var, char *check, int *flag)
+void	error_export(char *var, int *flag)
 {
-	if (!check)
-		return (malloc_error(msh));
 	ft_putstr_fd("minishell: export: ", 2);
 	write(2, "\'", 1);
 	ft_putstr_fd(var, 2);
