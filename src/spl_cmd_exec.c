@@ -67,9 +67,11 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	int		i;
 
 	i = -1;
-	env_get(&pb.path_val, "PATH", msh);
+	if (env_get(&pb.path_val, "PATH", msh))
+		return (malloc_error(), 1);
 	if (!pb.path_val)
-		return (1);
+		return (error_custom_arg(cmd->argv[0], ": No such file or directory\n"),
+			g_exit_status = 127);
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
 	if (!pb.path_split)
@@ -83,7 +85,7 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	if (pb.full_name)
 		return (run_bin(pb.full_name, msh, cmd),
 			ft_free_str(&pb.full_name), 0);
-	return (1);
+	return (-1);
 }
 
 static void	search_bin(t_msh *msh, t_cmd *cmd)
@@ -106,7 +108,7 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 				error_custom_arg(cmd->argv[0], ": No such file or directory\n"));
 		}
 	}
-	else if (search_in_path(msh, cmd))
+	else if (search_in_path(msh, cmd) == -1)
 	{
 		return (g_exit_status = 127,
 			error_custom_arg(cmd->argv[0], ": command not found\n"));
