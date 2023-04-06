@@ -16,29 +16,6 @@
 # include "../lib/libft/libft.h"
 # include "mini_struct.h"
 
-// Builtins prototypes
-int				ft_echo(t_msh *msh, char **argv);
-int				ft_cd(t_msh *msh, char **argv);
-int				ft_pwd(void);
-int				ft_export(t_msh *msh, char **argv);
-int				ft_unset(t_msh *msh, char **argv);
-int				ft_exit(t_msh *msh, char **argv);
-int				ft_env(t_msh *msh, char **argv, int mode);
-
-// Environment extra functions
-int				env_not_exist(t_msh *msh, char *var, int flag);
-int				env_edit(t_msh *msh, char *var, char *value, int flag);
-int				del(t_msh *msh, t_env env, char **envp);
-int				env_get(char **value, char *name, t_msh *msh);
-int				env_del(t_msh *msh, char *var);
-int				pos_sep(char *str);
-int				env_size(char **env);
-
-// cd utils
-int				fill_env(t_msh *msh, char *path);
-char			*get_value(t_msh *msh, char *var);
-int				check_if_pwd_equal_envp(t_msh *msh, char *var);
-
 // Signals
 void			signal_manager(int mode);
 void			ctrl_c_heredoc_handler(int sig);
@@ -105,5 +82,28 @@ void			error_unexpected_token(char *str);
 void			error_custom_arg(char *arg, char *err_msg);
 int				error_cd(t_msh *msh, char **argv, char *home);
 void			error_export(char *var, int *flag);
+
+// Builtins prototypes
+int				ft_echo(t_msh *msh, char **argv);
+int				ft_cd(t_msh *msh, char **argv);
+int				ft_pwd(void);
+int				ft_export(t_msh *msh, char **argv);
+int				ft_unset(t_msh *msh, char **argv);
+int				ft_exit(t_msh *msh, char **argv);
+int				ft_env(t_msh *msh, char **argv, int mode);
+
+// env, export, unset: extra functions
+int				env_not_exist(t_msh *msh, char *var, int flag);
+int				env_edit(t_msh *msh, char *var, char *value, int flag);
+int				del(t_msh *msh, t_env env, char **envp);
+int				env_get(char **value, char *name, t_msh *msh);
+int				env_del(t_msh *msh, char *var);
+int				pos_sep(char *str);
+int				env_size(char **env);
+
+// cd: utils
+int				fill_env(t_msh *msh, char *path);
+char			*get_value(t_msh *msh, char *var);
+int				check_if_pwd_equal_envp(t_msh *msh, char *var);
 
 #endif
