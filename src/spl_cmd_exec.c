@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/05 15:08:05 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:37:37 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	if (env_get(&pb.path_val, "PATH", msh))
 		return (malloc_error(), 1);
 	if (!pb.path_val)
-		return (ft_mini_perror(*cmd->argv, ": No such file or directory\n", 1),
+		return (ft_mini_perror(*cmd->argv, NULL, "No such file or directory\n", 1),
 			g_exit_status = 127);
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
@@ -104,13 +104,13 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 				ft_putstr_fd("minishell: ", 2), perror(*cmd->argv));
 		if (statbuf.st_mode & S_IFDIR)
 			return (g_exit_status = 126,
-				ft_mini_perror(*cmd->argv, ": Is a directory\n", 1));
+				ft_mini_perror(*cmd->argv, NULL, "Is a directory\n", 1));
 		else
 			run_bin(*cmd->argv, msh, cmd);
 	}
 	else if (search_in_path(msh, cmd) == -1)
 		return (g_exit_status = 127,
-			ft_mini_perror(*cmd->argv, ": command not found\n", 0));
+			ft_mini_perror(*cmd->argv, NULL, "command not found\n", 0));
 }
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)

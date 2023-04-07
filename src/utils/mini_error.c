@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/06 01:16:32 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:31:59 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,20 @@ void	malloc_error(void)
 	ft_putstr_fd("minishell: malloc error\n", 2);
 }
 
-void	ft_mini_perror(char *argv, char *err_msg, int print_msh)
+void	ft_mini_perror(char *s1, char *s2, char *err_msg, int print_msh)
 {
 	if (print_msh)
 		ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(argv, 2);
+	if (s1)
+	{
+		ft_putstr_fd(s1, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	if (s2)
+	{
+		ft_putstr_fd(s2, 2);
+		ft_putstr_fd(": ", 2);
+	}
 	ft_putstr_fd(err_msg, 2);
 }
 
