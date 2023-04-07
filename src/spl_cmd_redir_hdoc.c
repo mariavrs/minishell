@@ -68,3 +68,10 @@ int	heredoc_collect_status(pid_t pid)
 		return (128 + WTERMSIG(stat));
 	return (0);
 }
+
+void	heredoc_clean(t_heredoc *hd)
+{
+	unlink(hd->hdoc);
+	ft_free_str(&hd->hdoc);
+	ft_free_str(&hd->line_in);
+}

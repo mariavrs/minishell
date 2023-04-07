@@ -14,6 +14,29 @@
 
 int	g_exit_status;
 
+static void	exec_pipeline(t_msh *msh)
+{
+	if (!msh->cmd_list->pipeline->next)
+		run_cmd_exec(msh, msh->cmd_list->pipeline);
+	else
+		run_pipe(msh, msh->cmd_list->pipeline);
+}
+
+static void	exec_cmd_list(t_msh *msh)
+{
+	t_block	*next;
+
+	if (!msh->cmd_list)
+		return ;
+	next = msh->cmd_list->next;
+	if (!msh->cmd_list->mode || (!g_exit_status && msh->cmd_list->mode == '&')
+		|| (g_exit_status && g_exit_status < 128 && msh->cmd_list->mode == '|'))
+		exec_pipeline(msh);
+	ft_free_cmd_list_block(&msh->cmd_list);
+	msh->cmd_list = next;
+	exec_cmd_list(msh);
+}
+
 static int	sline_cmp_len(t_msh *msh)
 {
 	int	s_len;
@@ -45,50 +68,15 @@ static void	parse_exec_prep(t_msh *msh)
 		msh->ex_sline = ft_strdup(msh->sline);
 	}
 	if (!syntax_check(line, eline))
-		parse_list(line, eline, msh);
+	{
+		msh->cmd_list = parse_list(line, eline, msh, 0);
+		if (msh->cmd_list)
+			exec_cmd_list(msh);
+		else if (msh->malloc_err_parse)
+			ft_putstr_fd("not enough heap memory to perform execution\n", 2);
+	}
 	else
 		g_exit_status = 2;
-}
-
-static int	ft_parent_env_cpy(char ***env, char **envp)
-{
-	int		nb_env;
-	int		i;
-
-	i = -1;
-	nb_env = 0;
-	while (envp[nb_env])
-		nb_env++;
-	(*env) = NULL;
-	(*env) = malloc((nb_env + 1) * sizeof(char *));
-	if (!(*env))
-		return (malloc_error(), 1);
-	while (envp[++i])
-	{
-		(*env)[i] = ft_strdup(envp[i]);
-		if (!(*env)[i])
-			return (ft_free_dbl_str(env),
-				malloc_error(), 1);
-	}
-	(*env)[i++] = NULL;
-	return (0);
-}
-
-static int	msh_prep(t_msh *msh, char **envp)
-{
-	if (ft_parent_env_cpy(&(msh->envp), envp))
-		return (1);
-	msh->envp_lcl = NULL;
-	msh->envp_lcl = malloc(sizeof(char *));
-	if (!msh->envp_lcl)
-		return (ft_free_dbl_str(&msh->envp), malloc_error(), 1);
-	msh->envp_lcl[0] = NULL;
-	msh->ex_sline = NULL;
-	msh->pipeline = NULL;
-	msh->stdin_default = dup(STDIN_FILENO);
-	msh->stdout_default = dup(STDOUT_FILENO);
-	msh->malloc_err_parse = 0;
-	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)

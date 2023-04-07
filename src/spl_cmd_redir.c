@@ -14,13 +14,6 @@
 
 extern int	g_exit_status;
 
-static void	heredoc_clean(t_heredoc *hd)
-{
-	unlink(hd->hdoc);
-	ft_free_str(&hd->hdoc);
-	ft_free_str(&hd->line_in);
-}
-
 int	redir_heredoc(t_msh *msh, t_cmd *cmd, char *eof)
 {
 	t_heredoc	hd;
@@ -80,6 +73,26 @@ int	redir_out(t_cmd *cmd, char *filename)
 	if (cmd->fd_out < 0)
 		return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
 	return (0);
+}
+
+int	run_redir(t_cmd *cmd, char *line, int *i, t_msh *msh)
+{
+	char	*filename;
+	int		l_start;
+	int		status_lcl;
+
+	l_start = *i;
+	filename = NULL;
+	filename = get_next_word(line, msh, i);
+	if (!filename)
+		return (1);
+	if (cmd->rdr_mode == '>' || cmd->rdr_mode == '+')
+		status_lcl = redir_out(cmd, filename);
+	else
+		status_lcl = redir_in(msh, cmd, filename);
+	while (l_start < *i)
+		line[l_start++] = ' ';
+	return (ft_free_str(&filename), status_lcl);
 }
 
 void	redir_clean(t_msh *msh, t_cmd *cmd)

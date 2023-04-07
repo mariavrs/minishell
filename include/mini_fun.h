@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/07 16:56:38 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:43:27 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,13 @@ void			signal_manager(int mode);
 void			ctrl_c_heredoc_handler(int sig);
 
 // Parse & Execute
+int				msh_prep(t_msh *msh, char **envp);
 int				syntax_check(char *line, char *eline);
-
-void			parse_list(char *line, char *eline, t_msh *msh);
-
+t_block			*parse_list(char *line, char *eline, t_msh *msh, char mode);
 t_cmd			*parse_pipe(char *line, char *eline, t_msh *msh);
 void			run_pipe(t_msh *msh, t_cmd *cmd);
 
 t_cmd			*parse_simple_cmd(char *line, char *eline, t_msh *msh);
-
 int				first_wrd_check(int *skip, char *line, t_msh *msh);
 
 int				parse_redir(t_msh *msh, t_cmd *cmd, char *line, int i);
@@ -42,6 +40,7 @@ int				heredoc_prep(t_msh *msh, t_heredoc *hd);
 int				heredoc_collect_status(pid_t pid);
 int				heredoc_collect(t_msh *msh, t_cmd *cmd,
 					t_heredoc *hd, char *eof);
+void			heredoc_clean(t_heredoc *hd);
 
 int				parse_cmd_argv(t_msh *msh, t_cmd *cmd, char *line, int argc);
 void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
@@ -72,13 +71,14 @@ int				env_replace(t_env env, char **envp);
 // General Utils
 long long int	ft_ll_atoi(const char *str);
 char			*ft_malloc_str(int size);
-void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_cmd(t_cmd **cmd);
 void			ft_free_pipeline(t_cmd **cmd);
+void			ft_free_cmd_list_block(t_block	**cmd_block);
+void			ft_free_cmd_list(t_block	**cmd_block);
 void			ft_free_exit(t_msh *msh);
-void			ft_mini_perror(char *arg, char *err_msg, int print_msh);
+void			ft_mini_perror(char *s1, char *s2, char *err_msg, int print_msh);
 void			malloc_error(void);
 void			error_unexpected_token(char *str);
 int				error_cd(t_msh *msh, char **argv, char *home);

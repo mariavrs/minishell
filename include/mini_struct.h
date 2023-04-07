@@ -52,6 +52,13 @@ typedef struct s_spl_cmd
 	struct s_spl_cmd	*next;
 }	t_cmd;
 
+typedef struct s_block
+{
+	char			mode;
+	t_cmd			*pipeline;
+	struct s_block	*next;
+}	t_block;
+
 typedef struct s_msh
 {
 	char	**envp;
@@ -61,7 +68,7 @@ typedef struct s_msh
 	int		stdin_default;
 	int		stdout_default;
 	int		malloc_err_parse;
-	t_cmd	*pipeline;
+	t_block	*cmd_list;
 }	t_msh;
 
 typedef struct s_heredoc
