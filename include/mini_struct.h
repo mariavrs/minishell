@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_struct.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 15:37:10 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/07 16:40:51 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@
 
 typedef struct s_spl_cmd
 {
-	int		fd_in;
-	int		fd_out;
-	char	rdr_mode;
-	char	*spl_cmd;
-	char	**argv;
+	int					fd_in;
+	int					fd_out;
+	char				rdr_mode;
+	char				*spl_cmd;
+	char				**argv;
 	struct s_spl_cmd	*next;
 }	t_cmd;
 
