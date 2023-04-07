@@ -70,16 +70,16 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	if (env_get(&pb.path_val, "PATH", msh))
 		return (malloc_error(), 1);
 	if (!pb.path_val)
-		return (ft_mini_perror(cmd->argv[0], ": No such file or directory\n", 1),
+		return (ft_mini_perror(*cmd->argv, ": No such file or directory\n", 1),
 			g_exit_status = 127);
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
 	if (!pb.path_split)
 		return (malloc_error(), 1);
 	pb.full_name = NULL;
-	pb.name_len = ft_strlen(cmd->argv[0]);
+	pb.name_len = ft_strlen(*cmd->argv);
 	while (pb.path_split[++i] && !pb.full_name)
-		pb.full_name = bin_get_full_name(pb.path_split[i], cmd->argv[0],
+		pb.full_name = bin_get_full_name(pb.path_split[i], *cmd->argv,
 				pb.name_len);
 	ft_free_dbl_str(&pb.path_split);
 	if (pb.full_name)
@@ -92,21 +92,23 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 {
 	struct stat	statbuf;
 
-	if (ft_strchr(cmd->argv[0], '/'))
+	if (**cmd->argv == '\0')
+		return (g_exit_status = 127, ft_putstr_fd(": command not found\n", 2));
+	if (ft_strchr(*cmd->argv, '/'))
 	{
-		if (stat(cmd->argv[0], &statbuf))
+		if (stat(*cmd->argv, &statbuf))
 			return (g_exit_status = 127,
-				ft_putstr_fd("minishell: ", 2), perror(cmd->argv[0]));
+				ft_putstr_fd("minishell: ", 2), perror(*cmd->argv));
 		if (statbuf.st_mode & S_IFDIR)
 			return (g_exit_status = 126,
-				ft_mini_perror(cmd->argv[0], ": Is a directory\n", 1));
+				ft_mini_perror(*cmd->argv, ": Is a directory\n", 1));
 		else
-			run_bin(cmd->argv[0], msh, cmd);
+			run_bin(*cmd->argv, msh, cmd);
 			
 	}
 	else if (search_in_path(msh, cmd) == -1)
 		return (g_exit_status = 127,
-			ft_mini_perror(cmd->argv[0], ": command not found\n", 0));
+			ft_mini_perror(*cmd->argv, ": command not found\n", 0));
 }
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
@@ -117,19 +119,19 @@ void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 		dup2(cmd->fd_in, STDIN_FILENO);
 	if (cmd->fd_out >= 0)
 		dup2(cmd->fd_out, STDOUT_FILENO);
-	if (!ft_strncmp(cmd->argv[0], "cd", 3))
+	if (!ft_strncmp(*cmd->argv, "cd", 3))
 		g_exit_status = ft_cd(msh, cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
+	else if (!ft_strncmp(*cmd->argv, "echo", 5))
 		g_exit_status = ft_echo(msh, cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "env", 4))
+	else if (!ft_strncmp(*cmd->argv, "env", 4))
 		g_exit_status = ft_env(msh, cmd->argv, 0);
-	else if (!ft_strncmp(cmd->argv[0], "exit", 5))
+	else if (!ft_strncmp(*cmd->argv, "exit", 5))
 		g_exit_status = ft_exit(msh, cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "export", 7))
+	else if (!ft_strncmp(*cmd->argv, "export", 7))
 		g_exit_status = ft_export(msh, cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
+	else if (!ft_strncmp(*cmd->argv, "pwd", 4))
 		g_exit_status = ft_pwd();
-	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
+	else if (!ft_strncmp(*cmd->argv, "unset", 6))
 		g_exit_status = ft_unset(msh, cmd->argv);
 	else
 		search_bin(msh, cmd);
