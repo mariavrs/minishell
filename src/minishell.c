@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 02:08:51 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/08 00:24:01 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	parse_exec_prep(t_msh *msh)
 		if (msh->cmd_list)
 			exec_cmd_list(msh);
 		else if (msh->malloc_err_parse)
-			ft_putstr_fd("not enough heap memory to perform execution\n", 2);
+			ft_putendl_fd("not enough heap memory to perform execution", 2);
 	}
 	else
 		g_exit_status = 2;

@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/07 23:44:02 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/08 00:22:04 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	malloc_error(void)
 {
-	ft_putstr_fd("minishell: malloc error\n", 2);
+	ft_putendl_fd("minishell: malloc error", 2);
 }
 
 void	ft_mini_perror(char *s1, char *s2, char *err_msg, int print_msh)
@@ -31,7 +31,7 @@ void	ft_mini_perror(char *s1, char *s2, char *err_msg, int print_msh)
 		ft_putstr_fd(s2, 2);
 		ft_putstr_fd(": ", 2);
 	}
-	ft_putstr_fd(err_msg, 2);
+	ft_putendl_fd(err_msg, 2);
 }
 
 void	error_unexpected_token(char *str)
@@ -55,19 +55,17 @@ int	error_cd(t_msh *msh, char **argv, char *home)
 	if (!argv)
 		return (1);
 	if (dbl_str_size(argv) > 2)
-		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
+		return (ft_mini_perror("cd", NULL, "too many arguments", 1), 1);
 	if (if_not_exist(msh, "HOME", ENV_EXP)
 		&&if_not_exist(msh, "HOME", ENV_LCL) && !argv[1])
-		return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
+		return (ft_mini_perror("cd", NULL, "HOME not set", 1), 1);
 	return (0);
 }
 
 void	error_export(char *var, int *flag)
 {
-	ft_putstr_fd("minishell: export: ", 2);
-	write(2, "\'", 1);
+	ft_putstr_fd("minishell: export: `", 2);
 	ft_putstr_fd(var, 2);
-	write(2, "\'", 1);
-	ft_putstr_fd(": not a valid identifier\n", 2);
+	ft_putendl_fd("': not a valid identifier", 2);
 	*flag = 1;
 }
