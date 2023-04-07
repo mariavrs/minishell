@@ -12,16 +12,16 @@
 
 #include "../../include/mini_fun.h"
 
-int	ft_unset(t_msh *msh)
+int	ft_unset(t_msh *msh, char **argv)
 {
 	int		i;
 
 	i = 0;
-	while (msh->argv[++i])
+	while (argv[++i])
 	{
-		if (!(ft_strlen(msh->argv[i]) == 1 && msh->argv[i][0] == '_'))
+		if (!(ft_strlen(argv[i]) == 1 && argv[i][0] == '_'))
 		{
-			if (env_del(msh, msh->argv[i]))
+			if (env_del(msh, argv[i]))
 				return (1);
 		}
 	}

@@ -21,78 +21,77 @@ static void	heredoc_clean(t_heredoc *hd)
 	ft_free_str(&hd->line_in);
 }
 
-int	redir_heredoc(char *delim, t_redir *rdr, t_msh *msh)
+int	redir_heredoc(t_msh *msh, t_cmd *cmd, char *eof)
 {
 	t_heredoc	hd;
 	pid_t		pid;
 
-	heredoc_prep(&hd);
-	rdr->fd = open(hd.hdoc,
+	heredoc_prep(msh, &hd);
+	cmd->fd_in = open(hd.hdoc,
 			O_CREAT | O_WRONLY | O_APPEND | O_TRUNC, 0444);
-	if (rdr->fd < 0)
+	if (cmd->fd_in < 0)
 		return (perror("minishell: heredoc"), 1);
 	signal_manager(MODE_INTR_HDC);
 	pid = fork();
 	if (pid == 0)
-		exit(heredoc_collect(delim, &hd, rdr, msh));
+		exit(heredoc_collect(msh, cmd, &hd, eof));
 	hd.status = heredoc_collect_status(pid);
+	close(cmd->fd_in);
 	signal_manager(MODE_NITR);
 	if (!hd.status)
 	{
-		rdr->fd = open(hd.hdoc, O_RDONLY);
-		if (rdr->fd < 0)
+		cmd->fd_in = open(hd.hdoc, O_RDONLY);
+		if (cmd->fd_in < 0)
 			return (heredoc_clean(&hd), perror("minishell: heredoc"), 1);
 		return (heredoc_clean(&hd), 0);
 	}
 	return (heredoc_clean(&hd), hd.status);
 }
 
-int	redir_in(char *filename, t_redir *rdr, t_msh *msh)
+int	redir_in(t_msh *msh, t_cmd *cmd, char *filename)
 {
 	int	hdc_stat;
 
-	if (rdr->mode == '<')
+	if (cmd->fd_in >= 0)
+		close(cmd->fd_in);
+	if (cmd->rdr_mode == '<')
 	{
-		rdr->fd = open(filename, O_RDONLY);
-		if (rdr->fd < 0)
-			return (error_custom_arg(filename, ": "), perror(""), 1);
+		cmd->fd_in = open(filename, O_RDONLY);
+		if (cmd->fd_in < 0)
+			return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
 	}
-	else if (rdr->mode == '-')
+	else if (cmd->rdr_mode == '-')
 	{
-		hdc_stat = redir_heredoc(filename, rdr, msh);
+		hdc_stat = redir_heredoc(msh, cmd, filename);
 		if (hdc_stat)
 			return (hdc_stat);
 	}
-	if (rdr->stdin_cpy == -1)
-		rdr->stdin_cpy = dup(STDIN_FILENO);
-	dup2(rdr->fd, STDIN_FILENO);
 	return (0);
 }
 
-int	redir_out(char *filename, t_redir *rdr)
+int	redir_out(t_cmd *cmd, char *filename)
 {
-	if (rdr->mode == '>')
-		rdr->fd = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0664);
-	else if (rdr->mode == '+')
-		rdr->fd = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
-	if (rdr->fd < 0)
-		return (error_custom_arg(filename, ": "), perror(""), 1);
-	if (rdr->stdout_cpy == -1)
-		rdr->stdout_cpy = dup(STDOUT_FILENO);
-	dup2(rdr->fd, STDOUT_FILENO);
+	if (cmd->fd_out >= 0)
+		close(cmd->fd_out);
+	if (cmd->rdr_mode == '>')
+		cmd->fd_out = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0664);
+	else if (cmd->rdr_mode == '+')
+		cmd->fd_out = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
+	if (cmd->fd_out < 0)
+		return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
 	return (0);
 }
 
-void	redir_clean(t_redir *rdr)
+void	redir_clean(t_msh *msh, t_cmd *cmd)
 {
-	if (rdr->stdin_cpy >= 0)
+	if (cmd->fd_in >= 0)
 	{
-		dup2(rdr->stdin_cpy, STDIN_FILENO);
-		close(rdr->stdin_cpy);
+		dup2(msh->stdin_default, STDIN_FILENO);
+		close(cmd->fd_in);
 	}
-	if (rdr->stdout_cpy >= 0)
+	if (cmd->fd_out >= 0)
 	{
-		dup2(rdr->stdout_cpy, STDOUT_FILENO);
-		close(rdr->stdout_cpy);
+		dup2(msh->stdout_default, STDOUT_FILENO);
+		close(cmd->fd_out);
 	}
 }

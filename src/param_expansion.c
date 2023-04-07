@@ -109,7 +109,7 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag)
 	i = 0;
 	str = ft_malloc_str(final_line_len(line, msh, quo_flag) + 1);
 	if (!str)
-		return (NULL);
+		return (malloc_error(), msh->malloc_err_parse = 1, NULL);
 	while (*line)
 	{
 		while (*line && !check_if_varname(line, quo_flag))

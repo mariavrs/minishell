@@ -16,62 +16,34 @@
 # include "../lib/libft/libft.h"
 # include "mini_struct.h"
 
-// Builtins prototypes
-int				ft_echo(t_msh *msh);
-int				ft_cd(t_msh *msh);
-int				ft_pwd(void);
-int				ft_export(t_msh *msh);
-int				ft_unset(t_msh *msh);
-int				ft_exit(t_msh *msh);
-int				ft_env(t_msh msh, int mode);
-
-// Environment extra functions
-int				ft_parent_env_cpy(char ***env, char **envp);
-int				env_not_exist(t_msh *msh, char *var, int flag);
-int				env_edit(t_msh *msh, char *var, char *value, int flag);
-int				del(t_msh *msh, t_env env, char **envp);
-int				env_get(char **value, char *name, t_msh *msh);
-int				env_del(t_msh *msh, char *var);
-int				del(t_msh *msh, t_env env, char **envp);
-int				pos_sep(char *str);
-int				env_size(char **env);
-
-// cd utils
-int				fill_env(t_msh *msh, char *path);
-char			*get_value(t_msh *msh, char *var);
-int				check_if_pwd_equal_envp(t_msh *msh, char *var);
-
 // Signals
 void			signal_manager(int mode);
 void			ctrl_c_heredoc_handler(int sig);
-void			ctrl_c_heredoc_pipe_handler(int sig);
 
 // Parse & Execute
-void			parse_exec_prep(t_msh *msh);
 int				syntax_check(char *line, char *eline);
 
 void			parse_list(char *line, char *eline, t_msh *msh);
 
-void			parse_pipe(char *line, char *eline, t_msh *msh);
-void			run_pipe(char *line, char *eline, char *del, t_msh *msh);
+t_cmd			*parse_pipe(char *line, char *eline, t_msh *msh);
+void			run_pipe(t_msh *msh, t_cmd *cmd);
 
-void			parse_simple_cmd(char *line, char *eline, t_msh *msh);
+t_cmd			*parse_simple_cmd(char *line, char *eline, t_msh *msh);
 
 int				first_wrd_check(int *skip, char *line, t_msh *msh);
 
-int				parse_redir(char *line, int i, t_redir *rdr, t_msh *msh);
-int				run_redir(char *line, int *i, t_redir *rdr, t_msh *msh);
-int				redir_in(char *filename, t_redir *rdr, t_msh *msh);
-int				redir_out(char *filename, t_redir *rdr);
-int				redir_heredoc(char *delim, t_redir *rdr, t_msh *msh);
-void			redir_clean(t_redir *rdr);
-int				heredoc_prep(t_heredoc *hd);
+int				parse_redir(t_msh *msh, t_cmd *cmd, char *line, int i);
+int				run_redir(t_cmd *cmd, char *line, int *i, t_msh *msh);
+int				redir_in(t_msh *msh, t_cmd *cmd, char *filename);
+int				redir_out(t_cmd *cmd, char *filename);
+int				redir_heredoc(t_msh *msh, t_cmd *cmd, char *eof);
+void			redir_clean(t_msh *msh, t_cmd *cmd);
+int				heredoc_prep(t_msh *msh, t_heredoc *hd);
 int				heredoc_collect_status(pid_t pid);
-int				heredoc_collect(char *delim, t_heredoc *hd,
-					t_redir *rdr, t_msh *msh);
+int				heredoc_collect(t_msh *msh, t_cmd *cmd, t_heredoc *hd, char *eof);
 
-int				parse_cmd_argv(char *line, int argc, t_msh *msh);
-void			run_cmd_exec(t_msh *msh);
+int				parse_cmd_argv(t_msh *msh, t_cmd *cmd, char *line, int argc);
+void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
 
 // Parse & Execute Utils
 char			*get_next_word(char *line, t_msh *msh, int *i);
@@ -102,10 +74,36 @@ char			*ft_malloc_str(int size);
 void			ft_free_spl_cmd(t_msh *msh);
 void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
+void			ft_free_cmd(t_cmd **cmd);
+void			ft_free_pipeline(t_cmd **cmd);
 void			ft_free_exit(t_msh *msh);
+void			ft_mini_perror(char *arg, char *err_msg, int print_msh);
+void			malloc_error();
 void			error_unexpected_token(char *str);
-void			error_custom_arg(char *arg, char *err_msg);
-int				error_cd(t_msh *msh, char *home);
+int				error_cd(t_msh *msh, char **argv, char *home);
 void			error_export(char *var, int *flag);
+
+// Builtins prototypes
+int				ft_echo(t_msh *msh, char **argv);
+int				ft_cd(t_msh *msh, char **argv);
+int				ft_pwd(void);
+int				ft_export(t_msh *msh, char **argv);
+int				ft_unset(t_msh *msh, char **argv);
+int				ft_exit(t_msh *msh, char **argv);
+int				ft_env(t_msh *msh, char **argv, int mode);
+
+// env, export, unset: extra functions
+int				env_not_exist(t_msh *msh, char *var, int flag);
+int				env_edit(t_msh *msh, char *var, char *value, int flag);
+int				del(t_msh *msh, t_env env, char **envp);
+int				env_get(char **value, char *name, t_msh *msh);
+int				env_del(t_msh *msh, char *var);
+int				pos_sep(char *str);
+int				env_size(char **env);
+
+// cd: utils
+int				fill_env(t_msh *msh, char *path);
+char			*get_value(t_msh *msh, char *var);
+int				check_if_pwd_equal_envp(t_msh *msh, char *var);
 
 #endif

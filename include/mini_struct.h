@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 01:48:53 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/03 15:37:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,17 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <stdlib.h>
+# include <errno.h>
+
+typedef struct s_spl_cmd
+{
+	int		fd_in;
+	int		fd_out;
+	char	rdr_mode;
+	char	*spl_cmd;
+	char	**argv;
+	struct s_spl_cmd	*next;
+}	t_cmd;
 
 typedef struct s_msh
 {
@@ -47,22 +58,11 @@ typedef struct s_msh
 	char	**envp_lcl;
 	char	*sline;
 	char	*ex_sline;
-	char	*spl_cmd;
-	int		spl_cmd_len;
-	char	**argv;
 	int		stdin_default;
 	int		stdout_default;
-	int		in_pipe_flag;
-	int		out_pipe_flag;
+	int		malloc_err_parse;
+	t_cmd	*pipeline;
 }	t_msh;
-
-typedef struct s_redir
-{
-	int		stdin_cpy;
-	int		stdout_cpy;
-	int		fd;
-	char	mode;
-}	t_redir;
 
 typedef struct s_heredoc
 {

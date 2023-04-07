@@ -57,7 +57,7 @@ int	del(t_msh *msh, t_env env, char **envp)
 	envp_new = NULL;
 	envp_new = malloc(sizeof(char *) * size);
 	if (!envp_new)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(), 1);
 	envp_new[size - 1] = NULL;
 	size = -1;
 	while (envp[++size] && size != env.i)

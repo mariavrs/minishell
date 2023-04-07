@@ -31,11 +31,11 @@ static int	env_var_declaration(t_env *env, int *skip, char *line, t_msh *msh)
 	if (line[*skip])
 		return (ft_free_str(&env->value), 0);
 	if (get_full_var_str(line, env, msh))
-		return (*skip = 0, 1);
+		return (*skip = 0, msh->malloc_err_parse = 1);
 	ft_free_str(&env->value);
 	get_env_dest(env);
 	if (put_env_var(env, msh))
-		return (ft_free_str(&env->full_var), *skip = 0, 1);
+		return (ft_free_str(&env->full_var), *skip = 0, msh->malloc_err_parse = 1);
 	return (0);
 }
 

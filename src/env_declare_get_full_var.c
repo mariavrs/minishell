@@ -85,7 +85,7 @@ int	full_var_if_expand(t_env *env, t_msh *msh)
 	else
 		env->full_var = ft_strdup(env->name);
 	if (!env->full_var)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(), 1);
 	return (0);
 }
 

@@ -22,7 +22,7 @@ SRC_LIST = minishell.c syntax_check.c pipe_list_parse.c pipe_exec.c \
 	parser_utils.c spl_cmd_parse.c ft_get_next_word.c spl_cmd_exec.c \
 	spl_cmd_redir.c spl_cmd_local_var.c env_declare_get_full_var.c \
 	env_declare_put_var.c param_expansion.c param_expansion_utils.c signal.c \
-	spl_cmd_redir_hdoc.c signal_hdoc.c \
+	spl_cmd_redir_hdoc.c \
 	$(BUILT_DIR)ft_echo.c $(BUILT_DIR)ft_cd.c $(BUILT_DIR)ft_pwd.c $(BUILT_DIR)ft_export.c \
 	$(BUILT_DIR)ft_unset.c $(BUILT_DIR)env/ft_env.c $(BUILT_DIR)env/env_func.c $(BUILT_DIR)env/env_utils.c $(BUILT_DIR)ft_exit.c \
 	$(UTILS_DIR)ft_ll_atoi.c $(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_malloc.c $(UTILS_DIR)mini_error.c $(BUILT_DIR)ft_cd_utils.c

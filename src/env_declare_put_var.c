@@ -28,7 +28,7 @@ int	env_add(t_env env, t_msh *msh, char **envp, int env_flag)
 		env.i++;
 	envp_tmp = malloc(sizeof(char *) * (env.i + 2));
 	if (!envp_tmp)
-		return (ft_putstr_fd("minishell: malloc error\n", 2), 1);
+		return (malloc_error(), 1);
 	env.i = -1;
 	while (envp[++env.i])
 		envp_tmp[env.i] = envp[env.i];

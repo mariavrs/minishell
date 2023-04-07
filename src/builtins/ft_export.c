@@ -57,7 +57,7 @@ static void	export_env_print(t_msh *msh)
 	{
 		var = ft_substr(msh->envp[i], 0, pos_sep(msh->envp[i]) - 1);
 		if (!var)
-			return (ft_putstr_fd("minishell: malloc error\n", 2));
+			return (malloc_error());
 		write(1, "declare -x ", 11);
 		if (pos_sep(msh->envp[i]) <= (int)ft_strlen(msh->envp[i]))
 			value = msh->envp[i] + pos_sep(msh->envp[i]);
@@ -74,7 +74,7 @@ static void	export_env_print(t_msh *msh)
 	}
 }
 
-int	ft_export(t_msh *msh)
+int	ft_export(t_msh *msh, char **argv)
 {
 	t_env	env;
 	int		err_flag;
@@ -84,17 +84,17 @@ int	ft_export(t_msh *msh)
 	env.name_ln = -1;
 	err_flag = 0;
 	i = 0;
-	if (!msh->argv[1])
+	if (!argv[1])
 		return (export_env_print(msh), 0);
-	while (msh->argv[++i])
+	while (argv[++i])
 	{
-		if (msh->argv[i][0] == '=' || msh->argv[i][0] == '\0')
-			error_export(msh->argv[i], &err_flag);
+		if (argv[i][0] == '=' || argv[i][0] == '\0')
+			error_export(argv[i], &err_flag);
 		else
 		{
-			status = get_and_put_var(&env, msh, msh->argv[i]);
+			status = get_and_put_var(&env, msh, argv[i]);
 			if (status == -1)
-				error_export(msh->argv[i], &err_flag);
+				error_export(argv[i], &err_flag);
 			else if (status == 1)
 				return (1);
 		}

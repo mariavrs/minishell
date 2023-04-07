@@ -12,7 +12,7 @@
 
 #include "../../../include/mini_fun.h"
 
-char	*get_full_var(char *var, char *value)
+static char	*get_full_var(char *var, char *value)
 {
 	char	*full_var;
 	int		size;

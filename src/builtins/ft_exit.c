@@ -53,22 +53,22 @@ static int	border_llong_check(char *str)
 	return (0);
 }
 
-int	ft_exit(t_msh *msh)
+int	ft_exit(t_msh *msh, char **argv)
 {
 	long long int	i;
 	int				mod;
 
-	if (!msh->argv)
+	if (!argv)
 		return (1);
-	if (!msh->argv[1])
+	if (!argv[1])
 		return (exit_error(-1, NULL), ft_free_exit(msh)
 			, exit(g_exit_status), g_exit_status);
-	i = ft_ll_atoi(msh->argv[1]);
+	i = ft_ll_atoi(argv[1]);
 	mod = i % 256;
-	if (!is_numeric(msh->argv[1]) && msh->argv[2])
+	if (!is_numeric(argv[1]) && argv[2])
 		return (exit_error(0, NULL), 1);
-	else if (border_llong_check(msh->argv[1]) || is_numeric(msh->argv[1]))
-		return (exit_error(1, msh->argv[1]), ft_free_exit(msh), exit(2), 2);
+	else if (border_llong_check(argv[1]) || is_numeric(argv[1]))
+		return (exit_error(1, argv[1]), ft_free_exit(msh), exit(2), 2);
 	else if (i < 0)
 		return (exit_error(-1, NULL),
 			ft_free_exit(msh), exit(256 + mod), 256 + mod);

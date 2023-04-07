@@ -35,22 +35,23 @@ static int	option_control(char *str)
 	return (0);
 }
 
-int	ft_echo(t_msh *msh)
+int	ft_echo(t_msh *msh, char **argv)
 {
 	int	i;
 
+	(void)msh;
 	i = 1;
-	if (!msh->argv)
+	if (!argv)
 		return (1);
-	while (msh->argv[i] && !option_control(msh->argv[i]))
+	while (argv[i] && !option_control(argv[i]))
 		i++;
 	if (i != 1)
-		while (msh->argv[i])
-			ft_print_line(msh->argv, i++);
+		while (argv[i])
+			ft_print_line(argv, i++);
 	else
 	{
-		while (msh->argv[i])
-			ft_print_line(msh->argv, i++);
+		while (argv[i])
+			ft_print_line(argv, i++);
 		ft_putchar_fd('\n', 1);
 	}
 	return (0);

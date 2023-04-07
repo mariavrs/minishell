@@ -21,8 +21,7 @@ char	*ft_malloc_str(int size)
 	str = NULL;
 	str = malloc(sizeof(char) * size);
 	if (!str)
-		return (g_exit_status = 1, ft_putstr_fd("minishell: malloc error\n", 2),
-			NULL);
+		return (g_exit_status = 1, malloc_error(), NULL);
 	ft_bzero(str, size);
 	return (str);
 }
