@@ -38,7 +38,9 @@ int				redir_heredoc(t_msh *msh, t_cmd *cmd, char *eof);
 void			redir_clean(t_msh *msh, t_cmd *cmd);
 int				heredoc_prep(t_msh *msh, t_heredoc *hd);
 int				heredoc_collect_status(pid_t pid);
-int				heredoc_collect(t_msh *msh, t_cmd *cmd, t_heredoc *hd, char *eof);
+int				heredoc_collect(t_msh *msh, t_cmd *cmd,
+					t_heredoc *hd, char *eof);
+void			heredoc_clean(t_heredoc *hd);
 
 int				parse_cmd_argv(t_msh *msh, t_cmd *cmd, char *line, int argc);
 void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
@@ -77,7 +79,7 @@ void			ft_free_cmd_list_block(t_block	**cmd_block);
 void			ft_free_cmd_list(t_block	**cmd_block);
 void			ft_free_exit(t_msh *msh);
 void			ft_mini_perror(char *arg, char *err_msg, int print_msh);
-void			malloc_error();
+void			malloc_error(void);
 void			error_unexpected_token(char *str);
 int				error_cd(t_msh *msh, char **argv, char *home);
 void			error_export(char *var, int *flag);

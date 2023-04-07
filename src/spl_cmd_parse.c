@@ -55,26 +55,6 @@ int	parse_cmd_argv(t_msh *msh, t_cmd *cmd, char *line, int argc)
 	return (0);
 }
 
-int	run_redir(t_cmd *cmd, char *line, int *i, t_msh *msh)
-{
-	char	*filename;
-	int		l_start;
-	int		status_lcl;
-
-	l_start = *i;
-	filename = NULL;
-	filename = get_next_word(line, msh, i);
-	if (!filename)
-		return (1);
-	if (cmd->rdr_mode == '>' || cmd->rdr_mode == '+')
-		status_lcl = redir_out(cmd, filename);
-	else
-		status_lcl = redir_in(msh, cmd, filename);
-	while (l_start < *i)
-		line[l_start++] = ' ';
-	return (ft_free_str(&filename), status_lcl);
-}
-
 int	parse_redir(t_msh *msh, t_cmd *cmd, char *line, int i)
 {
 	int	status_lcl;
@@ -104,11 +84,9 @@ int	parse_redir(t_msh *msh, t_cmd *cmd, char *line, int i)
 	return (0);
 }
 
-t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
+static t_cmd	*cmd_prep(t_msh *msh, char *line, char *eline)
 {
 	t_cmd	*cmd;
-	int		status_lcl;
-	int		skip;
 
 	cmd = NULL;
 	cmd = malloc(sizeof(t_cmd));
@@ -117,14 +95,26 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	cmd->next = NULL;
 	cmd->fd_in = -1;
 	cmd->fd_out = -1;
-	skip = 0;
-	status_lcl = 0;
-	trim_whitespaces(&line, &eline);
 	cmd->argv = NULL;
 	cmd->spl_cmd = ft_malloc_str(eline - line + 2);
 	if (!cmd->spl_cmd)
 		return (msh->malloc_err_parse = 1, free(cmd), cmd = NULL);
 	ft_strlcpy(cmd->spl_cmd, line, eline - line + 1);
+	return (cmd);
+}
+
+t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
+{
+	t_cmd	*cmd;
+	int		status_lcl;
+	int		skip;
+
+	skip = 0;
+	status_lcl = 0;
+	trim_whitespaces(&line, &eline);
+	cmd = cmd_prep(msh, line, eline);
+	if (!cmd)
+		return (NULL);
 	if (!(*cmd->spl_cmd >= '0' && *cmd->spl_cmd <= '9'))
 		status_lcl = first_wrd_check(&skip, cmd->spl_cmd, msh);
 	if (!status_lcl && cmd->spl_cmd[skip])
@@ -137,4 +127,3 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 		return (ft_free_cmd(&cmd), NULL);
 	return (ft_free_str(&cmd->spl_cmd), cmd);
 }
-

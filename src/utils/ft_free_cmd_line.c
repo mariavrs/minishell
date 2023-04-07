@@ -24,10 +24,8 @@ void	ft_free_cmd(t_cmd **cmd)
 
 void	ft_free_pipeline(t_cmd **cmd)
 {
-	t_cmd *tmp;
+	t_cmd	*tmp;
 
-/* 	if (!(*cmd))
-		return ; */
 	while (*cmd)
 	{
 		tmp = (*cmd)->next;

@@ -12,7 +12,7 @@
 
 #include "../../include/mini_fun.h"
 
-void	malloc_error()
+void	malloc_error(void)
 {
 	ft_putstr_fd("minishell: malloc error\n", 2);
 }

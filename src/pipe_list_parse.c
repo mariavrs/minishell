@@ -74,7 +74,8 @@ static void	cmd_block_merge(t_block **head, t_block *tail)
 	tmp->next = tail;
 }
 
-static t_block	*create_new_block(t_msh *msh, char *line, char *eline, char mode)
+static t_block	*create_new_block(t_msh *msh, char *line,
+	char *eline, char mode)
 {
 	t_block	*cmd_block;
 

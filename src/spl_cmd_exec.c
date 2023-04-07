@@ -107,7 +107,6 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 				ft_mini_perror(*cmd->argv, ": Is a directory\n", 1));
 		else
 			run_bin(*cmd->argv, msh, cmd);
-			
 	}
 	else if (search_in_path(msh, cmd) == -1)
 		return (g_exit_status = 127,
