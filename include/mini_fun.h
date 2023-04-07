@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/07 23:35:33 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:43:16 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void			ft_free_pipeline(t_cmd **cmd);
 void			ft_free_cmd_list_block(t_block	**cmd_block);
 void			ft_free_cmd_list(t_block	**cmd_block);
 void			ft_free_exit(t_msh *msh);
-void			ft_mini_perror(char *s1, char *s2, char *err_msg, int print_msh);
+void			ft_mini_perror(char *s1, char *s2,
+					char *err_msg, int print_msh);
 void			malloc_error(void);
 void			error_unexpected_token(char *str);
 int				error_cd(t_msh *msh, char **argv, char *home);

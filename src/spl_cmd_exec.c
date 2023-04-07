@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/07 23:37:37 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:43:54 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	if (env_get(&pb.path_val, "PATH", msh))
 		return (malloc_error(), 1);
 	if (!pb.path_val)
-		return (ft_mini_perror(*cmd->argv, NULL, "No such file or directory\n", 1),
-			g_exit_status = 127);
+		return (ft_mini_perror(*cmd->argv, NULL,
+				"No such file or directory\n", 1), g_exit_status = 127);
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
 	if (!pb.path_split)
