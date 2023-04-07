@@ -6,13 +6,13 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/06 01:16:32 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/07 16:39:53 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-void	malloc_error()
+void	malloc_error(void)
 {
 	ft_putstr_fd("minishell: malloc error\n", 2);
 }
@@ -45,10 +45,10 @@ int	error_cd(t_msh *msh, char **argv, char *home)
 		return (malloc_error(), 1);
 	if (!argv)
 		return (1);
-	if (env_size(argv) > 2)
+	if (dbl_str_size(argv) > 2)
 		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
-	if (env_not_exist(msh, "HOME", ENV_EXP)
-		&&env_not_exist(msh, "HOME", ENV_LCL) && !argv[1])
+	if (if_not_exist(msh, "HOME", ENV_EXP)
+		&&if_not_exist(msh, "HOME", ENV_LCL) && !argv[1])
 		return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
 	return (0);
 }

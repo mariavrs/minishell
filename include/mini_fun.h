@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/06 01:30:28 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/07 16:56:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int				redir_heredoc(t_msh *msh, t_cmd *cmd, char *eof);
 void			redir_clean(t_msh *msh, t_cmd *cmd);
 int				heredoc_prep(t_msh *msh, t_heredoc *hd);
 int				heredoc_collect_status(pid_t pid);
-int				heredoc_collect(t_msh *msh, t_cmd *cmd, t_heredoc *hd, char *eof);
+int				heredoc_collect(t_msh *msh, t_cmd *cmd,
+					t_heredoc *hd, char *eof);
 
 int				parse_cmd_argv(t_msh *msh, t_cmd *cmd, char *line, int argc);
 void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
@@ -78,7 +79,7 @@ void			ft_free_cmd(t_cmd **cmd);
 void			ft_free_pipeline(t_cmd **cmd);
 void			ft_free_exit(t_msh *msh);
 void			ft_mini_perror(char *arg, char *err_msg, int print_msh);
-void			malloc_error();
+void			malloc_error(void);
 void			error_unexpected_token(char *str);
 int				error_cd(t_msh *msh, char **argv, char *home);
 void			error_export(char *var, int *flag);
@@ -93,17 +94,17 @@ int				ft_exit(t_msh *msh, char **argv);
 int				ft_env(t_msh *msh, char **argv, int mode);
 
 // env, export, unset: extra functions
-int				env_not_exist(t_msh *msh, char *var, int flag);
+int				if_not_exist(t_msh *msh, char *var, int src);
 int				env_edit(t_msh *msh, char *var, char *value, int flag);
-int				del(t_msh *msh, t_env env, char **envp);
+int				env_remove_line(t_msh *msh, t_env env, char **envp);
 int				env_get(char **value, char *name, t_msh *msh);
 int				env_del(t_msh *msh, char *var);
-int				pos_sep(char *str);
-int				env_size(char **env);
+int				env_val_start_pos(char *str);
+int				dbl_str_size(char **env);
 
 // cd: utils
-int				fill_env(t_msh *msh, char *path);
-char			*get_value(t_msh *msh, char *var);
+int				cd_fill_env(t_msh *msh, char *path);
+char			*cd_get_value(t_msh *msh, char *var);
 int				check_if_pwd_equal_envp(t_msh *msh, char *var);
 
 #endif

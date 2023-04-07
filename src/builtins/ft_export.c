@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/05 23:18:42 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/07 16:53:11 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	get_and_put_var(t_env *env, t_msh *msh, char *name)
 		if (get_full_var_str(name, env, msh))
 			return (1);
 		if (env->src == ENV_LCL)
-			if (del(msh, *env, msh->envp_lcl))
+			if (env_remove_line(msh, *env, msh->envp_lcl))
 				return (1);
 		env->dest = ENV_EXP;
 		if (put_env_var(env, msh))
@@ -55,14 +55,14 @@ static void	export_env_print(t_msh *msh)
 	i = -1;
 	while (msh->envp[++i])
 	{
-		var = ft_substr(msh->envp[i], 0, pos_sep(msh->envp[i]) - 1);
+		var = ft_substr(msh->envp[i], 0, env_val_start_pos(msh->envp[i]) - 1);
 		if (!var)
 			return (malloc_error());
 		write(1, "declare -x ", 11);
-		if (pos_sep(msh->envp[i]) <= (int)ft_strlen(msh->envp[i]))
-			value = msh->envp[i] + pos_sep(msh->envp[i]);
+		if (env_val_start_pos(msh->envp[i]) <= (int)ft_strlen(msh->envp[i]))
+			value = msh->envp[i] + env_val_start_pos(msh->envp[i]);
 		write(1, var, ft_strlen(var));
-		if (value && pos_sep(msh->envp[i]))
+		if (value && env_val_start_pos(msh->envp[i]))
 		{
 			write(1, "=\"", 2);
 			write(1, value, ft_strlen(value));
