@@ -37,7 +37,10 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 	}
 	else
 		waitpid(pid, &g_exit_status, 0);
-	g_exit_status = WEXITSTATUS(g_exit_status);
+	if (WIFEXITED(g_exit_status))
+		g_exit_status = WEXITSTATUS(g_exit_status);
+	else if (WIFSIGNALED(g_exit_status))
+		g_exit_status = 128 + WTERMSIG(g_exit_status);
 }
 
 static char	*bin_get_full_name(char *path, char *argv, int name_len)
