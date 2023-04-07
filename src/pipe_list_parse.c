@@ -14,15 +14,6 @@
 
 extern int	g_exit_status;
 
-void	exec_pipeline(t_msh *msh)
-{
-	if (!msh->pipeline->next)
-		run_cmd_exec(msh, msh->pipeline);
-	else
-		run_pipe(msh, msh->pipeline);
-	ft_free_pipeline(&msh->pipeline);
-}
-
 t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
 {
 	t_cmd	*cmd;
@@ -45,59 +36,80 @@ t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
 	if (cmd_tail)
 		cmd = parse_simple_cmd(del + 1, eline, msh);
 	if (!cmd)
-	{
 		ft_free_pipeline(&cmd_tail);
-	}
 	else
 		cmd->next = cmd_tail;
 	return (cmd);
 }
 
-static int	list_delim_locator(char *line, char *eline, char **del)
+static void	list_delim_locator(char *line, char *eline, char **del)
 {
 	int	block_check;
 	int	quo_flag;
 
 	block_check = 0;
 	quo_flag = 0;
-	*del = eline - 1;
-	while (*del > line && !(!block_check && !quo_flag
-			&& ((**del == '&' && *(*del - 1) == '&')
-				|| (**del == '|' && *(*del - 1) == '|'))))
+	*del = line;
+	while (*del < eline && !(!block_check && !quo_flag
+			&& ((**del == '&' && *(*del + 1) == '&')
+				|| (**del == '|' && *(*del + 1) == '|'))))
 	{
-		if (**del == ')' && !quo_flag)
+		if (**del == '(' && !quo_flag)
 			block_check++;
-		else if (**del == '(' && !quo_flag)
+		else if (**del == ')' && !quo_flag)
 			block_check--;
 		else
 			quo_flag = quo_check(**del, quo_flag);
-		*del = *del - 1;
+		*del += 1;
 	}
-	if (*del == line)
-		return (0);
-	*del = *del - 1;
-	return (1);
 }
 
-void	parse_list(char *line, char *eline, t_msh *msh)
+static void	cmd_block_merge(t_block **head, t_block *tail)
 {
+	t_block	*tmp;
+
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = tail;
+}
+
+static t_block	*create_new_block(t_msh *msh, char *line, char *eline, char mode)
+{
+	t_block	*cmd_block;
+
+	cmd_block = malloc(sizeof(t_block));
+	if (!cmd_block)
+		return (msh->malloc_err_parse = 1, malloc_error(), NULL);
+	cmd_block->pipeline = NULL;
+	cmd_block->mode = mode;
+	cmd_block->next = NULL;
+	cmd_block->pipeline = parse_pipe(line, eline, msh);
+	if (!cmd_block->pipeline)
+		return (ft_free_cmd_list_block(&cmd_block), NULL);
+	return (cmd_block);
+}
+
+t_block	*parse_list(char *line, char *eline, t_msh *msh, char mode)
+{
+	t_block	*cmd_block;
+	t_block	*cmd_block_tail;
 	char	*del;
 
-	if (msh->malloc_err_parse)
-		return ;
 	trim_whitespaces(&line, &eline);
 	trim_brackets(&line, &eline);
-	if (!list_delim_locator(line, eline, &del))
+	list_delim_locator(line, eline, &del);
+	if (del == eline)
+		cmd_block = create_new_block(msh, line, eline, mode);
+	else
 	{
-		msh->pipeline = parse_pipe(line, eline, msh);
-		if (msh->pipeline)
-			exec_pipeline(msh);
-		else if (msh->malloc_err_parse)
-			ft_putstr_fd("not enough heap memory to perform execution\n", 2);
-		return ;
+		cmd_block = parse_list(line, del, msh, mode);
+		if (!cmd_block)
+			return (NULL);
+		cmd_block_tail = parse_list(del + 2, eline, msh, *del);
+		if (!cmd_block_tail)
+			return (ft_free_cmd_list_block(&cmd_block), NULL);
+		cmd_block_merge(&cmd_block, cmd_block_tail);
 	}
-	parse_list(line, del, msh);
-	if ((g_exit_status == 0 && *del == '&')
-		|| (g_exit_status != 0 && *del == '|'))
-		parse_list(del + 2, eline, msh);
+	return (cmd_block);
 }

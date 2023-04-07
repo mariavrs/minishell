@@ -133,7 +133,7 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 		status_lcl = parse_cmd_argv(msh, cmd, &cmd->spl_cmd[skip], 0);
 	if (status_lcl)
 		g_exit_status = status_lcl;
-	if (status_lcl >= 128 || msh->malloc_err_parse == 1)
+	if (status_lcl > 128 || msh->malloc_err_parse == 1)
 		return (ft_free_cmd(&cmd), NULL);
 	return (ft_free_str(&cmd->spl_cmd), cmd);
 }
