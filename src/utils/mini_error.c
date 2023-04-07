@@ -17,9 +17,10 @@ void	malloc_error()
 	ft_putstr_fd("minishell: malloc error\n", 2);
 }
 
-void	error_custom_arg(char *argv, char *err_msg)
+void	ft_mini_perror(char *argv, char *err_msg, int print_msh)
 {
-	ft_putstr_fd("minishell: ", 2);
+	if (print_msh)
+		ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(argv, 2);
 	ft_putstr_fd(err_msg, 2);
 }

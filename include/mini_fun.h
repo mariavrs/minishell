@@ -77,9 +77,9 @@ void			ft_free_str(char **str);
 void			ft_free_cmd(t_cmd **cmd);
 void			ft_free_pipeline(t_cmd **cmd);
 void			ft_free_exit(t_msh *msh);
+void			ft_mini_perror(char *arg, char *err_msg, int print_msh);
 void			malloc_error();
 void			error_unexpected_token(char *str);
-void			error_custom_arg(char *arg, char *err_msg);
 int				error_cd(t_msh *msh, char **argv, char *home);
 void			error_export(char *var, int *flag);
 

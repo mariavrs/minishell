@@ -30,14 +30,14 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		exit(execve(full_name, cmd->argv, msh->envp));
+		execve(full_name, cmd->argv, msh->envp);
+		ft_putstr_fd("minishell: ", 2);
+		perror(full_name);
+		exit(126);
 	}
 	else
 		waitpid(pid, &g_exit_status, 0);
-	if (WIFEXITED(g_exit_status))
-		g_exit_status = WEXITSTATUS(g_exit_status);
-	else if (WIFSIGNALED(g_exit_status))
-		g_exit_status = 128 + WTERMSIG(g_exit_status);
+	g_exit_status = WEXITSTATUS(g_exit_status);
 }
 
 static char	*bin_get_full_name(char *path, char *argv, int name_len)
@@ -70,7 +70,7 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	if (env_get(&pb.path_val, "PATH", msh))
 		return (malloc_error(), 1);
 	if (!pb.path_val)
-		return (error_custom_arg(cmd->argv[0], ": No such file or directory\n"),
+		return (ft_mini_perror(cmd->argv[0], ": No such file or directory\n", 1),
 			g_exit_status = 127);
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
@@ -94,25 +94,19 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 
 	if (ft_strchr(cmd->argv[0], '/'))
 	{
-		if (!stat(cmd->argv[0], &statbuf))
-		{
-			if (statbuf.st_mode & S_IFDIR)
-				return (g_exit_status = 126,
-					error_custom_arg(cmd->argv[0], ": Is a directory\n"));
-			else
-				run_bin(cmd->argv[0], msh, cmd);
-		}
-		else
-		{
+		if (stat(cmd->argv[0], &statbuf))
 			return (g_exit_status = 127,
-				error_custom_arg(cmd->argv[0], ": No such file or directory\n"));
-		}
+				ft_putstr_fd("minishell: ", 2), perror(cmd->argv[0]));
+		if (statbuf.st_mode & S_IFDIR)
+			return (g_exit_status = 126,
+				ft_mini_perror(cmd->argv[0], ": Is a directory\n", 1));
+		else
+			run_bin(cmd->argv[0], msh, cmd);
+			
 	}
 	else if (search_in_path(msh, cmd) == -1)
-	{
 		return (g_exit_status = 127,
-			error_custom_arg(cmd->argv[0], ": command not found\n"));
-	}
+			ft_mini_perror(cmd->argv[0], ": command not found\n", 0));
 }
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)

@@ -58,7 +58,7 @@ int	redir_in(t_msh *msh, t_cmd *cmd, char *filename)
 	{
 		cmd->fd_in = open(filename, O_RDONLY);
 		if (cmd->fd_in < 0)
-			return (error_custom_arg(filename, ": "), perror(""), 1);
+			return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
 	}
 	else if (cmd->rdr_mode == '-')
 	{
@@ -78,7 +78,7 @@ int	redir_out(t_cmd *cmd, char *filename)
 	else if (cmd->rdr_mode == '+')
 		cmd->fd_out = open(filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 	if (cmd->fd_out < 0)
-		return (error_custom_arg(filename, ": "), perror(""), 1);
+		return (ft_putstr_fd("minishell: ", 2), perror(filename), 1);
 	return (0);
 }
 

@@ -40,6 +40,7 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <stdlib.h>
+# include <errno.h>
 
 typedef struct s_spl_cmd
 {
