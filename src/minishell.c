@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 02:08:51 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/08 22:41:20 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,20 @@ int	g_exit_status;
 
 static void	exec_pipeline(t_msh *msh)
 {
+	int	pid;
+
 	if (!msh->cmd_list->pipeline->next)
-		run_cmd_exec(msh, msh->cmd_list->pipeline);
-	else
-		run_pipe(msh, msh->cmd_list->pipeline);
+		return (run_cmd_exec(msh, msh->cmd_list->pipeline));
+	pid = fork();
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		run_pipe_new(msh, msh->cmd_list->pipeline);
+		exit(g_exit_status);
+	}
+	waitpid(pid, &g_exit_status, 0);
+	g_exit_status = WEXITSTATUS(g_exit_status);;
 }
 
 static void	exec_cmd_list(t_msh *msh)

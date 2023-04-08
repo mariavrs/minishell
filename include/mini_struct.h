@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/03 15:37:10 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/08 16:55:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # include <sys/stat.h>
 # include <dirent.h>
 # include <fcntl.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <stdlib.h>
 # include <errno.h>

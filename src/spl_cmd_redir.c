@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:26:27 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 23:49:04 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/08 15:50:54 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,13 @@ int	run_redir(t_cmd *cmd, char *line, int *i, t_msh *msh)
 
 void	redir_clean(t_msh *msh, t_cmd *cmd)
 {
-	if (cmd->fd_in >= 0)
-	{
+	(void)msh;
+/* 	if (!isatty(STDIN_FILENO))
 		dup2(msh->stdin_default, STDIN_FILENO);
+	if (!isatty(STDOUT_FILENO))
+		dup2(msh->stdout_default, STDOUT_FILENO); */
+	if (cmd->fd_in >= 0)
 		close(cmd->fd_in);
-	}
 	if (cmd->fd_out >= 0)
-	{
-		dup2(msh->stdout_default, STDOUT_FILENO);
 		close(cmd->fd_out);
-	}
 }

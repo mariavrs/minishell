@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 01:41:05 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/08 22:12:49 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,25 @@ extern int	g_exit_status;
 t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
 {
 	t_cmd	*cmd;
-	t_cmd	*cmd_tail;
 	char	*del;
 	int		quo_flag;
 
 	trim_whitespaces(&line, &eline);
-	del = eline - 1;
+	del = line;
 	quo_flag = 0;
 	cmd = NULL;
-	while (del >= line && (*del != '|' || quo_flag))
+	while (del < eline && (*del != '|' || quo_flag))
 	{
 		quo_flag = quo_check(*del, quo_flag);
-		del--;
+		del++;
 	}
-	if (del < line)
-		return (parse_simple_cmd(del + 1, eline, msh));
-	cmd_tail = parse_pipe(line, del, msh);
-	if (cmd_tail)
-		cmd = parse_simple_cmd(del + 1, eline, msh);
-	if (!cmd)
-		ft_free_pipeline(&cmd_tail);
-	else
-		cmd->next = cmd_tail;
+	cmd = parse_simple_cmd(line, del, msh);
+	if (cmd && del < eline)
+	{
+		cmd->next = parse_pipe(del + 1, eline, msh);
+		if (!cmd->next)
+			ft_free_pipeline(&cmd);
+	}
 	return (cmd);
 }
 
