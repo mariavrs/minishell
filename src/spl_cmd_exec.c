@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/08 19:06:12 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 04:49:38 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,23 +115,10 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 {
-	int	fd_stdin;
-	int	fd_stdout;
-
-	if (!cmd->argv)
+	if (get_backup_stdio(cmd))
 		return ;
-	if (cmd->fd_in >= 0)
-	{
-		fd_stdin = dup(STDIN_FILENO);
-		dup2(cmd->fd_in, STDIN_FILENO);
-		close(cmd->fd_in);
-	}
-	if (cmd->fd_out >= 0)
-	{
-		fd_stdout = dup(STDOUT_FILENO);
-		dup2(cmd->fd_out, STDOUT_FILENO);
-		close(cmd->fd_out);
-	}
+	if (run_redir(msh, cmd))
+		return ;
 	if (!ft_strncmp(*cmd->argv, "cd", 3))
 		g_exit_status = ft_cd(msh, cmd->argv);
 	else if (!ft_strncmp(*cmd->argv, "echo", 5))
@@ -148,20 +135,5 @@ void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 		g_exit_status = ft_unset(msh, cmd->argv);
 	else
 		search_bin(msh, cmd);
-//	redir_clean(msh, cmd);
-	if (cmd->fd_in >= 0)
-	{
-		dup2(fd_stdin, STDIN_FILENO);
-		close(fd_stdin);
-	}
-	if (cmd->fd_out >= 0)
-	{
-		dup2(fd_stdout, STDOUT_FILENO);
-		close(fd_stdout);
-	}
-	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
-	{
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-	}
+	put_backup_stdio(msh, cmd);
 }
