@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/09 08:03:57 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 23:38:59 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_spl_cmd
 	int					stdin_backup;
 	int					stdout_backup;
 	char				*spl_cmd;
+	char				*argv_line;
 	char				**argv;
 	t_redir				*rdr;
 	struct s_spl_cmd	*next;

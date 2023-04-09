@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 13:35:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 21:44:11 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,7 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag)
 	{
 		while (*line && !check_if_varname(line, quo_flag))
 		{
-			if (!((is_in_str(*line, STR_QUOTE) && quo_flag == 0)
-					|| (*line == '\'' && quo_flag == 1)
-					|| (*line == '\"' && quo_flag == 2)))
-				str[i++] = *line;
+			str[i++] = *line;
 			quo_flag = quo_check(*(++line), quo_flag);
 		}
 		if (*line && *(line + 1) == '?')

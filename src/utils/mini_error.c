@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/07 23:31:59 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 23:32:56 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_mini_perror(char *s1, char *s2, char *err_msg, int print_msh)
 		ft_putstr_fd(s2, 2);
 		ft_putstr_fd(": ", 2);
 	}
-	ft_putstr_fd(err_msg, 2);
+	ft_putendl_fd(err_msg, 2);
 }
 
 void	error_unexpected_token(char *str)

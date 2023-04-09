@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 21:12:38 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 23:39:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static t_cmd	*cmd_prep(t_msh *msh, char *line, char *eline)
 	cmd->next = NULL;
 	cmd->rdr = NULL;
 	cmd->argv = NULL;
+	cmd->argv_line = NULL;
 	cmd->spl_cmd = ft_malloc_str(eline - line + 2);
 	if (!cmd->spl_cmd)
 		return (msh->malloc_err_parse = 1, free(cmd), cmd = NULL);

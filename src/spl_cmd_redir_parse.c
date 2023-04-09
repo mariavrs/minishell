@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:00:07 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 21:16:00 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/10 00:22:38 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,79 @@
 
 extern int	g_exit_status;
 
+static int	get_len_in_cmd(char *line)
+{
+	int	quo_flag;
+	int	len;
+
+	len = 0;
+	quo_flag = quo_check(line[0], 0);
+	while (line[len] && ((!is_in_str(line[len], STR_WHSPACE)
+		&& !is_in_str(line[len], STR_REDIR)) || quo_flag))
+		quo_flag = quo_check(line[++len], quo_flag);
+	return (len);
+}
+
+static char	*get_next_word_fn(char *src, int *src_i, int dest_i, int quo_flag)
+{
+	char	*dest;
+	char	c;
+
+	while (src[*src_i] && ((is_in_str(src[*src_i], STR_WHSPACE) && !quo_flag)
+			|| (src[*src_i] == '\"' && quo_flag != 1)
+			|| (src[*src_i] == '\'' && quo_flag != 2)))
+		quo_flag = quo_check(src[++(*src_i)], quo_flag);
+	if (src[*src_i] && !is_in_str(src[*src_i], STR_WHSPACE))
+	{
+		c = src[(*src_i)++];
+		dest = get_next_word_fn(src, src_i, dest_i + 1, quo_flag);
+		if (!dest)
+			return (NULL);
+		dest[dest_i] = c;
+	}
+	else
+	{
+		dest = NULL;
+		dest = malloc(sizeof(char) * (dest_i + 1));
+		if (!dest)
+			return (malloc_error(), NULL);
+		dest[dest_i] = '\0';
+	}
+	return (dest);
+}
+
+
+//static char	*get_redir_filename(t_msh *msh, t_cmd *cmd, int *i)
 static char	*get_redir_filename(t_msh *msh, t_cmd *cmd, int *i)
 {
+	char	*filename_raw;
 	char	*filename;
-	int		l_start;
+	char	tmp;
+	int		cursor;
 
-	l_start = *i;
-	filename = NULL;
-	filename = get_next_word(cmd->spl_cmd, msh, i);
+	cursor = *i;
+	*i += get_len_in_cmd(&cmd->spl_cmd[*i]);
+	tmp = cmd->spl_cmd[*i];
+	cmd->spl_cmd[*i] = '\0';
+	filename_raw = NULL;
+	filename_raw = param_expansion(&cmd->spl_cmd[cursor], msh,
+				quo_check(cmd->spl_cmd[cursor], 0));
+	cmd->spl_cmd[*i] = tmp;
+	if (!filename_raw)
+		return (cmd->parse_status = 1, NULL);
+	while (cursor < *i)
+		cmd->spl_cmd[cursor++] = ' ';
+	cursor = 0;
+	filename = get_next_word_fn(filename_raw, &cursor, 0, quo_check(*filename_raw, 0));
 	if (!filename)
 		return (cmd->parse_status = 1, NULL);
-	while (l_start < *i)
-		cmd->spl_cmd[l_start++] = ' ';
+	if ((size_t)cursor < ft_strlen(filename_raw))
+	{
+		ft_mini_perror(filename_raw, NULL, "ambigous redirect", 1);
+		ft_free_str(&filename);
+		cmd->parse_status = 1;
+	}
+	ft_free_str(&filename_raw);
 	return (filename);
 }
 
@@ -59,7 +120,7 @@ t_redir	*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag)
 	rdr = NULL;
 	rdr = malloc(sizeof(t_redir));
 	if (!rdr)
-		return (cmd->parse_status = 1, NULL);
+		return (msh->malloc_err_parse = 1, cmd->parse_status = 1, NULL);
 	rdr->mode = get_redir_mode(cmd->spl_cmd, i);
 	while (cmd->spl_cmd[i] == '<' || cmd->spl_cmd[i] == '>')
 		cmd->spl_cmd[i++] = ' ';
