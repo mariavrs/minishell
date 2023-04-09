@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 06:59:38 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 21:15:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 		return ;
 	if (run_redir(msh, cmd))
 		return ;
+	if (!cmd->argv)
+		return ((void)put_backup_stdio(msh, cmd));
 	if (!ft_strncmp(*cmd->argv, "cd", 3))
 		g_exit_status = ft_cd(msh, cmd->argv);
 	else if (!ft_strncmp(*cmd->argv, "echo", 5))

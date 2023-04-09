@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 15:51:47 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 21:23:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static int	env_var_declaration(t_env *env, int *skip, char *line, t_msh *msh)
 	if (!env->value)
 		return (*skip = 0, 1);
 	*skip += env->name_ln + env->mod + 1;
+	while (is_in_str(line[*skip], STR_WHSPACE))
+		*skip += 1;
 	if (line[*skip])
 		return (ft_free_str(&env->value), 0);
 	if (get_full_var_str(line, env, msh))
@@ -50,9 +52,7 @@ int	first_wrd_check(int *skip, char *line, t_msh *msh)
 	{
 		if (line[env.name_ln] == '='
 			|| !ft_strncmp(&line[env.name_ln], "+=", 2))
-		{
 			return (env_var_declaration(&env, skip, line, msh));
-		}
 	}
 	return (0);
 }

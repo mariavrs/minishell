@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 03:14:15 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 21:12:38 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,9 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	cmd = cmd_prep(msh, line, eline);
 	if (!cmd)
 		return (NULL);
-	if (!(*cmd->spl_cmd >= '0' && *cmd->spl_cmd <= '9'))
+	cmd->rdr = parse_redir(msh, cmd, skip, 0);
+	if (!cmd->parse_status && !(*cmd->spl_cmd >= '0' && *cmd->spl_cmd <= '9'))
 		cmd->parse_status = first_wrd_check(&skip, cmd->spl_cmd, msh);
-	if (!cmd->parse_status && cmd->spl_cmd[skip])
-		cmd->rdr = parse_redir(msh, cmd, skip, 0);
 	if (!cmd->parse_status && cmd->spl_cmd[skip])
 		cmd->parse_status = parse_cmd_argv(msh, cmd, &cmd->spl_cmd[skip], 0);
 	if (cmd->parse_status)
