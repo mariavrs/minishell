@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/08 23:19:55 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 07:04:05 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@ int	msh_prep(t_msh *msh, char **envp)
 	msh->envp_lcl[0] = NULL;
 	msh->ex_sline = NULL;
 	msh->cmd_list = NULL;
+/* 	msh->stdin_backup = dup(STDIN_FILENO);
+	msh->stdout_backup = dup(STDOUT_FILENO);
+	if (msh->stdin_backup == -1 || msh->stdout_backup == -1)
+		return (ft_free_exit(msh), 1); */
 	msh->malloc_err_parse = 0;
 	return (0);
 }

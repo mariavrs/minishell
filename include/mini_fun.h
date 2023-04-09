@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/09 04:50:06 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 06:38:43 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_cmd(t_cmd **cmd);
 void			ft_free_redir(t_redir **rdr);
-void			ft_free_cmd_list(t_block	**cmd_block);
+void			ft_free_cmd_list(t_block **cmd_block);
+void			ft_free_cmd_elem(t_cmd **cmd);
+void			ft_free_redir_elem(t_redir **rdr);
+void			ft_free_cmd_list_elem(t_block **cmd_block);
 void			ft_free_exit(t_msh *msh);
 void			ft_mini_perror(char *s1, char *s2,
 					char *err_msg, int print_msh);

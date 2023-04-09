@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/09 04:17:11 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 06:50:57 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,12 @@ static void	exec_pipeline(t_msh *msh)
 
 static void	exec_cmd_list(t_msh *msh)
 {
-	t_block	*next;
-
 	if (!msh->cmd_list)
 		return ;
-	next = msh->cmd_list->next;
 	if (!msh->cmd_list->mode || (!g_exit_status && msh->cmd_list->mode == '&')
 		|| (g_exit_status && g_exit_status < 128 && msh->cmd_list->mode == '|'))
 		exec_pipeline(msh);
-	ft_free_cmd_list(&msh->cmd_list);
-	msh->cmd_list = next;
+	ft_free_cmd_list_elem(&msh->cmd_list);
 	exec_cmd_list(msh);
 }
 

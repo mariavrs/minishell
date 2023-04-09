@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/08 22:20:08 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 07:57:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ static int	run_pipe_next(t_msh *msh, t_cmd *cmd, int fd[2])
 	if (cmd->next)
 		run_pipe_new(msh, cmd);
 	else
-		return (run_cmd_exec(msh, cmd), ft_free_exit(msh), g_exit_status);
+		return (run_cmd_exec(msh, cmd),
+			close_pipe_fd(STDIN_FILENO, STDOUT_FILENO), ft_free_exit(msh), g_exit_status);
 	return (g_exit_status);
 }
 
@@ -52,6 +53,7 @@ void	run_pipe_new(t_msh *msh, t_cmd *cmd)
 	dup2(fd[1], STDOUT_FILENO);
 	close_pipe_fd(fd[0], fd[1]);
 	run_cmd_exec(msh, cmd);
+	close_pipe_fd(STDIN_FILENO, STDOUT_FILENO);
 	ft_free_exit(msh);
 	waitpid(pid, &g_exit_status, 0);
 	g_exit_status = WEXITSTATUS(g_exit_status);

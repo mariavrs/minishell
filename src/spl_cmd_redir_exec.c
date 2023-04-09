@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:31:33 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 04:49:27 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 08:00:57 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,8 @@ static int	run_redir_out(t_cmd *cmd)
 
 int	run_redir(t_msh *msh, t_cmd *cmd)
 {
-	t_redir	*next;
-
 	if (!cmd->rdr)
 		return (0);
-	next = cmd->rdr->next;
 	if (cmd->rdr->mode == '<' || cmd->rdr->mode == '-')
 	{
 		if (run_redir_in(cmd))
@@ -62,8 +59,7 @@ int	run_redir(t_msh *msh, t_cmd *cmd)
 		if (run_redir_out(cmd))
 			return (g_exit_status = 1);
 	}
-	ft_free_redir(&cmd->rdr);
-	cmd->rdr = next;
+	ft_free_redir_elem(&cmd->rdr);
 	return (run_redir(msh, cmd));
 }
 
@@ -73,7 +69,6 @@ int	get_backup_stdio(t_cmd *cmd)
 	{
 		cmd->rdr_in_flag = 0;
 		cmd->rdr_out_flag = 0;
-		return (0);
 	}
 	if (cmd->rdr_in_flag)
 	{
