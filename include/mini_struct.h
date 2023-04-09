@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/07 16:40:51 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/09 16:46:27 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define MODE_NITR 0
 # define MODE_INTR_CMD 1
 # define MODE_INTR_HDC 2
+# define RDR_WCREAT 0
+# define RDR_WAPPND 1
 
 # include <stdio.h>
 # include <unistd.h>
@@ -38,17 +40,28 @@
 # include <sys/stat.h>
 # include <dirent.h>
 # include <fcntl.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <stdlib.h>
 # include <errno.h>
 
+typedef struct s_redir
+{
+	char			mode;
+	char			*filename;
+	struct s_redir	*next;
+}	t_redir;
+
 typedef struct s_spl_cmd
 {
-	int					fd_in;
-	int					fd_out;
-	char				rdr_mode;
+	int					parse_status;
+	int					rdr_in_flag;
+	int					rdr_out_flag;
+	int					stdin_backup;
+	int					stdout_backup;
 	char				*spl_cmd;
 	char				**argv;
+	t_redir				*rdr;
 	struct s_spl_cmd	*next;
 }	t_cmd;
 
@@ -65,14 +78,14 @@ typedef struct s_msh
 	char	**envp_lcl;
 	char	*sline;
 	char	*ex_sline;
-	int		stdin_default;
-	int		stdout_default;
 	int		malloc_err_parse;
 	t_block	*cmd_list;
 }	t_msh;
 
 typedef struct s_heredoc
 {
+	int			fd;
+	char		*eof;
 	char		*line_in;
 	char		*line_out;
 	char		*hdoc;

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 17:27:19 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/01 13:48:37 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 06:46:07 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,42 @@ void	ft_free_dbl_str(char ***str)
 	}
 	free(*str);
 	*str = NULL;
+}
+
+void	ft_free_redir_elem(t_redir **rdr)
+{
+	t_redir	*next;
+
+	if (!(*rdr))
+		return ;
+	next = (*rdr)->next;
+	ft_free_str(&(*rdr)->filename);
+	free(*rdr);
+	*rdr = next;
+}
+
+void	ft_free_cmd_elem(t_cmd **cmd)
+{
+	t_cmd	*next;
+
+	if (!(*cmd))
+		return ;
+	next = (*cmd)->next;
+	ft_free_str(&(*cmd)->spl_cmd);
+	ft_free_dbl_str(&(*cmd)->argv);
+	ft_free_redir(&(*cmd)->rdr);
+	free(*cmd);
+	*cmd = next;
+}
+
+void	ft_free_cmd_list_elem(t_block **cmd_block)
+{
+	t_block	*next;
+
+	if (!(*cmd_block))
+		return ;
+	next = (*cmd_block)->next;
+	ft_free_cmd(&(*cmd_block)->pipeline);
+	free(*cmd_block);
+	*cmd_block = next;
 }

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 01:41:05 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 04:18:56 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,25 @@ extern int	g_exit_status;
 t_cmd	*parse_pipe(char *line, char *eline, t_msh *msh)
 {
 	t_cmd	*cmd;
-	t_cmd	*cmd_tail;
 	char	*del;
 	int		quo_flag;
 
 	trim_whitespaces(&line, &eline);
-	del = eline - 1;
+	del = line;
 	quo_flag = 0;
 	cmd = NULL;
-	while (del >= line && (*del != '|' || quo_flag))
+	while (del < eline && (*del != '|' || quo_flag))
 	{
 		quo_flag = quo_check(*del, quo_flag);
-		del--;
+		del++;
 	}
-	if (del < line)
-		return (parse_simple_cmd(del + 1, eline, msh));
-	cmd_tail = parse_pipe(line, del, msh);
-	if (cmd_tail)
-		cmd = parse_simple_cmd(del + 1, eline, msh);
-	if (!cmd)
-		ft_free_pipeline(&cmd_tail);
-	else
-		cmd->next = cmd_tail;
+	cmd = parse_simple_cmd(line, del, msh);
+	if (cmd && del < eline)
+	{
+		cmd->next = parse_pipe(del + 1, eline, msh);
+		if (!cmd->next)
+			ft_free_cmd(&cmd);
+	}
 	return (cmd);
 }
 
@@ -87,7 +84,7 @@ static t_block	*create_new_block(t_msh *msh, char *line,
 	cmd_block->next = NULL;
 	cmd_block->pipeline = parse_pipe(line, eline, msh);
 	if (!cmd_block->pipeline)
-		return (ft_free_cmd_list_block(&cmd_block), NULL);
+		return (ft_free_cmd_list(&cmd_block), NULL);
 	return (cmd_block);
 }
 
@@ -109,7 +106,7 @@ t_block	*parse_list(char *line, char *eline, t_msh *msh, char mode)
 			return (NULL);
 		cmd_block_tail = parse_list(del + 2, eline, msh, *del);
 		if (!cmd_block_tail)
-			return (ft_free_cmd_list_block(&cmd_block), NULL);
+			return (ft_free_cmd_list(&cmd_block), NULL);
 		cmd_block_merge(&cmd_block, cmd_block_tail);
 	}
 	return (cmd_block);

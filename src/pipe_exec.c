@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 15:37:26 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 08:09:33 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,55 +27,38 @@ static void	close_pipe_fd(int fd0, int fd1)
 	close(fd1);
 }
 
-static void	run_pipe_left(t_pp *pipe_info, t_msh *msh, t_cmd *cmd)
+static int	run_pipe_next(t_msh *msh, t_cmd *cmd, int fd[2])
 {
-	pipe_info->pid[0] = fork();
-	if (pipe_info->pid[0] == -1)
-		return (g_exit_status = 1, perror("minishell"));
-	else if (pipe_info->pid[0] == 0)
-	{
-		dup2(pipe_info->fd[1], STDOUT_FILENO);
-		close_pipe_fd(pipe_info->fd[0], pipe_info->fd[1]);
-		if (cmd->next)
-			run_pipe(msh, cmd);
-		else
-			run_cmd_exec(msh, cmd);
-		ft_free_exit(msh);
-		exit(g_exit_status);
-	}
-}
-
-static void	run_pipe_right(t_pp *pipe_info, t_msh *msh, t_cmd *cmd)
-{
-	pipe_info->pid[1] = fork();
-	if (pipe_info->pid[1] == -1)
-		return (perror("minishell"), g_exit_status = 1,
-			close_pipe_fd(pipe_info->fd[0], pipe_info->fd[1]));
-	else if (pipe_info->pid[1] == 0)
-	{
-		dup2(pipe_info->fd[0], STDIN_FILENO);
-		close_pipe_fd(pipe_info->fd[0], pipe_info->fd[1]);
-		run_cmd_exec(msh, cmd);
-		ft_free_exit(msh);
-		exit(g_exit_status);
-	}
-}
-
-void	run_pipe(t_msh *msh, t_cmd *cmd)
-{
-	t_pp	pipe_info;
-
-	pipe(pipe_info.fd);
-	if (pipe(pipe_info.fd) == -1)
-		return (perror("minishell"));
-	run_pipe_left(&pipe_info, msh, cmd->next);
-	if (pipe_info.pid[0] == -1)
-		close_pipe_fd(pipe_info.fd[0], pipe_info.fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	close_pipe_fd(fd[0], fd[1]);
+	if (cmd->next)
+		run_pipe_new(msh, cmd);
 	else
-		run_pipe_right(&pipe_info, msh, cmd);
-	close_pipe_fd(pipe_info.fd[0], pipe_info.fd[1]);
-	waitpid(pipe_info.pid[0], &pipe_info.status[0], 0);
-	g_exit_status = WEXITSTATUS(pipe_info.status[0]);
-	waitpid(pipe_info.pid[1], &pipe_info.status[1], 0);
-	g_exit_status = WEXITSTATUS(pipe_info.status[1]);
+	{
+		run_cmd_exec(msh, cmd);
+		close_pipe_fd(STDIN_FILENO, STDOUT_FILENO);
+		return (ft_free_exit(msh), g_exit_status);
+	}
+	return (g_exit_status);
+}
+
+void	run_pipe_new(t_msh *msh, t_cmd *cmd)
+{
+	int	fd[2];
+	int	pid;
+
+	pipe(fd);
+	if (pipe(fd) == -1)
+		return (g_exit_status = 1, perror("minishell"));
+	pid = fork();
+	if (pid == 0)
+		exit(run_pipe_next(msh, cmd->next, fd));
+	dup2(fd[1], STDOUT_FILENO);
+	close_pipe_fd(fd[0], fd[1]);
+	run_cmd_exec(msh, cmd);
+	close_pipe_fd(STDIN_FILENO, STDOUT_FILENO);
+	ft_free_exit(msh);
+	waitpid(pid, &g_exit_status, 0);
+	g_exit_status = WEXITSTATUS(g_exit_status);
+	exit(g_exit_status);
 }

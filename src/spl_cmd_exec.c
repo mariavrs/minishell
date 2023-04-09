@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/08 00:27:37 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/09 16:47:17 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,12 +115,10 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 {
-	if (!cmd->argv)
+	if (get_backup_stdio(cmd))
 		return ;
-	if (cmd->fd_in >= 0)
-		dup2(cmd->fd_in, STDIN_FILENO);
-	if (cmd->fd_out >= 0)
-		dup2(cmd->fd_out, STDOUT_FILENO);
+	if (run_redir(msh, cmd))
+		return ;
 	if (!ft_strncmp(*cmd->argv, "cd", 3))
 		g_exit_status = ft_cd(msh, cmd->argv);
 	else if (!ft_strncmp(*cmd->argv, "echo", 5))
@@ -137,6 +135,5 @@ void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 		g_exit_status = ft_unset(msh, cmd->argv);
 	else
 		search_bin(msh, cmd);
-	dup2(msh->stdin_default, STDIN_FILENO);
-	dup2(msh->stdout_default, STDOUT_FILENO);
+	put_backup_stdio(msh, cmd);
 }
