@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 07:57:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/09 08:09:33 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,11 @@ static int	run_pipe_next(t_msh *msh, t_cmd *cmd, int fd[2])
 	if (cmd->next)
 		run_pipe_new(msh, cmd);
 	else
-		return (run_cmd_exec(msh, cmd),
-			close_pipe_fd(STDIN_FILENO, STDOUT_FILENO), ft_free_exit(msh), g_exit_status);
+	{
+		run_cmd_exec(msh, cmd);
+		close_pipe_fd(STDIN_FILENO, STDOUT_FILENO);
+		return (ft_free_exit(msh), g_exit_status);
+	}
 	return (g_exit_status);
 }
 
