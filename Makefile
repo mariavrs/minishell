@@ -6,7 +6,7 @@
 #    By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/04/09 16:46:10 by ede-smet         ###   ########.fr        #
+#    Updated: 2023/04/10 16:38:46 by ede-smet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ UTILS_DIR = utils/
 SRC_LIST = minishell.c syntax_check.c pipe_list_parse.c pipe_exec.c \
 	parser_utils.c spl_cmd_parse.c ft_get_next_word.c spl_cmd_exec.c \
 	spl_cmd_local_var.c env_declare_get_full_var.c \
-	env_declare_put_var.c param_expansion.c param_expansion_utils.c signal.c \
+	env_declare_put_var.c param_expansion.c param_expansion_utils.c signal.c prompt.c\
 	spl_cmd_hdoc.c spl_cmd_redir_parse.c spl_cmd_redir_exec.c minishell_prep.c \
 	$(BUILT_DIR)ft_echo.c $(BUILT_DIR)ft_cd.c $(BUILT_DIR)ft_pwd.c $(BUILT_DIR)ft_export.c \
 	$(BUILT_DIR)ft_unset.c $(BUILT_DIR)ft_env.c $(BUILT_DIR)env_utils.c $(BUILT_DIR)ft_exit.c \

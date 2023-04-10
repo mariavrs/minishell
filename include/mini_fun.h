@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/09 16:46:19 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:50:46 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void			malloc_error(void);
 void			error_unexpected_token(char *str);
 int				error_cd(t_msh *msh, char **argv, char *home);
 void			error_export(char *var, int *flag);
+char			*get_prompt(void);
 
 // Builtins prototypes
 int				ft_echo(t_msh *msh, char **argv);
