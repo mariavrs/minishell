@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/09 06:50:57 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:50:53 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	parse_exec_prep(t_msh *msh)
 		if (msh->cmd_list)
 			exec_cmd_list(msh);
 		else if (msh->malloc_err_parse)
-			ft_putstr_fd("not enough heap memory to perform execution\n", 2);
+			ft_putendl_fd("not enough heap memory to perform execution", 2);
 	}
 	else
 		g_exit_status = 2;
@@ -88,6 +88,7 @@ static void	parse_exec_prep(t_msh *msh)
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
+	char	*prompt;
 
 	(void)argc;
 	(void)argv;
@@ -97,16 +98,18 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal_manager(MODE_INTR_CMD);
 		msh.sline = NULL;
-		msh.sline = readline("\033[1;36mminishell>> \033[0m");
+		prompt = get_prompt();
+		msh.sline = readline(prompt);
 		signal_manager(MODE_NITR);
 		if (msh.sline)
 		{
 			if (ft_strlen(msh.sline) != 0)
 				parse_exec_prep(&msh);
 			ft_free_str(&msh.sline);
+			ft_free_str(&prompt);
 		}
 		else
 			return (ft_putstr_fd("exit\n", 1),
-				ft_free_exit(&msh), g_exit_status);
+				ft_free_str(&prompt), ft_free_exit(&msh), g_exit_status);
 	}
 }

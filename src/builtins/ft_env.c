@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils.c                                        :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/06 01:30:23 by ede-smet         ###   ########.fr       */
+/*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
+/*   Updated: 2023/04/07 16:58:49 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/mini_fun.h"
+#include "../../include/mini_fun.h"
 
-int	env_not_exist(t_msh *msh, char *var, int flag)
+int	if_not_exist(t_msh *msh, char *var, int src)
 {
 	t_env	env;
 
@@ -20,12 +20,12 @@ int	env_not_exist(t_msh *msh, char *var, int flag)
 	env.name_ln = ft_strlen(var);
 	if (find_in_envp(&env, msh) == -1)
 		return (1);
-	if (env.src == flag)
+	if (env.src == src)
 		return (0);
 	return (1);
 }
 
-int	env_size(char **env)
+int	dbl_str_size(char **env)
 {
 	int	i;
 
@@ -35,7 +35,7 @@ int	env_size(char **env)
 	return (i);
 }
 
-int	pos_sep(char *str)
+int	env_val_start_pos(char *str)
 {
 	int	i;
 
@@ -46,29 +46,22 @@ int	pos_sep(char *str)
 	return (0);
 }
 
-int	del(t_msh *msh, t_env env, char **envp)
+int	ft_env(t_msh *msh, char **argv, int mode)
 {
-	char	**envp_new;
-	int		size;
+	int		i;
 
-	size = 0;
-	while (envp[size])
-		size++;
-	envp_new = NULL;
-	envp_new = malloc(sizeof(char *) * size);
-	if (!envp_new)
-		return (malloc_error(), 1);
-	envp_new[size - 1] = NULL;
-	size = -1;
-	while (envp[++size] && size != env.i)
-		envp_new[size] = envp[size];
-	while (envp[++size])
-		envp_new[size - 1] = envp[size];
-	ft_free_str(&envp[env.i]);
-	free(envp);
-	if (env.src == ENV_EXP)
-		msh->envp = envp_new;
-	else if (env.src == ENV_LCL)
-		msh->envp_lcl = envp_new;
+	(void)argv;
+	i = -1;
+	if (mode == 1)
+		while (msh->envp[++i])
+			ft_putendl_fd(msh->envp[i], 1);
+	else
+	{
+		while (msh->envp[++i])
+			if (ft_strncmp(msh->envp[i] + env_val_start_pos(msh->envp[i]),
+					"\"\"\0", 3)
+				&& env_val_start_pos(msh->envp[i]))
+				ft_putendl_fd(msh->envp[i], 1);
+	}
 	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/06 01:19:59 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/07 16:50:20 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
-char	*get_value(t_msh *msh, char *var)
+char	*cd_get_value(t_msh *msh, char *var)
 {
 	char	*value;
 
@@ -60,7 +60,7 @@ int	ft_cd(t_msh *msh, char **argv)
 	char	*home;
 	char	*error;
 
-	home = get_value(msh, "HOME");
+	home = cd_get_value(msh, "HOME");
 	if (error_cd(msh, argv, home))
 		return (ft_free_str(&home), 1);
 	if (home[0] == '\0' && !argv[1])
@@ -69,7 +69,7 @@ int	ft_cd(t_msh *msh, char **argv)
 		return (1);
 	if (chdir(dir) == 0)
 	{
-		if (!getcwd(current_dir, PATH_MAX) || fill_env(msh, current_dir))
+		if (!getcwd(current_dir, PATH_MAX) || cd_fill_env(msh, current_dir))
 			return (malloc_error(), ft_free_str(&home), 1);
 		return (ft_free_str(&home), 0);
 	}

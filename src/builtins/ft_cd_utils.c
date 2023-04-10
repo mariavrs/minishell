@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 13:46:17 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/06 01:35:21 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/07 16:50:20 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	fill_env_pwd(t_msh *msh, char *path)
 {
-	if (env_not_exist(msh, "PWD", ENV_EXP))
+	if (if_not_exist(msh, "PWD", ENV_EXP))
 		return (env_edit(msh, "PWD", path, ENV_LCL));
 	else
 		return (env_edit(msh, "PWD", path, ENV_EXP));
@@ -24,8 +24,8 @@ static int	unset_case(t_msh *msh)
 {
 	t_env	env;
 
-	if (env_not_exist(msh, "PWD", ENV_EXP)
-		&& env_not_exist(msh, "PWD", ENV_LCL))
+	if (if_not_exist(msh, "PWD", ENV_EXP)
+		&& if_not_exist(msh, "PWD", ENV_LCL))
 	{
 		env.full_var = ft_strdup("PWD");
 		if (!env.full_var)
@@ -33,8 +33,8 @@ static int	unset_case(t_msh *msh)
 		if (env_add(env, msh, msh->envp_lcl, ENV_LCL))
 			return (1);
 	}
-	if (env_not_exist(msh, "OLDPWD", ENV_EXP)
-		&& env_not_exist(msh, "OLDPWD", ENV_LCL))
+	if (if_not_exist(msh, "OLDPWD", ENV_EXP)
+		&& if_not_exist(msh, "OLDPWD", ENV_LCL))
 	{
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
@@ -49,7 +49,7 @@ static int	if_pwd_is_empty_case(t_msh *msh)
 {
 	t_env	env;
 
-	if (env_not_exist(msh, "OLDPWD", ENV_EXP))
+	if (if_not_exist(msh, "OLDPWD", ENV_EXP))
 	{
 		env.full_var = ft_strdup("OLDPWD");
 		if (!env.full_var)
@@ -85,13 +85,13 @@ static int	set_env(t_msh *msh, t_env *env, char *name, char *full_var_str)
 	return (0);
 }
 
-int	fill_env(t_msh *msh, char *path)
+int	cd_fill_env(t_msh *msh, char *path)
 {
 	t_env	env;
 
 	if (unset_case(msh))
 		return (1);
-	env.value = get_value(msh, "PWD");
+	env.value = cd_get_value(msh, "PWD");
 	if (!env.value)
 		return (1);
 	if (!ft_strlen(env.value) && !check_if_pwd_equal_envp(msh, "PWD"))
