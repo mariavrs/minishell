@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 23:39:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:37:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ static int	get_next_arg(t_msh *msh, t_cmd *cmd, char *line, int argc)
 	int		eword;
 
 	eword = 0;
-	arg = get_next_word(line, msh, &eword);
+	arg = get_next_word(line, &eword, 0, quo_check(*line, 0));
 	if (!arg)
-		return (1);
+		return (msh->malloc_err_parse = 1, 1);
 	if (!ft_strlen(arg) && !is_in_str(*line, STR_QUOTE))
 	{
 		if (parse_cmd_argv(msh, cmd, line + eword, argc))
@@ -90,13 +90,20 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 	if (!cmd)
 		return (NULL);
 	cmd->rdr = parse_redir(msh, cmd, skip, 0);
-	if (!cmd->parse_status && !(*cmd->spl_cmd >= '0' && *cmd->spl_cmd <= '9'))
-		cmd->parse_status = first_wrd_check(&skip, cmd->spl_cmd, msh);
+	while (is_in_str(cmd->spl_cmd[skip], STR_WHSPACE))
+		skip++;
 	if (!cmd->parse_status && cmd->spl_cmd[skip])
-		cmd->parse_status = parse_cmd_argv(msh, cmd, &cmd->spl_cmd[skip], 0);
+		skip += var_declar_fraction_ln(cmd->spl_cmd);
+	if (!cmd->parse_status && !cmd->spl_cmd[skip])
+		cmd->parse_status = lcl_var_declaration(msh, cmd->spl_cmd);
+	else if (!cmd->parse_status)
+		cmd->argv_line = param_expansion(&cmd->spl_cmd[skip], msh,
+				quo_check(cmd->spl_cmd[skip], 0), 0);
+	if (!cmd->parse_status && cmd->argv_line)
+		cmd->parse_status = parse_cmd_argv(msh, cmd, cmd->argv_line, 0);
 	if (cmd->parse_status)
 		g_exit_status = cmd->parse_status;
 	if (cmd->parse_status > 128 || msh->malloc_err_parse == 1)
 		return (ft_free_cmd(&cmd), NULL);
-	return (ft_free_str(&cmd->spl_cmd), cmd);
+	return (ft_free_str(&cmd->spl_cmd), ft_free_str(&cmd->argv_line), cmd);
 }

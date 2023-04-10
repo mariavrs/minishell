@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 21:23:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/10 21:40:02 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,39 +20,81 @@ static void	get_env_dest(t_env *env)
 		env->dest = env->src;
 }
 
-static int	env_var_declaration(t_env *env, int *skip, char *line, t_msh *msh)
+static int	env_var_declaration(t_msh *msh, t_env *env, char *line)
 {
 	env->mod = get_env_mod(line[env->name_ln]);
-	env->value = get_next_word(&line[env->name_ln + env->mod + 1],
-			msh, skip);
+	env->value = param_expansion(&line[env->name_ln + env->mod + 1],
+			msh, quo_check(line[env->name_ln + env->mod + 1], 0), 1);
 	if (!env->value)
-		return (*skip = 0, 1);
-	*skip += env->name_ln + env->mod + 1;
-	while (is_in_str(line[*skip], STR_WHSPACE))
-		*skip += 1;
-	if (line[*skip])
-		return (ft_free_str(&env->value), 0);
+		return (1);
 	if (get_full_var_str(line, env, msh))
-		return (*skip = 0, msh->malloc_err_parse = 1);
+		return (msh->malloc_err_parse = 1);
 	ft_free_str(&env->value);
 	get_env_dest(env);
 	if (put_env_var(env, msh))
-		return (ft_free_str(&env->full_var),
-			*skip = 0, msh->malloc_err_parse = 1);
+		return (ft_free_str(&env->full_var), msh->malloc_err_parse = 1);
 	return (0);
 }
 
-int	first_wrd_check(int *skip, char *line, t_msh *msh)
+static int	parse_var(t_msh *msh, char *line)
 {
 	t_env	env;
 
 	env.name_ln = -1;
-	while (is_valid_varname(line[++env.name_ln])
-		|| is_in_str(line[env.name_ln], "+="))
+	while (line[++env.name_ln] && line[env.name_ln] != '+'
+		&& line[env.name_ln] != '=')
 	{
-		if (line[env.name_ln] == '='
-			|| !ft_strncmp(&line[env.name_ln], "+=", 2))
-			return (env_var_declaration(&env, skip, line, msh));
+		if (is_in_str(line[++env.name_ln], "+="))
+			return (env_var_declaration(msh, &env, line));
 	}
 	return (0);
+}
+
+int	lcl_var_declaration(t_msh *msh, char *line)
+{
+	int		start;
+	int		end;
+	int		quo_flag;
+	char	tmp;
+
+	start = 0;
+	while (is_in_str(line[start], STR_WHSPACE))
+		start++;
+	while (line[start] && !msh->malloc_err_parse)
+	{
+		quo_flag = 0;
+		end = start;
+		while (line[end] && (!is_in_str(line[end], STR_WHSPACE) || quo_flag))
+			quo_flag = quo_check(line[++end], quo_flag);
+		tmp = line[end];
+		line[end] = '\0';
+		parse_var(msh, &line[start]);
+		line[end] = tmp;
+		start = end;
+		while (is_in_str(line[start], STR_WHSPACE))
+			start++;
+	}
+	return (msh->malloc_err_parse);
+}
+
+int	var_declar_fraction_ln(char *line)
+{
+	int	quo_flag;
+	int	size;
+
+	quo_flag = 0;
+	size = 0;
+	if (ft_isdigit(line[size]) || !line[size])
+		return (0);
+	while (is_valid_varname(line[size]))
+		size++;
+	if (!line[size] || (line[size] != '=' && ft_strncmp(&line[size], "+=", 2)))
+		return (0);
+	while (line[size] && (!is_in_str(line[size], STR_WHSPACE) || quo_flag))
+		quo_flag = quo_check(line[++size], quo_flag);
+	while (is_in_str(line[size], STR_WHSPACE))
+		size++;
+	if (line[size])
+		return (size + var_declar_fraction_ln(&line[size]));
+	return (size);
 }
