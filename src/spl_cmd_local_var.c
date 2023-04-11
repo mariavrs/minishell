@@ -6,11 +6,13 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/10 21:40:02 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:02:59 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
+
+extern int	g_exit_status;
 
 static void	get_env_dest(t_env *env)
 {
@@ -28,11 +30,11 @@ static int	env_var_declaration(t_msh *msh, t_env *env, char *line)
 	if (!env->value)
 		return (1);
 	if (get_full_var_str(line, env, msh))
-		return (msh->malloc_err_parse = 1);
+		return (1);
 	ft_free_str(&env->value);
 	get_env_dest(env);
 	if (put_env_var(env, msh))
-		return (ft_free_str(&env->full_var), msh->malloc_err_parse = 1);
+		return (ft_free_str(&env->full_var), 1);
 	return (0);
 }
 
@@ -60,7 +62,7 @@ int	lcl_var_declaration(t_msh *msh, char *line)
 	start = 0;
 	while (is_in_str(line[start], STR_WHSPACE))
 		start++;
-	while (line[start] && !msh->malloc_err_parse)
+	while (line[start])
 	{
 		quo_flag = 0;
 		end = start;
@@ -68,13 +70,14 @@ int	lcl_var_declaration(t_msh *msh, char *line)
 			quo_flag = quo_check(line[++end], quo_flag);
 		tmp = line[end];
 		line[end] = '\0';
-		parse_var(msh, &line[start]);
+		if (parse_var(msh, &line[start]))
+			return (1);
 		line[end] = tmp;
 		start = end;
 		while (is_in_str(line[start], STR_WHSPACE))
 			start++;
 	}
-	return (msh->malloc_err_parse);
+	return (0);
 }
 
 int	var_declar_fraction_ln(char *line)

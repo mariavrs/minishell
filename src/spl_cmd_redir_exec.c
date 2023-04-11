@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:31:33 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 08:00:57 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:08:09 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ static int	run_redir_in(t_cmd *cmd)
 
 	fd = open(cmd->rdr->filename, O_RDONLY);
 	if (fd < 0)
-		return (ft_putstr_fd("minishell: ", 2), perror(cmd->rdr->filename), 1);
+		return (ft_putstr_fd("minishell: ", 2), perror(cmd->rdr->filename),
+			g_exit_status = 1);
 	if (cmd->rdr->mode == '-')
 		unlink(cmd->rdr->filename);
 	if (dup2(fd, STDIN_FILENO) == -1)
-		return (close(fd), perror("minishell: "), 1);
+		return (close(fd), perror("minishell: "), g_exit_status = 1);
 	close(fd);
 	return (0);
 }
@@ -38,9 +39,10 @@ static int	run_redir_out(t_cmd *cmd)
 	else
 		fd = open(cmd->rdr->filename, O_CREAT | O_RDWR | O_APPEND, 0664);
 	if (fd < 0)
-		return (ft_putstr_fd("minishell: ", 2), perror(cmd->rdr->filename), 1);
+		return (ft_putstr_fd("minishell: ", 2), perror(cmd->rdr->filename),
+			g_exit_status = 1);
 	if (dup2(fd, STDOUT_FILENO) == -1)
-		return (close(fd), perror("minishell: "), 1);
+		return (close(fd), perror("minishell: "), g_exit_status = 1);
 	close(fd);
 	return (0);
 }
@@ -52,12 +54,12 @@ int	run_redir(t_msh *msh, t_cmd *cmd)
 	if (cmd->rdr->mode == '<' || cmd->rdr->mode == '-')
 	{
 		if (run_redir_in(cmd))
-			return (g_exit_status = 1);
+			return (1);
 	}
 	else
 	{
 		if (run_redir_out(cmd))
-			return (g_exit_status = 1);
+			return (1);
 	}
 	ft_free_redir_elem(&cmd->rdr);
 	return (run_redir(msh, cmd));
@@ -74,8 +76,8 @@ int	get_backup_stdio(t_cmd *cmd)
 	{
 		cmd->stdin_backup = dup(STDIN_FILENO);
 		if (cmd->stdin_backup == -1)
-			return (ft_putstr_fd("minishell: ", 2), perror(cmd->rdr->filename),
-				g_exit_status = 1);
+			return (perror("minishell"), ft_putendl_fd("STD I/O backup failed", 2),
+				ft_putendl_fd("exit", 2), 1);
 	}
 	if (cmd->rdr_out_flag)
 	{
@@ -84,23 +86,22 @@ int	get_backup_stdio(t_cmd *cmd)
 		{
 			if (cmd->stdin_backup >= 0)
 				close(cmd->stdin_backup);
-			return (ft_putstr_fd("minishell: ", 2), perror(cmd->rdr->filename),
-				g_exit_status = 1);
+			return (perror("minishell"), ft_putendl_fd("STD I/O backup failed", 2),
+				ft_putendl_fd("exit", 2), 1);
 		}
 	}
 	return (0);
 }
 
-int	put_backup_stdio(t_msh *msh, t_cmd *cmd)
+void	put_backup_stdio(t_msh *msh, t_cmd *cmd)
 {
 	if (cmd->rdr_in_flag)
 	{
 		if (dup2(cmd->stdin_backup, STDIN_FILENO) == -1)
 		{
+			g_exit_status = ERR_IO;
 			perror("minishell");
-			ft_putstr_fd("STD I/O could not be restored\nexit\n", 2);
-			ft_free_exit(msh);
-			exit(1);
+			close(STDIN_FILENO);
 		}
 		close(cmd->stdin_backup);
 	}
@@ -108,12 +109,13 @@ int	put_backup_stdio(t_msh *msh, t_cmd *cmd)
 	{
 		if (dup2(cmd->stdout_backup, STDOUT_FILENO) == -1)
 		{
+			g_exit_status = ERR_IO;
 			perror("minishell");
-			ft_putstr_fd("STD I/O could not be restored\nexit\n", 2);
-			ft_free_exit(msh);
-			exit(1);
+			close(STDOUT_FILENO);
 		}
 		close(cmd->stdout_backup);
 	}
-	return (0);
+	if ((cmd->rdr_in_flag || cmd->rdr_out_flag) && g_exit_status == ERR_IO)
+		return (ft_putendl_fd("STD I/O could not be restored", 2),
+				ft_putendl_fd("exit", 2), ft_free_exit(msh), exit(ERR_IO));
 }

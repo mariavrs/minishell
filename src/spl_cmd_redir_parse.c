@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:00:07 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/10 21:39:48 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:22:42 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_redir	*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag)
 	rdr = NULL;
 	rdr = malloc(sizeof(t_redir));
 	if (!rdr)
-		return (msh->malloc_err_parse = 1, cmd->parse_status = 1, NULL);
+		return (malloc_error(), cmd->parse_status = 1, NULL);
 	rdr->mode = get_redir_mode(cmd->spl_cmd, i);
 	while (cmd->spl_cmd[i] == '<' || cmd->spl_cmd[i] == '>')
 		cmd->spl_cmd[i++] = ' ';

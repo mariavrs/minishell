@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 22:43:38 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:36:45 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ static void	exec_pipeline(t_msh *msh)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		run_pipe_new(msh, msh->cmd_list->pipeline);
+		run_pipe(msh, msh->cmd_list->pipeline);
 		exit(g_exit_status);
 	}
+	if (pid == -1)
+		return (g_exit_status = ERR_FORK, perror("minishell"));
 	waitpid(pid, &g_exit_status, 0);
 	g_exit_status = WEXITSTATUS(g_exit_status);
 }
@@ -61,7 +63,6 @@ static void	parse_exec_prep(t_msh *msh)
 	char	*line;
 	char	*eline;
 
-	msh->malloc_err_parse = 0;
 	line = msh->sline;
 	eline = line + ft_strlen(line);
 	if (trim_whitespaces(&line, &eline))
@@ -78,8 +79,9 @@ static void	parse_exec_prep(t_msh *msh)
 		msh->cmd_list = parse_list(line, eline, msh, 0);
 		if (msh->cmd_list)
 			exec_cmd_list(msh);
-		else if (msh->malloc_err_parse)
-			ft_putendl_fd("not enough heap memory to perform execution", 2);
+		if (g_exit_status == ERR_MALLOC)
+			return (ft_free_exit(msh),
+				ft_putendl_fd("exit", 2), exit(ERR_MALLOC));
 	}
 	else
 		g_exit_status = 2;

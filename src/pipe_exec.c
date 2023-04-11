@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 08:09:33 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:39:07 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,21 @@ static void	close_pipe_fd(int fd0, int fd1)
 	close(fd1);
 }
 
+static void	pipe_clean(t_msh *msh, int fd[2], int fd_pipe_flag)
+{
+	if (fd_pipe_flag)
+		close_pipe_fd(fd[0], fd[1]);
+	close_pipe_fd(STDIN_FILENO, STDOUT_FILENO);
+	ft_free_exit(msh);
+}
+
 static int	run_pipe_next(t_msh *msh, t_cmd *cmd, int fd[2])
 {
-	dup2(fd[0], STDIN_FILENO);
+	if (dup2(fd[0], STDIN_FILENO) == -1)
+		return (pipe_clean(msh, fd, 1), perror("minishell"), ERR_PIPE);
 	close_pipe_fd(fd[0], fd[1]);
 	if (cmd->next)
-		run_pipe_new(msh, cmd);
+		run_pipe(msh, cmd);
 	else
 	{
 		run_cmd_exec(msh, cmd);
@@ -42,22 +51,29 @@ static int	run_pipe_next(t_msh *msh, t_cmd *cmd, int fd[2])
 	return (g_exit_status);
 }
 
-void	run_pipe_new(t_msh *msh, t_cmd *cmd)
+void	run_pipe(t_msh *msh, t_cmd *cmd)
 {
 	int	fd[2];
 	int	pid;
 
 	pipe(fd);
 	if (pipe(fd) == -1)
-		return (g_exit_status = 1, perror("minishell"));
+		return (perror("minishell"), pipe_clean(msh, fd, 0), exit(ERR_PIPE));
 	pid = fork();
+	if (pid == -1)
+		return (perror("minishell"),
+			pipe_clean(msh, fd, 1), exit(ERR_PIPE));
 	if (pid == 0)
 		exit(run_pipe_next(msh, cmd->next, fd));
-	dup2(fd[1], STDOUT_FILENO);
+	if (dup2(fd[1], STDOUT_FILENO) == -1)
+	{
+		perror("minishell");
+		g_exit_status = ERR_PIPE;
+	}
 	close_pipe_fd(fd[0], fd[1]);
-	run_cmd_exec(msh, cmd);
-	close_pipe_fd(STDIN_FILENO, STDOUT_FILENO);
-	ft_free_exit(msh);
+	if (g_exit_status != ERR_PIPE)
+		run_cmd_exec(msh, cmd);
+	pipe_clean(msh, fd, 0);
 	waitpid(pid, &g_exit_status, 0);
 	g_exit_status = WEXITSTATUS(g_exit_status);
 	exit(g_exit_status);

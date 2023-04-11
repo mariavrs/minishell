@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 22:41:51 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:36:07 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@
 # define MODE_INTR_HDC 2
 # define RDR_WCREAT 0
 # define RDR_WAPPND 1
+# define ERR_MALLOC 12
+# define ERR_FORK 1
+# define ERR_PIPE 32
+# define ERR_IO 5
 
 # include <stdio.h>
 # include <unistd.h>
@@ -80,7 +84,6 @@ typedef struct s_msh
 	char	*sline;
 	char	*ex_sline;
 	char	*prompt;
-	int		malloc_err_parse;
 	t_block	*cmd_list;
 }	t_msh;
 

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:28:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 04:18:56 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:20:26 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static t_block	*create_new_block(t_msh *msh, char *line,
 
 	cmd_block = malloc(sizeof(t_block));
 	if (!cmd_block)
-		return (msh->malloc_err_parse = 1, malloc_error(), NULL);
+		return (malloc_error(), NULL);
 	cmd_block->pipeline = NULL;
 	cmd_block->mode = mode;
 	cmd_block->next = NULL;

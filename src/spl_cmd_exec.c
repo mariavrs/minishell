@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 02:32:11 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:07:48 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 		execve(full_name, cmd->argv, msh->envp);
 		ft_putstr_fd("minishell: ", 2);
 		perror(full_name);
-		exit(126);
+		exit(128);
 	}
 	else
 		waitpid(pid, &g_exit_status, 0);
@@ -88,6 +88,8 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	if (pb.full_name)
 		return (run_bin(pb.full_name, msh, cmd),
 			ft_free_str(&pb.full_name), 0);
+	if (g_exit_status)
+		return (g_exit_status);
 	return (-1);
 }
 
@@ -117,11 +119,11 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 {
 	if (get_backup_stdio(cmd))
-		return ;
+		return (ft_free_exit(msh), exit(ERR_IO));
 	if (run_redir(msh, cmd))
 		return ;
 	if (!cmd->argv)
-		return ((void)put_backup_stdio(msh, cmd));
+		return (put_backup_stdio(msh, cmd));
 	if (!ft_strncmp(*cmd->argv, "cd", 3))
 		g_exit_status = ft_cd(msh, cmd->argv);
 	else if (!ft_strncmp(*cmd->argv, "echo", 5))
