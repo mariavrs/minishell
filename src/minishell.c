@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 23:36:45 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:45:09 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal_manager(MODE_INTR_CMD);
 		msh.sline = NULL;
-		get_prompt(&msh.prompt);
+		get_prompt(&msh.prompt, &msh);
 		msh.sline = readline(msh.prompt);
 		signal_manager(MODE_NITR);
 		if (msh.sline)
