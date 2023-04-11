@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_struct.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/09 16:46:27 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/10 21:43:47 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_spl_cmd
 	int					stdin_backup;
 	int					stdout_backup;
 	char				*spl_cmd;
+	char				*argv_line;
 	char				**argv;
 	t_redir				*rdr;
 	struct s_spl_cmd	*next;

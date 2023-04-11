@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 16:47:17 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/11 02:32:11 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 	struct stat	statbuf;
 
 	if (**cmd->argv == '\0')
-		return (g_exit_status = 127, ft_putendl_fd(": command not found", 2));
+		return (g_exit_status = 127, ft_putendl_fd("'': command not found", 2));
 	if (ft_strchr(*cmd->argv, '/'))
 	{
 		if (stat(*cmd->argv, &statbuf))
@@ -108,7 +108,8 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 		else
 			run_bin(*cmd->argv, msh, cmd);
 	}
-	else if (search_in_path(msh, cmd) == -1)
+	else if (!ft_strncmp(*cmd->argv, ".", 2) || !ft_strncmp(*cmd->argv, "..", 3)
+		|| search_in_path(msh, cmd) == -1)
 		return (g_exit_status = 127,
 			ft_mini_perror(*cmd->argv, NULL, "command not found", 0));
 }
@@ -119,6 +120,8 @@ void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 		return ;
 	if (run_redir(msh, cmd))
 		return ;
+	if (!cmd->argv)
+		return ((void)put_backup_stdio(msh, cmd));
 	if (!ft_strncmp(*cmd->argv, "cd", 3))
 		g_exit_status = ft_cd(msh, cmd->argv);
 	else if (!ft_strncmp(*cmd->argv, "echo", 5))

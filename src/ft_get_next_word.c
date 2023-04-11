@@ -6,45 +6,35 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:12 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/03 00:19:04 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/10 21:09:22 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
-static int	wrd_collect(char *line)
+char	*get_next_word(char *src, int *src_i, int dest_i, int quo_flag)
 {
-	int	count;
-	int	quo_flag;
+	char	*dest;
+	char	c;
 
-	count = 0;
-	quo_flag = 0;
-	while (line[count] && !is_in_str(line[count], STR_WHSPACE)
-		&& !is_in_str(line[count], STR_REDIR))
+	while ((src[*src_i] == '\"' && quo_flag != 1)
+		|| (src[*src_i] == '\'' && quo_flag != 2))
+		quo_flag = quo_check(src[++(*src_i)], quo_flag);
+	if (src[*src_i] && (!is_in_str(src[*src_i], STR_WHSPACE) || quo_flag))
 	{
-		if (is_in_str(line[count], STR_QUOTE))
-		{
-			quo_flag = quo_check(line[count], quo_flag);
-			while (line[++count] && quo_flag)
-				quo_flag = quo_check(line[count], quo_flag);
-		}
-		else
-			count++;
+		c = src[(*src_i)++];
+		dest = get_next_word(src, src_i, dest_i + 1, quo_flag);
+		if (!dest)
+			return (NULL);
+		dest[dest_i] = c;
 	}
-	return (count);
-}
-
-char	*get_next_word(char *line, t_msh *msh, int *i)
-{
-	char	*wrd;
-	char	tmp;
-	int		l_start;
-
-	l_start = *i;
-	*i += wrd_collect(&line[l_start]);
-	tmp = line[*i];
-	line[*i] = '\0';
-	wrd = param_expansion(&line[l_start], msh, quo_check(line[l_start], 0));
-	line[*i] = tmp;
-	return (wrd);
+	else
+	{
+		dest = NULL;
+		dest = malloc(sizeof(char) * (dest_i + 1));
+		if (!dest)
+			return (malloc_error(), NULL);
+		dest[dest_i] = '\0';
+	}
+	return (dest);
 }

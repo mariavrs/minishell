@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/10 19:50:46 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/10 21:43:38 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,19 @@ void			run_pipe(t_msh *msh, t_cmd *cmd);
 void			run_pipe_new(t_msh *msh, t_cmd *cmd);
 
 t_cmd			*parse_simple_cmd(char *line, char *eline, t_msh *msh);
-int				first_wrd_check(int *skip, char *line, t_msh *msh);
+int				var_declar_fraction_ln(char *line);
+int				lcl_var_declaration(t_msh *msh, char *line);
 
 t_redir			*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag);
 int				run_redir(t_msh *msh, t_cmd *cmd);
 int				redir_heredoc(t_msh *msh, t_redir *rdr);
-//void			redir_clean(t_msh *msh, t_cmd *cmd);
 int				get_backup_stdio(t_cmd *cmd);
 int				put_backup_stdio(t_msh *msh, t_cmd *cmd);
 int				parse_cmd_argv(t_msh *msh, t_cmd *cmd, char *line, int argc);
 void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
 
 // Parse & Execute Utils
-char			*get_next_word(char *line, t_msh *msh, int *i);
+char			*get_next_word(char *src, int *src_i, int dest_i, int quo_flag);
 int				is_in_str(char c, char *str);
 int				brackets_check(char *line, char *eline);
 int				trim_brackets(char **line, char **eline);
@@ -49,7 +49,8 @@ int				trim_whitespaces(char **line, char **eline);
 int				quo_check(char del, int quo_flag);
 
 // Expansion
-char			*param_expansion(char *line, t_msh *msh, int quo_flag);
+char			*param_expansion(char *line, t_msh *msh,
+					int quo_flag, int unquote);
 int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
 int				check_if_varname(char *line, int quo_flag);
