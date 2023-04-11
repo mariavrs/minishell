@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:16:41 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 22:43:55 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:37:58 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	get_prompt(char **prompt)
 	char	*folder;
 
 	folder = NULL;
-	if (prompt)
+	if (*prompt)
 		ft_free_str(prompt);
 	get_current_folder(&folder);
 	*prompt = concat_str("\033[36;1mminishell:\033[90;1m", folder,
