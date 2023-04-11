@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 17:29:42 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:41:00 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	exec_pipeline(t_msh *msh)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		run_pipe_new(msh, msh->cmd_list->pipeline);
+		run_pipe(msh, msh->cmd_list->pipeline);
 		exit(g_exit_status);
 	}
 	waitpid(pid, &g_exit_status, 0);

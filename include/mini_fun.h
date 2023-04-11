@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 17:35:44 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:41:08 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int				syntax_check(char *line, char *eline);
 t_block			*parse_list(char *line, char *eline, t_msh *msh, char mode);
 t_cmd			*parse_pipe(char *line, char *eline, t_msh *msh);
 void			run_pipe(t_msh *msh, t_cmd *cmd);
-void			run_pipe_new(t_msh *msh, t_cmd *cmd);
 
 t_cmd			*parse_simple_cmd(char *line, char *eline, t_msh *msh);
 int				var_declar_fraction_ln(char *line);

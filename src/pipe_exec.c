@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/09 08:09:33 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:41:00 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	run_pipe_next(t_msh *msh, t_cmd *cmd, int fd[2])
 	dup2(fd[0], STDIN_FILENO);
 	close_pipe_fd(fd[0], fd[1]);
 	if (cmd->next)
-		run_pipe_new(msh, cmd);
+		run_pipe(msh, cmd);
 	else
 	{
 		run_cmd_exec(msh, cmd);
@@ -42,7 +42,7 @@ static int	run_pipe_next(t_msh *msh, t_cmd *cmd, int fd[2])
 	return (g_exit_status);
 }
 
-void	run_pipe_new(t_msh *msh, t_cmd *cmd)
+void	run_pipe(t_msh *msh, t_cmd *cmd)
 {
 	int	fd[2];
 	int	pid;
