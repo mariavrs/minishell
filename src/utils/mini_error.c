@@ -6,15 +6,20 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/10 21:44:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:45:15 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
 
+extern int	g_exit_status;
+
 void	malloc_error(void)
 {
+	g_exit_status = ERR_MALLOC;
 	ft_putendl_fd("minishell: malloc error", 2);
+	ft_putendl_fd("not enough heap memory to perform execution", 2);
+//	ft_putendl_fd("exit", 2);
 }
 
 void	ft_mini_perror(char *s1, char *s2, char *err_msg, int print_msh)

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/10 01:12:53 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:36:40 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_exit_status;
 
-static int	heredoc_prep(t_msh *msh, t_heredoc *hd, t_redir *rdr)
+static int	heredoc_prep(t_heredoc *hd, t_redir *rdr)
 {
 	hd->status = 0;
 	if (fstat(STDIN_FILENO, &hd->statbuf) == -1)
@@ -23,11 +23,11 @@ static int	heredoc_prep(t_msh *msh, t_heredoc *hd, t_redir *rdr)
 	hd->hdoc_id = NULL;
 	hd->hdoc_id = ft_itoa(hd->statbuf.st_atim.tv_sec);
 	if (!hd->hdoc_id)
-		return (malloc_error(), msh->malloc_err_parse = 1);
+		return (malloc_error(), 1);
 	hd->hdoc = ft_strjoin("/tmp/minishell-", hd->hdoc_id);
 	ft_free_str(&hd->hdoc_id);
 	if (!hd->hdoc)
-		return (malloc_error(), msh->malloc_err_parse = 1);
+		return (malloc_error(), 1);
 	hd->eof = rdr->filename;
 	rdr->filename = hd->hdoc;
 	return (0);
@@ -54,7 +54,7 @@ static int	heredoc_collect(t_msh *msh, t_heredoc *hd)
 	signal(SIGINT, &ctrl_c_heredoc_handler);
 	hd->line_in = NULL;
 	hd->line_in = readline("> ");
-	while (hd->line_in
+	while (hd->line_in && g_exit_status != ERR_MALLOC
 		&& ft_strncmp(hd->line_in, hd->eof, ft_strlen(hd->eof) + 1))
 	{
 		write_to_heredoc(msh, hd);
@@ -64,6 +64,8 @@ static int	heredoc_collect(t_msh *msh, t_heredoc *hd)
 	ft_free_exit(msh);
 	ft_free_str(&hd->eof);
 	ft_free_str(&hd->hdoc);
+	if (g_exit_status == ERR_MALLOC)
+		return (ERR_MALLOC);
 	return (0);
 }
 
@@ -84,7 +86,7 @@ int	redir_heredoc(t_msh *msh, t_redir *rdr)
 	t_heredoc	hd;
 	pid_t		pid;
 
-	if (heredoc_prep(msh, &hd, rdr))
+	if (heredoc_prep(&hd, rdr))
 		return (1);
 	signal_manager(MODE_INTR_HDC);
 	pid = fork();
@@ -94,18 +96,7 @@ int	redir_heredoc(t_msh *msh, t_redir *rdr)
 	signal_manager(MODE_NITR);
 	ft_free_str(&hd.eof);
 	ft_free_str(&hd.line_in);
+	if (hd.status == ERR_MALLOC)
+		return (g_exit_status = ERR_MALLOC, 1);
 	return (hd.status);
 }
-
-/* void	redir_clean(t_msh *msh, t_cmd *cmd)
-{
-	(void)msh;
-	if (!isatty(STDIN_FILENO))
-		dup2(msh->stdin_default, STDIN_FILENO);
-	if (!isatty(STDOUT_FILENO))
-		dup2(msh->stdout_default, STDOUT_FILENO);
-	if (cmd->fd_in >= 0)
-		close(cmd->fd_in);
-	if (cmd->fd_out >= 0)
-		close(cmd->fd_out);
-} */

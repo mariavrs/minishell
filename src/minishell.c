@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/10 19:50:53 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:29:42 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ static void	parse_exec_prep(t_msh *msh)
 	char	*line;
 	char	*eline;
 
-	msh->malloc_err_parse = 0;
 	line = msh->sline;
 	eline = line + ft_strlen(line);
 	if (trim_whitespaces(&line, &eline))
@@ -78,8 +77,6 @@ static void	parse_exec_prep(t_msh *msh)
 		msh->cmd_list = parse_list(line, eline, msh, 0);
 		if (msh->cmd_list)
 			exec_cmd_list(msh);
-		else if (msh->malloc_err_parse)
-			ft_putendl_fd("not enough heap memory to perform execution", 2);
 	}
 	else
 		g_exit_status = 2;
@@ -88,7 +85,6 @@ static void	parse_exec_prep(t_msh *msh)
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
-	char	*prompt;
 
 	(void)argc;
 	(void)argv;
@@ -98,18 +94,19 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal_manager(MODE_INTR_CMD);
 		msh.sline = NULL;
-		prompt = get_prompt();
-		msh.sline = readline(prompt);
+		msh.prompt = get_prompt();
+		msh.sline = readline(msh.prompt);
 		signal_manager(MODE_NITR);
 		if (msh.sline)
 		{
 			if (ft_strlen(msh.sline) != 0)
 				parse_exec_prep(&msh);
+			if (g_exit_status == ERR_MALLOC)
+				return (ft_free_exit(&msh), ft_putendl_fd("exit", 2), 1);
 			ft_free_str(&msh.sline);
-			ft_free_str(&prompt);
+			ft_free_str(&msh.prompt);
 		}
 		else
-			return (ft_putstr_fd("exit\n", 1),
-				ft_free_str(&prompt), ft_free_exit(&msh), g_exit_status);
+			return (ft_putstr_fd("exit\n", 1), ft_free_exit(&msh), g_exit_status);
 	}
 }

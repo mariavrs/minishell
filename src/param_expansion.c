@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/10 01:11:46 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:28:10 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ static int	put_exit_status(char *str, char **line)
 	int		ln;
 
 	num = ft_itoa(g_exit_status);
+	if (!num)
+		return (malloc_error(), 0);
 	ln = ft_strlen(num);
 	ft_strlcpy(str, num, ln + 1);
 	ft_free_str(&num);
@@ -109,7 +111,7 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag, int unquote)
 	i = 0;
 	str = ft_malloc_str(final_line_len(line, msh, quo_flag) + 1);
 	if (!str)
-		return (malloc_error(), msh->malloc_err_parse = 1, NULL);
+		return (NULL);
 	while (*line)
 	{
 		while (*line && !check_if_varname(line, quo_flag))
@@ -123,6 +125,8 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag, int unquote)
 			i += put_exit_status(&str[i], &line);
 		else if (*line)
 			line += var_value(line + 1, str, &i, msh) + 1;
+		if (g_exit_status == 300)
+			return (ft_free_str(&str), NULL);
 	}
 	return (str);
 }

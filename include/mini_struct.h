@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/10 21:43:47 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:27:32 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define MODE_INTR_HDC 2
 # define RDR_WCREAT 0
 # define RDR_WAPPND 1
+# define ERR_MALLOC 300
 
 # include <stdio.h>
 # include <unistd.h>
@@ -79,7 +80,7 @@ typedef struct s_msh
 	char	**envp_lcl;
 	char	*sline;
 	char	*ex_sline;
-	int		malloc_err_parse;
+	char	*prompt;
 	t_block	*cmd_list;
 }	t_msh;
 
