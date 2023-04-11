@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 17:41:00 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:07:29 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void	exec_pipeline(t_msh *msh)
 		run_pipe(msh, msh->cmd_list->pipeline);
 		exit(g_exit_status);
 	}
+	if (pid == -1)
+		return (g_exit_status = ERR_FORK, perror("minishell"));
 	waitpid(pid, &g_exit_status, 0);
 	g_exit_status = WEXITSTATUS(g_exit_status);
 }
@@ -77,6 +79,9 @@ static void	parse_exec_prep(t_msh *msh)
 		msh->cmd_list = parse_list(line, eline, msh, 0);
 		if (msh->cmd_list)
 			exec_cmd_list(msh);
+		if (g_exit_status == ERR_MALLOC)
+			return (ft_free_exit(msh),
+				ft_putendl_fd("exit", 2), exit(ERR_MALLOC));
 	}
 	else
 		g_exit_status = 2;
@@ -101,8 +106,6 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (ft_strlen(msh.sline) != 0)
 				parse_exec_prep(&msh);
-			if (g_exit_status == ERR_MALLOC)
-				return (ft_free_exit(&msh), ft_putendl_fd("exit", 2), 1);
 			ft_free_str(&msh.sline);
 			ft_free_str(&msh.prompt);
 		}

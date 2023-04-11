@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 17:27:32 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:55:53 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@
 # define MODE_INTR_HDC 2
 # define RDR_WCREAT 0
 # define RDR_WAPPND 1
-# define ERR_MALLOC 300
+# define ERR_MALLOC 12
+# define ERR_FORK 1
+# define ERR_PIPE 32
+# define ERR_IO 5
 
 # include <stdio.h>
 # include <unistd.h>

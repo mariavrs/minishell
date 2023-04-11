@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 16:28:10 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 21:06:19 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag, int unquote)
 			i += put_exit_status(&str[i], &line);
 		else if (*line)
 			line += var_value(line + 1, str, &i, msh) + 1;
-		if (g_exit_status == 300)
+		if (g_exit_status == ERR_MALLOC)
 			return (ft_free_str(&str), NULL);
 	}
 	return (str);

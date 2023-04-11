@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 17:36:40 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 21:39:24 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,22 @@ int	redir_heredoc(t_msh *msh, t_redir *rdr)
 	pid_t		pid;
 
 	if (heredoc_prep(&hd, rdr))
-		return (1);
+		return (g_exit_status);
 	signal_manager(MODE_INTR_HDC);
 	pid = fork();
 	if (pid == 0)
 		exit(heredoc_collect(msh, &hd));
-	hd.status = heredoc_collect_status(pid);
+	if (pid > 0)
+		hd.status = heredoc_collect_status(pid);
+	else if (pid == -1)
+	{
+		perror("minishell");
+		hd.status = ERR_FORK;
+	}
 	signal_manager(MODE_NITR);
 	ft_free_str(&hd.eof);
 	ft_free_str(&hd.line_in);
 	if (hd.status == ERR_MALLOC)
-		return (g_exit_status = ERR_MALLOC, 1);
+		return (g_exit_status = ERR_MALLOC);
 	return (hd.status);
 }

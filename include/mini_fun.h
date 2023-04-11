@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 17:41:08 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:05:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_redir			*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag);
 int				run_redir(t_msh *msh, t_cmd *cmd);
 int				redir_heredoc(t_msh *msh, t_redir *rdr);
 int				get_backup_stdio(t_cmd *cmd);
-int				put_backup_stdio(t_msh *msh, t_cmd *cmd);
+void			put_backup_stdio(t_msh *msh, t_cmd *cmd);
 int				parse_cmd_argv(t_cmd *cmd, char *line, int argc);
 void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
 
