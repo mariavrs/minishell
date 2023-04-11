@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/07 16:50:20 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/12 00:09:58 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ int	ft_cd(t_msh *msh, char **argv)
 		return (1);
 	if (chdir(dir) == 0)
 	{
-		if (!getcwd(current_dir, PATH_MAX) || cd_fill_env(msh, current_dir))
+		if (!getcwd(current_dir, PATH_MAX))
+			return (perror("minishell: cd"), ft_free_str(&home), 1);
+		if (cd_fill_env(msh, current_dir))
 			return (malloc_error(), ft_free_str(&home), 1);
 		return (ft_free_str(&home), 0);
 	}

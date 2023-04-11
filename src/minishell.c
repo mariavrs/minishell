@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 23:07:29 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 23:45:09 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal_manager(MODE_INTR_CMD);
 		msh.sline = NULL;
-		msh.prompt = get_prompt();
+		get_prompt(&msh.prompt, &msh);
 		msh.sline = readline(msh.prompt);
 		signal_manager(MODE_NITR);
 		if (msh.sline)
@@ -107,9 +107,9 @@ int	main(int argc, char **argv, char **envp)
 			if (ft_strlen(msh.sline) != 0)
 				parse_exec_prep(&msh);
 			ft_free_str(&msh.sline);
-			ft_free_str(&msh.prompt);
 		}
 		else
-			return (ft_putstr_fd("exit\n", 1), ft_free_exit(&msh), g_exit_status);
+			return (ft_putstr_fd("exit\n", 1),
+				ft_free_exit(&msh), g_exit_status);
 	}
 }
