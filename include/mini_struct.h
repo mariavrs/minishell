@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_struct.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/10 21:43:47 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:41:51 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_msh
 	char	**envp_lcl;
 	char	*sline;
 	char	*ex_sline;
+	char	*prompt;
 	int		malloc_err_parse;
 	t_block	*cmd_list;
 }	t_msh;

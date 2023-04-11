@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:16:41 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/10 20:05:02 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:43:55 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,15 @@ static char	*concat_str(char *s1, char *s2, char *s3)
 	return (result);
 }
 
-char	*get_prompt(void)
+void	get_prompt(char **prompt)
 {
 	char	*folder;
-	char	*prompt;
 
 	folder = NULL;
+	if (prompt)
+		ft_free_str(prompt);
 	get_current_folder(&folder);
-	prompt = concat_str("\033[36;1mminishell:\033[90;1m", folder,
+	*prompt = concat_str("\033[36;1mminishell:\033[90;1m", folder,
 			"\033[33;1m ~ \033[0m");
 	ft_free_str(&folder);
-	return (prompt);
 }

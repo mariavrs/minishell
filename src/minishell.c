@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/10 19:50:53 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:43:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ static void	parse_exec_prep(t_msh *msh)
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
-	char	*prompt;
 
 	(void)argc;
 	(void)argv;
@@ -98,18 +97,17 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal_manager(MODE_INTR_CMD);
 		msh.sline = NULL;
-		prompt = get_prompt();
-		msh.sline = readline(prompt);
+		get_prompt(&msh.prompt);
+		msh.sline = readline(msh.prompt);
 		signal_manager(MODE_NITR);
 		if (msh.sline)
 		{
 			if (ft_strlen(msh.sline) != 0)
 				parse_exec_prep(&msh);
 			ft_free_str(&msh.sline);
-			ft_free_str(&prompt);
 		}
 		else
 			return (ft_putstr_fd("exit\n", 1),
-				ft_free_str(&prompt), ft_free_exit(&msh), g_exit_status);
+				ft_free_exit(&msh), g_exit_status);
 	}
 }
