@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 13:58:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 17:18:33 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:27:01 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,11 @@ char	**ft_malloc_dbl_str(int size)
 	while (size >= 0)
 		str[size--] = NULL;
 	return (str);
+}
+
+void	malloc_error(void)
+{
+	g_exit_status = ERR_MALLOC;
+	ft_putendl_fd("minishell: malloc error", 2);
+	ft_putendl_fd("not enough heap memory to perform execution", 2);
 }

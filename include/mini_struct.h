@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_struct.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 23:36:07 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:02:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_spl_cmd
 	char				*spl_cmd;
 	char				*argv_line;
 	char				**argv;
+	char				*error_msg;
 	t_redir				*rdr;
 	struct s_spl_cmd	*next;
 }	t_cmd;
@@ -84,6 +85,7 @@ typedef struct s_msh
 	char	*sline;
 	char	*ex_sline;
 	char	*prompt;
+	int		pipe_flag;
 	t_block	*cmd_list;
 }	t_msh;
 

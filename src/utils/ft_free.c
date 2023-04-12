@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 17:27:19 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 17:37:32 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 00:15:48 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	ft_free_cmd_elem(t_cmd **cmd)
 	next = (*cmd)->next;
 	ft_free_str(&(*cmd)->spl_cmd);
 	ft_free_str(&(*cmd)->argv_line);
+	ft_free_str(&(*cmd)->error_msg);
 	ft_free_dbl_str(&(*cmd)->argv);
 	ft_free_redir(&(*cmd)->rdr);
 	free(*cmd);

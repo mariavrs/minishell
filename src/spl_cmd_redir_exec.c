@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:31:33 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 23:08:09 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:33:20 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	get_backup_stdio(t_cmd *cmd)
 	{
 		cmd->stdin_backup = dup(STDIN_FILENO);
 		if (cmd->stdin_backup == -1)
-			return (perror("minishell"), ft_putendl_fd("STD I/O backup failed", 2),
+			return (perror("minishell"), ft_putendl_fd("I/O backup failed", 2),
 				ft_putendl_fd("exit", 2), 1);
 	}
 	if (cmd->rdr_out_flag)
@@ -86,7 +86,7 @@ int	get_backup_stdio(t_cmd *cmd)
 		{
 			if (cmd->stdin_backup >= 0)
 				close(cmd->stdin_backup);
-			return (perror("minishell"), ft_putendl_fd("STD I/O backup failed", 2),
+			return (perror("minishell"), ft_putendl_fd("I/O backup failed", 2),
 				ft_putendl_fd("exit", 2), 1);
 		}
 	}
@@ -117,5 +117,5 @@ void	put_backup_stdio(t_msh *msh, t_cmd *cmd)
 	}
 	if ((cmd->rdr_in_flag || cmd->rdr_out_flag) && g_exit_status == ERR_IO)
 		return (ft_putendl_fd("STD I/O could not be restored", 2),
-				ft_putendl_fd("exit", 2), ft_free_exit(msh), exit(ERR_IO));
+			ft_putendl_fd("exit", 2), ft_free_exit(msh), exit(ERR_IO));
 }

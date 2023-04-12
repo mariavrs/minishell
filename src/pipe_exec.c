@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 22:39:07 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:45:28 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ static int	run_pipe_next(t_msh *msh, t_cmd *cmd, int fd[2])
 	else
 	{
 		run_cmd_exec(msh, cmd);
-		close_pipe_fd(STDIN_FILENO, STDOUT_FILENO);
-		return (ft_free_exit(msh), g_exit_status);
+		if (cmd->error_msg)
+			ft_putendl_fd(cmd->error_msg, 2);
+		pipe_clean(msh, fd, 0);
+		return (g_exit_status);
 	}
 	return (g_exit_status);
 }
@@ -61,8 +63,7 @@ void	run_pipe(t_msh *msh, t_cmd *cmd)
 		return (perror("minishell"), pipe_clean(msh, fd, 0), exit(ERR_PIPE));
 	pid = fork();
 	if (pid == -1)
-		return (perror("minishell"),
-			pipe_clean(msh, fd, 1), exit(ERR_PIPE));
+		return (perror("minishell"), pipe_clean(msh, fd, 1), exit(ERR_PIPE));
 	if (pid == 0)
 		exit(run_pipe_next(msh, cmd->next, fd));
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
@@ -73,8 +74,10 @@ void	run_pipe(t_msh *msh, t_cmd *cmd)
 	close_pipe_fd(fd[0], fd[1]);
 	if (g_exit_status != ERR_PIPE)
 		run_cmd_exec(msh, cmd);
-	pipe_clean(msh, fd, 0);
-	waitpid(pid, &g_exit_status, 0);
-	g_exit_status = WEXITSTATUS(g_exit_status);
+	close_pipe_fd(STDIN_FILENO, STDOUT_FILENO);
+	g_exit_status = waitpid_collect_status(pid);
+	if (cmd->error_msg)
+		ft_putendl_fd(cmd->error_msg, 2);
+	ft_free_exit(msh);
 	exit(g_exit_status);
 }
