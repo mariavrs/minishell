@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 00:34:01 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:45:28 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ void	run_pipe(t_msh *msh, t_cmd *cmd)
 		return (perror("minishell"), pipe_clean(msh, fd, 0), exit(ERR_PIPE));
 	pid = fork();
 	if (pid == -1)
-		return (perror("minishell"),
-			pipe_clean(msh, fd, 1), exit(ERR_PIPE));
+		return (perror("minishell"), pipe_clean(msh, fd, 1), exit(ERR_PIPE));
 	if (pid == 0)
 		exit(run_pipe_next(msh, cmd->next, fd));
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
