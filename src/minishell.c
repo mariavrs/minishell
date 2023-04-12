@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 00:41:14 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:03:36 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	exec_pipeline(t_msh *msh)
 	pid = fork();
 	if (pid == 0)
 	{
+		msh->pipe_flag = 1;
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		run_pipe(msh, msh->cmd_list->pipeline);

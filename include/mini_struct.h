@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 00:15:16 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:02:39 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_msh
 	char	*sline;
 	char	*ex_sline;
 	char	*prompt;
+	int		pipe_flag;
 	t_block	*cmd_list;
 }	t_msh;
 

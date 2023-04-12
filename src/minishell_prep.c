@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_prep.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 23:37:37 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:02:58 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@ int	msh_prep(t_msh *msh, char **envp)
 	msh->ex_sline = NULL;
 	msh->cmd_list = NULL;
 	msh->prompt = NULL;
+	msh->pipe_flag = 0;
 	return (0);
 }
