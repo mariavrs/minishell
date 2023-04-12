@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:16:41 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 23:56:54 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 00:40:19 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,8 @@ static void	get_current_folder(char **folder, t_msh *msh)
 	if (!getcwd(current_path, PATH_MAX))
 	{
 		perror("getcwd: ");
-		ft_putendl_fd("exit", 1);
 		ft_free_exit(msh);
-		exit(ERR_MALLOC);
+		ft_exit_error(0, NULL, msh, ERR_MALLOC);
 	}
 	slash_pos = get_last_pos_slash(current_path);
 	if (slash_pos == 0)
@@ -48,14 +47,13 @@ static void	get_current_folder(char **folder, t_msh *msh)
 		*folder = ft_strjoin("../", current_path + slash_pos + 1);
 	if (!*folder)
 	{
-		ft_putendl_fd("minishell: malloc error", 2);
-		ft_putendl_fd("exit", 1);
+		malloc_error();
 		ft_free_exit(msh);
-		exit(ERR_MALLOC);
+		ft_exit_error(0, NULL, msh, ERR_MALLOC);
 	}
 }
 
-static char	*concat_str(char *s1, char *s2, char *s3)
+static char	*concat_str(char *s1, char *s2, char *s3, t_msh *msh)
 {
 	int		size;
 	char	*result;
@@ -65,7 +63,8 @@ static char	*concat_str(char *s1, char *s2, char *s3)
 	size = ft_strlen(s1) + ft_strlen(s2) + ft_strlen(s3);
 	result = ft_malloc_str(size + 1);
 	if (!result)
-		return (NULL);
+		return (ft_free_exit(msh),
+			ft_exit_error(0, NULL, msh, ERR_MALLOC), NULL);
 	ft_strlcpy(result, s1, ft_strlen(s1) + 1);
 	ft_strlcpy(result + ft_strlen(s1), s2, ft_strlen(s2) + 1);
 	ft_strlcpy(result + ft_strlen(s1) + ft_strlen(s2), s3, ft_strlen(s3) + 1);
@@ -81,14 +80,13 @@ void	get_prompt(char **prompt, t_msh *msh)
 		ft_free_str(prompt);
 	get_current_folder(&folder, msh);
 	*prompt = concat_str("\033[36;1mminishell:\033[90;1m", folder,
-			"\033[33;1m ~ \033[0m");
+			"\033[33;1m ~ \033[0m", msh);
 	if (!*prompt)
 	{
 		ft_free_str(&folder);
-		ft_putendl_fd("minishell: malloc error", 2);
-		ft_putendl_fd("exit", 1);
+		malloc_error();
 		ft_free_exit(msh);
-		exit(ERR_MALLOC);
+		ft_exit_error(0, NULL, msh, ERR_MALLOC);
 	}
 	ft_free_str(&folder);
 }
