@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 19:03:36 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:34:11 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void	parse_exec_prep(t_msh *msh)
 			exec_cmd_list(msh);
 		if (g_exit_status == ERR_MALLOC)
 			return (ft_free_exit(msh),
-				ft_putendl_fd("exit", 2), exit(ERR_MALLOC));
+				ft_putendl_fd("exit", 1), exit(ERR_MALLOC));
 	}
 	else
 		g_exit_status = 2;

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 18:29:14 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:32:23 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ char	*cmd_error_msg(char *s1, char *s2, char *err_msg, t_msh *msh)
 	msg = ft_malloc_str(len);
 	if (!msg)
 	{
-		ft_putendl_fd("exit", 2);
+		if (!msh->pipe_flag)
+			ft_putendl_fd("exit", 1);
 		return (ft_free_exit(msh), exit(ERR_MALLOC), NULL);
 	}
 	ft_strlcpy(msg, s1, ft_strlen(s1) + 1);
