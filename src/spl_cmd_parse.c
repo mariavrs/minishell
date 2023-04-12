@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 00:16:10 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 20:04:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,9 @@ int	parse_cmd_argv(t_cmd *cmd, char *line, int argc)
 	{
 		if (!argc)
 			return (0);
-		cmd->argv = malloc(sizeof(char *) * (argc + 1));
+		cmd->argv = ft_malloc_dbl_str(argc + 1);
 		if (!cmd->argv)
-			return (malloc_error(), 1);
-		cmd->argv[argc] = NULL;
+			return (1);
 	}
 	else
 		return (get_next_arg(cmd, line, argc));
@@ -78,7 +77,7 @@ static t_cmd	*cmd_prep(char *line, char *eline)
 	cmd->error_msg = NULL;
 	cmd->spl_cmd = ft_malloc_str(eline - line + 2);
 	if (!cmd->spl_cmd)
-		return (malloc_error(), free(cmd), cmd = NULL);
+		return (free(cmd), cmd = NULL);
 	ft_strlcpy(cmd->spl_cmd, line, eline - line + 1);
 	cmd->parse_status = 0;
 	return (cmd);

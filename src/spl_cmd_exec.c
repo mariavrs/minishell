@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 18:19:27 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:37:45 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 		execve(full_name, cmd->argv, msh->envp);
 		ft_putstr_fd("minishell: ", 2);
 		perror(full_name);
-		exit(128);
+		exit(126);
 	}
 	else
 		g_exit_status = waitpid_collect_status(pid);
@@ -62,7 +62,8 @@ static char	*bin_get_full_name(t_msh *msh, char *path, char *argv, int name_len)
 	}
 	else
 	{
-		ft_putendl_fd("exit", 2);
+		if (!msh->pipe_flag)
+			ft_putendl_fd("exit", 1);
 		ft_free_exit(msh);
 		exit(ERR_MALLOC);
 	}
@@ -124,7 +125,7 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 {
-	if (get_backup_stdio(cmd))
+	if (get_backup_stdio(msh, cmd))
 		return (ft_free_exit(msh), exit(ERR_IO));
 	if (run_redir(msh, cmd))
 		return ;

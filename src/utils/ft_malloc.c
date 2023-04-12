@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 13:58:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 18:27:01 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 21:24:25 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ char	**ft_malloc_dbl_str(int size)
 	str = malloc(sizeof(char *) * size);
 	if (!str)
 		return (malloc_error(), NULL);
-	while (size >= 0)
-		str[size--] = NULL;
+	while (--size >= 0)
+		str[size] = NULL;
 	return (str);
 }
 
