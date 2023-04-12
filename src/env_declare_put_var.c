@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_declare_put_var.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 20:09:29 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 18:28:32 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:58:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,15 @@ int	env_add(t_env env, t_msh *msh, char **envp, int env_flag)
 	env.i = 0;
 	while (envp[env.i])
 		env.i++;
-	envp_tmp = malloc(sizeof(char *) * (env.i + 2));
+	envp_tmp = ft_malloc_dbl_str(env.i + 2);
 	if (!envp_tmp)
-		return (malloc_error(), 1);
+		return (1);
 	env.i = -1;
 	while (envp[++env.i])
 		envp_tmp[env.i] = envp[env.i];
 	free(envp);
 	envp = NULL;
 	envp = envp_tmp;
-	envp[env.i] = NULL;
-	envp[env.i + 1] = NULL;
 	if (env_flag == ENV_LCL)
 		msh->envp_lcl = envp;
 	else

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:12 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/10 21:09:22 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:56:45 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ char	*get_next_word(char *src, int *src_i, int dest_i, int quo_flag)
 	else
 	{
 		dest = NULL;
-		dest = malloc(sizeof(char) * (dest_i + 1));
+		dest = ft_malloc_str(dest_i + 1);
 		if (!dest)
-			return (malloc_error(), NULL);
+			return (NULL);
 		dest[dest_i] = '\0';
 	}
 	return (dest);

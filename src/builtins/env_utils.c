@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/07 16:58:28 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/12 20:08:37 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,9 @@ int	env_remove_line(t_msh *msh, t_env env, char **envp)
 	while (envp[size])
 		size++;
 	envp_new = NULL;
-	envp_new = malloc(sizeof(char *) * size);
+	envp_new = ft_malloc_dbl_str(size);
 	if (!envp_new)
-		return (malloc_error(), 1);
-	envp_new[size - 1] = NULL;
+		return (1);
 	size = -1;
 	while (envp[++size] && size != env.i)
 		envp_new[size] = envp[size];

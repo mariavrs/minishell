@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 19:31:02 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:50:55 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int				env_replace(t_env env, char **envp);
 // General Utils
 long long int	ft_ll_atoi(const char *str);
 char			*ft_malloc_str(int size);
+char			**ft_malloc_dbl_str(int size);
 void			ft_free_dbl_str(char ***str);
 void			ft_free_str(char **str);
 void			ft_free_cmd(t_cmd **cmd);
