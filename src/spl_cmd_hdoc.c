@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 21:39:24 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 00:33:41 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,6 @@ static int	heredoc_collect(t_msh *msh, t_heredoc *hd)
 	return (0);
 }
 
-static int	heredoc_collect_status(pid_t pid)
-{
-	int	stat;
-
-	waitpid(pid, &stat, 0);
-	if (WIFEXITED(stat))
-		return (WEXITSTATUS(stat));
-	else if (WIFSIGNALED(stat))
-		return (128 + WTERMSIG(stat));
-	return (0);
-}
-
 int	redir_heredoc(t_msh *msh, t_redir *rdr)
 {
 	t_heredoc	hd;
@@ -93,7 +81,7 @@ int	redir_heredoc(t_msh *msh, t_redir *rdr)
 	if (pid == 0)
 		exit(heredoc_collect(msh, &hd));
 	if (pid > 0)
-		hd.status = heredoc_collect_status(pid);
+		hd.status = waitpid_collect_status(pid);
 	else if (pid == -1)
 	{
 		perror("minishell");

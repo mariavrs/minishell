@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 23:07:48 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:19:27 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 	pid_t	pid;
 
 	pid = fork();
-	if (pid == 0)
+	if (pid == -1)
+	{
+		g_exit_status = ERR_FORK;
+		perror("minishell");
+	}
+	else if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		execve(full_name, cmd->argv, msh->envp);
@@ -36,21 +41,17 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 		exit(128);
 	}
 	else
-		waitpid(pid, &g_exit_status, 0);
-	if (WIFEXITED(g_exit_status))
-		g_exit_status = WEXITSTATUS(g_exit_status);
-	else if (WIFSIGNALED(g_exit_status))
-		g_exit_status = 128 + WTERMSIG(g_exit_status);
+		g_exit_status = waitpid_collect_status(pid);
 }
 
-static char	*bin_get_full_name(char *path, char *argv, int name_len)
+static char	*bin_get_full_name(t_msh *msh, char *path, char *argv, int name_len)
 {
 	int			path_len;
 	char		*full_name;
 	struct stat	statbuf;
 
 	path_len = ft_strlen(path);
-	full_name = malloc(sizeof(char) * (path_len + name_len + 2));
+	full_name = ft_malloc_str(path_len + name_len + 2);
 	if (full_name)
 	{
 		ft_strlcpy(full_name, path, path_len + 1);
@@ -60,7 +61,11 @@ static char	*bin_get_full_name(char *path, char *argv, int name_len)
 			ft_free_str(&full_name);
 	}
 	else
-		malloc_error();
+	{
+		ft_putendl_fd("exit", 2);
+		ft_free_exit(msh);
+		exit(ERR_MALLOC);
+	}
 	return (full_name);
 }
 
@@ -73,8 +78,8 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	if (env_get(&pb.path_val, "PATH", msh))
 		return (malloc_error(), 1);
 	if (!pb.path_val)
-		return (ft_mini_perror(*cmd->argv, NULL,
-				"No such file or directory", 1), g_exit_status = 127);
+		return (cmd->error_msg = cmd_error_msg("minishell", *cmd->argv,
+				"No such file or directory", msh), g_exit_status = 127);
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
 	if (!pb.path_split)
@@ -82,7 +87,7 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	pb.full_name = NULL;
 	pb.name_len = ft_strlen(*cmd->argv);
 	while (pb.path_split[++i] && !pb.full_name)
-		pb.full_name = bin_get_full_name(pb.path_split[i], *cmd->argv,
+		pb.full_name = bin_get_full_name(msh, pb.path_split[i], *cmd->argv,
 				pb.name_len);
 	ft_free_dbl_str(&pb.path_split);
 	if (pb.full_name)
@@ -98,7 +103,8 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 	struct stat	statbuf;
 
 	if (**cmd->argv == '\0')
-		return (g_exit_status = 127, ft_putendl_fd("'': command not found", 2));
+		return (g_exit_status = 127, cmd->error_msg = cmd_error_msg("''",
+				NULL, "command not found", msh), (void)statbuf);
 	if (ft_strchr(*cmd->argv, '/'))
 	{
 		if (stat(*cmd->argv, &statbuf))
@@ -112,8 +118,8 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 	}
 	else if (!ft_strncmp(*cmd->argv, ".", 2) || !ft_strncmp(*cmd->argv, "..", 3)
 		|| search_in_path(msh, cmd) == -1)
-		return (g_exit_status = 127,
-			ft_mini_perror(*cmd->argv, NULL, "command not found", 0));
+		return (g_exit_status = 127, cmd->error_msg = cmd_error_msg(*cmd->argv,
+				NULL, "command not found", msh), (void)statbuf);
 }
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 23:09:05 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:29:14 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,31 @@
 
 extern int	g_exit_status;
 
-void	malloc_error(void)
+char	*cmd_error_msg(char *s1, char *s2, char *err_msg, t_msh *msh)
 {
-	g_exit_status = ERR_MALLOC;
-	ft_putendl_fd("minishell: malloc error", 2);
-	ft_putendl_fd("not enough heap memory to perform execution", 2);
+	int		len;
+	char	*msg;
+
+	len = ft_strlen(s1) + ft_strlen(err_msg) + 3;
+	if (s2)
+		len += ft_strlen(s2) + 2;
+	msg = ft_malloc_str(len);
+	if (!msg)
+	{
+		ft_putendl_fd("exit", 2);
+		return (ft_free_exit(msh), exit(ERR_MALLOC), NULL);
+	}
+	ft_strlcpy(msg, s1, ft_strlen(s1) + 1);
+	len = ft_strlen(s1) + 2;
+	ft_strlcpy(&msg[len - 2], ": ", 3);
+	if (s2)
+	{
+		ft_strlcpy(&msg[len], s2, ft_strlen(s2) + 1);
+		len += ft_strlen(s1) + 2;
+		ft_strlcpy(&msg[len - 2], ": ", 3);
+	}
+	ft_strlcpy(&msg[len], err_msg, ft_strlen(err_msg) + 1);
+	return (msg);
 }
 
 void	ft_mini_perror(char *s1, char *s2, char *err_msg, int print_msh)

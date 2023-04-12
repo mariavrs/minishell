@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+         #
+#    By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 18:28:32 by ede-smet          #+#    #+#              #
-#    Updated: 2023/04/10 16:38:46 by ede-smet         ###   ########.fr        #
+#    Updated: 2023/04/12 00:35:35 by mvorslov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,10 @@ SRC_LIST = minishell.c syntax_check.c pipe_list_parse.c pipe_exec.c \
 	env_declare_put_var.c param_expansion.c param_expansion_utils.c signal.c prompt.c\
 	spl_cmd_hdoc.c spl_cmd_redir_parse.c spl_cmd_redir_exec.c minishell_prep.c \
 	$(BUILT_DIR)ft_echo.c $(BUILT_DIR)ft_cd.c $(BUILT_DIR)ft_pwd.c $(BUILT_DIR)ft_export.c \
-	$(BUILT_DIR)ft_unset.c $(BUILT_DIR)ft_env.c $(BUILT_DIR)env_utils.c $(BUILT_DIR)ft_exit.c \
-	$(UTILS_DIR)ft_ll_atoi.c $(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_free_cmd_line.c $(UTILS_DIR)ft_malloc.c $(UTILS_DIR)mini_error.c $(BUILT_DIR)ft_cd_utils.c
+	$(BUILT_DIR)ft_unset.c $(BUILT_DIR)ft_env.c $(BUILT_DIR)env_utils.c \
+	$(BUILT_DIR)ft_cd_utils.c $(BUILT_DIR)ft_exit.c \
+	$(UTILS_DIR)ft_ll_atoi.c $(UTILS_DIR)ft_free.c $(UTILS_DIR)ft_free_cmd_line.c \
+	$(UTILS_DIR)ft_malloc.c $(UTILS_DIR)mini_error.c $(UTILS_DIR)waitpid_collect_status.c
 DEPS_LIST = mini_fun.h mini_struct.h
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_LIST))

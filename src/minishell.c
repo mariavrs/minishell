@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 23:45:09 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/12 00:41:14 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ static void	exec_pipeline(t_msh *msh)
 	int	pid;
 
 	if (!msh->cmd_list->pipeline->next)
-		return (run_cmd_exec(msh, msh->cmd_list->pipeline));
+	{
+		run_cmd_exec(msh, msh->cmd_list->pipeline);
+		if (msh->cmd_list->pipeline->error_msg)
+			ft_putendl_fd(msh->cmd_list->pipeline->error_msg, 2);
+		return ;
+	}
 	pid = fork();
 	if (pid == 0)
 	{

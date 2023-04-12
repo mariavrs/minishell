@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/11 23:44:53 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/12 17:57:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void			error_unexpected_token(char *str);
 int				error_cd(t_msh *msh, char **argv, char *home);
 void			error_export(char *var, int *flag);
 void			get_prompt(char **prompt, t_msh *msh);
+int				waitpid_collect_status(pid_t pid);
+char			*cmd_error_msg(char *s1, char *s2, char *err_msg, t_msh *msh);
 
 // Builtins prototypes
 int				ft_echo(t_msh *msh, char **argv);
