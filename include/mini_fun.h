@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 19:50:55 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 00:09:21 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int				env_get(char **value, char *name, t_msh *msh);
 int				env_del(t_msh *msh, char *var);
 int				env_val_start_pos(char *str);
 int				dbl_str_size(char **env);
+void			ft_exit_error(int exit_flag, char *str, t_msh *msh, int code);
 
 // cd: utils
 int				cd_fill_env(t_msh *msh, char *path);

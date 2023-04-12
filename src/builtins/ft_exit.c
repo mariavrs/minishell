@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/08 00:10:07 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 00:23:40 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,18 @@ static int	is_numeric(char *str)
 	return (0);
 }
 
-static void	exit_error(int i, char *str)
+void	ft_exit_error(int exit_flag, char *str, t_msh *msh, int code)
 {
-	ft_putendl_fd("exit", 1);
-	if (i == 0)
+	if (!msh->pipe_flag)
+		ft_putendl_fd("exit", 1);
+	if (exit_flag == 1)
 		ft_mini_perror("exit", NULL, "too many arguments", 1);
-	if (i == 1)
+	if (exit_flag == 2)
 		ft_mini_perror("exit", str, "numeric argument required", 1);
+	if (!msh->pipe_flag)
+		exit(code);
+	else
+		g_exit_status = code;
 }
 
 static int	border_llong_check(char *str)
@@ -57,20 +62,20 @@ int	ft_exit(t_msh *msh, char **argv)
 	if (!argv)
 		return (1);
 	if (!argv[1])
-		return (exit_error(-1, NULL), ft_free_exit(msh)
-			, exit(g_exit_status), g_exit_status);
+		return (ft_free_exit(msh), ft_exit_error(0, NULL, msh, g_exit_status),
+			g_exit_status);
 	i = ft_ll_atoi(argv[1]);
 	mod = i % 256;
 	if (!is_numeric(argv[1]) && argv[2])
-		return (exit_error(0, NULL), 1);
+		return (ft_exit_error(1, NULL, msh, 1), 1);
 	else if (border_llong_check(argv[1]) || is_numeric(argv[1]))
-		return (exit_error(1, argv[1]), ft_free_exit(msh), exit(2), 2);
+		return (ft_free_exit(msh), ft_exit_error(2, argv[1], msh, 2), 2);
 	else if (i < 0)
-		return (exit_error(-1, NULL),
-			ft_free_exit(msh), exit(256 + mod), 256 + mod);
+		return (ft_free_exit(msh),
+			ft_exit_error(0, NULL, msh, 256 + mod), 256 + mod);
 	else if (i > 255)
-		return (exit_error(-1, NULL), ft_free_exit(msh), exit(mod), mod);
+		return (ft_free_exit(msh), ft_exit_error(0, NULL, msh, mod), mod);
 	else
-		return (exit_error(-1, NULL), ft_free_exit(msh), exit((int)i), (int)i);
+		return (ft_free_exit(msh), ft_exit_error(0, NULL, msh, (int)i), (int)i);
 	return (0);
 }
