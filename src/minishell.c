@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 19:34:11 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/12 22:25:19 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	if (msh_prep(&msh, envp))
-		return (1);
+		return (ft_putendl_fd("exit", 1), 1);
 	while (1)
 	{
 		signal_manager(MODE_INTR_CMD);
