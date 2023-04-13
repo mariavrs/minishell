@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 00:09:58 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:22:46 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*cd_get_value(t_msh *msh, char *var)
 		return (NULL);
 	if (!value)
 	{
-		value = ft_strdup("\0");
+		value = ft_strdup("\0"); // OK
 		if (!value)
 			return (malloc_error(), NULL);
 	}
@@ -61,6 +61,8 @@ int	ft_cd(t_msh *msh, char **argv)
 	char	*error;
 
 	home = cd_get_value(msh, "HOME");
+	if (!home)
+		return (ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
 	if (error_cd(msh, argv, home))
 		return (ft_free_str(&home), 1);
 	if (home[0] == '\0' && !argv[1])
@@ -72,11 +74,13 @@ int	ft_cd(t_msh *msh, char **argv)
 		if (!getcwd(current_dir, PATH_MAX))
 			return (perror("minishell: cd"), ft_free_str(&home), 1);
 		if (cd_fill_env(msh, current_dir))
-			return (malloc_error(), ft_free_str(&home), 1);
+			return (ft_free_str(&home),
+				ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
 		return (ft_free_str(&home), 0);
 	}
-	error = ft_strjoin("minishell: cd: ", dir);
+	error = NULL;
 	if (!error)
-		return (malloc_error(), ft_free_str(&home), 1);
+		return (malloc_error(), ft_free_str(&home), ft_exit_error(0, NULL,
+				msh, ERR_MALLOC), ERR_MALLOC);
 	return (perror(error), ft_free_str(&error), ft_free_str(&home), 1);
 }
