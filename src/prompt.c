@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:16:41 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 00:40:19 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:34:38 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,9 @@ static void	get_current_folder(char **folder, t_msh *msh)
 
 	*folder = NULL;
 	if (!getcwd(current_path, PATH_MAX))
-	{
-		perror("getcwd: ");
-		ft_free_exit(msh);
-		ft_exit_error(0, NULL, msh, ERR_MALLOC);
-	}
+		ft_strlcpy(current_path, "/.", 3);
 	slash_pos = get_last_pos_slash(current_path);
-	if (slash_pos == 0)
+	if (slash_pos == 0 && ft_strncmp(current_path, "/.", 3))
 		*folder = ft_strjoin("/", current_path + slash_pos + 1);
 	else
 		*folder = ft_strjoin("../", current_path + slash_pos + 1);
