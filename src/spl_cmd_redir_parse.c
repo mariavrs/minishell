@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:00:07 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 03:14:24 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:15:15 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,15 @@ static char	*get_redir_filename(t_msh *msh, t_cmd *cmd, int *i)
 	*i += get_len_in_cmd(&cmd->spl_cmd[*i]);
 	filename_raw = get_filename_raw(msh, cmd, i, cursor);
 	if (!filename_raw)
-		return (cmd->parse_status = 1, NULL);
+		return (cmd->parse_status = ERR_MALLOC, NULL);
 	while (cursor < *i)
 		cmd->spl_cmd[cursor++] = ' ';
 	cursor = 0;
 	filename = get_next_word(filename_raw, &cursor, 0,
 			quo_check(*filename_raw, 0));
 	if (!filename)
-		return (cmd->parse_status = 1, NULL);
+		return (cmd->parse_status = ERR_MALLOC,
+			ft_free_str(&filename_raw), NULL);
 	if ((size_t)cursor < ft_strlen(filename_raw))
 	{
 		ft_mini_perror(filename_raw, NULL, "ambigous redirect", 1);
@@ -97,7 +98,7 @@ t_redir	*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag)
 	rdr = NULL;
 	rdr = malloc(sizeof(t_redir));
 	if (!rdr)
-		return (malloc_error(), cmd->parse_status = 1, NULL);
+		return (malloc_error(), cmd->parse_status = ERR_MALLOC, NULL);
 	rdr->mode = get_redir_mode(cmd, i);
 	while (cmd->spl_cmd[i] == '<' || cmd->spl_cmd[i] == '>')
 		cmd->spl_cmd[i++] = ' ';

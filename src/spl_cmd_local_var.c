@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 17:02:59 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:36:29 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ static int	env_var_declaration(t_msh *msh, t_env *env, char *line)
 	env->value = param_expansion(&line[env->name_ln + env->mod + 1],
 			msh, quo_check(line[env->name_ln + env->mod + 1], 0), 1);
 	if (!env->value)
-		return (1);
+		return (ERR_MALLOC);
 	if (get_full_var_str(line, env, msh))
-		return (1);
+		return (ERR_MALLOC);
 	ft_free_str(&env->value);
 	get_env_dest(env);
 	if (put_env_var(env, msh))
@@ -71,7 +71,7 @@ int	lcl_var_declaration(t_msh *msh, char *line)
 		tmp = line[end];
 		line[end] = '\0';
 		if (parse_var(msh, &line[start]))
-			return (1);
+			return (ERR_MALLOC);
 		line[end] = tmp;
 		start = end;
 		while (is_in_str(line[start], STR_WHSPACE))

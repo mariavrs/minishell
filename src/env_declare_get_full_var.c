@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_declare_get_full_var.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 17:17:30 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/02 18:28:24 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:35:42 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	get_full_var_str(char *line, t_env *env, t_msh *msh)
 		return (full_var_if_expand(env, msh));
 	env->full_var = ft_malloc_str(env->full_var_ln + 1);
 	if (!env->full_var)
-		return (1);
+		return (ERR_MALLOC);
 	full_var_join(env, msh);
 	return (0);
 }

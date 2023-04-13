@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 20:04:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:43:12 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,17 @@ static int	get_next_arg(t_cmd *cmd, char *line, int argc)
 	{
 		while (cmd->argv[argc])
 			ft_free_str(&cmd->argv[argc++]);
-		return (1);
+		return (ERR_MALLOC);
 	}
 	if (!ft_strlen(arg) && !is_in_str(*line, STR_QUOTE))
 	{
 		if (parse_cmd_argv(cmd, line + eword, argc))
-			return (1);
+			return (ERR_MALLOC);
 	}
 	else
 	{
 		if (parse_cmd_argv(cmd, line + eword, ++argc))
-			return (1);
+			return (ERR_MALLOC);
 		cmd->argv[argc - 1] = arg;
 	}
 	return (0);
@@ -51,7 +51,7 @@ int	parse_cmd_argv(t_cmd *cmd, char *line, int argc)
 			return (0);
 		cmd->argv = ft_malloc_dbl_str(argc + 1);
 		if (!cmd->argv)
-			return (1);
+			return (ERR_MALLOC);
 	}
 	else
 		return (get_next_arg(cmd, line, argc));
@@ -105,9 +105,9 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 				quo_check(cmd->spl_cmd[skip], 0), 0);
 	if (!cmd->parse_status && cmd->argv_line)
 		cmd->parse_status = parse_cmd_argv(cmd, cmd->argv_line, 0);
-	if (cmd->parse_status && g_exit_status != ERR_MALLOC)
-		g_exit_status = cmd->parse_status;
-	if (cmd->parse_status > 128 || g_exit_status == ERR_MALLOC)
-		return (ft_free_cmd(&cmd), NULL);
+	else if (!cmd->parse_status && !cmd->argv_line)
+		cmd->parse_status = ERR_MALLOC;
+	if (cmd->parse_status)
+		return (g_exit_status = cmd->parse_status, ft_free_cmd(&cmd), NULL);
 	return (ft_free_str(&cmd->spl_cmd), ft_free_str(&cmd->argv_line), cmd);
 }
