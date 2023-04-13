@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:12 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 19:56:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 23:59:32 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ char	*get_next_word(char *src, int *src_i, int dest_i, int quo_flag)
 	if (src[*src_i] && (!is_in_str(src[*src_i], STR_WHSPACE) || quo_flag))
 	{
 		c = src[(*src_i)++];
-		dest = get_next_word(src, src_i, dest_i + 1, quo_flag);
+		dest = get_next_word(src, src_i, dest_i + 1,
+				quo_check(src[*src_i], quo_flag));
 		if (!dest)
 			return (NULL);
 		dest[dest_i] = c;
