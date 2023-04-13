@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 02:12:12 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:21:10 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	env_edit(t_msh *msh, char *var, char *value, int flag)
 		return (1);
 	env.name = ft_strdup(var);
 	if (!env.name)
-		return (ft_free_str(&env.full_var), 1);
+		return (ft_free_str(&env.full_var), malloc_error(), 1);
 	env.name_ln = ft_strlen(env.name);
 	env.i = find_in_envp(&env, msh);
 	if (flag == ENV_EXP)

@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/07 16:53:11 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:17:50 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	get_and_put_var(t_env *env, t_msh *msh, char *name)
 	return (0);
 }
 
-static void	export_env_print(t_msh *msh)
+static int	export_env_print(t_msh *msh)
 {
 	int		i;
 	char	*var;
@@ -57,7 +57,7 @@ static void	export_env_print(t_msh *msh)
 	{
 		var = ft_substr(msh->envp[i], 0, env_val_start_pos(msh->envp[i]) - 1);
 		if (!var)
-			return (malloc_error());
+			return (malloc_error(), 1);
 		write(1, "declare -x ", 11);
 		if (env_val_start_pos(msh->envp[i]) <= (int)ft_strlen(msh->envp[i]))
 			value = msh->envp[i] + env_val_start_pos(msh->envp[i]);
@@ -72,6 +72,7 @@ static void	export_env_print(t_msh *msh)
 			write(1, "\n", 1);
 		ft_free_str(&var);
 	}
+	return (0);
 }
 
 int	ft_export(t_msh *msh, char **argv)
@@ -85,7 +86,11 @@ int	ft_export(t_msh *msh, char **argv)
 	err_flag = 0;
 	i = 0;
 	if (!argv[1])
-		return (export_env_print(msh), 0);
+	{
+		if (export_env_print(msh))
+			return (ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
+		return (0);
+	}
 	while (argv[++i])
 	{
 		if (argv[i][0] == '=' || argv[i][0] == '\0')
@@ -96,7 +101,7 @@ int	ft_export(t_msh *msh, char **argv)
 			if (status == -1)
 				error_export(argv[i], &err_flag);
 			else if (status == 1)
-				return (1);
+				return (ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
 		}
 	}
 	return (err_flag);
