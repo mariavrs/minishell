@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:49:24 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 19:27:00 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:59:18 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ t_cmd	*parse_simple_cmd(char *line, char *eline, t_msh *msh)
 				quo_check(cmd->spl_cmd[skip], 0), 0);
 	if (!cmd->parse_status && cmd->argv_line)
 		cmd->parse_status = parse_cmd_argv(cmd, cmd->argv_line, 0);
-	else if (!cmd->parse_status && !cmd->argv_line)
+	else if (!cmd->parse_status && cmd->spl_cmd[skip] && !cmd->argv_line)
 		cmd->parse_status = ERR_MALLOC;
 	if (cmd->parse_status)
 		return (g_exit_status = cmd->parse_status, ft_free_cmd(&cmd), NULL);
