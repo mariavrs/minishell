@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 19:24:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 02:46:11 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 22:43:12 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,13 @@ void	run_pipe(t_msh *msh, t_cmd *cmd)
 	{
 		perror("minishell: pipe");
 		g_exit_status = ERR_PIPE;
+		close_pipe_fd(fd[0], fd[1]);
 	}
-	close_pipe_fd(fd[0], fd[1]);
-	if (g_exit_status != ERR_PIPE)
+	else
+	{
+		close_pipe_fd(fd[0], fd[1]);
 		run_cmd_exec(msh, cmd);
+	}
 	pipe_finish(msh, cmd, pid);
 	exit(g_exit_status);
 }
