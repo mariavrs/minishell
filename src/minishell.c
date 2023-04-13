@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 23:25:13 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 02:37:45 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	exec_pipeline(t_msh *msh)
 		exit(g_exit_status);
 	}
 	if (pid == -1)
-		return (g_exit_status = ERR_FORK, perror("minishell"));
+		return (g_exit_status = ERR_PIPE, perror("minishell: fork pipe"));
 	waitpid(pid, &g_exit_status, 0);
 	g_exit_status = WEXITSTATUS(g_exit_status);
 }

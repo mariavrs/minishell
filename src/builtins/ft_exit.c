@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 00:57:55 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 01:15:45 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ void	ft_exit_error(int exit_flag, char *str, t_msh *msh, int code)
 		ft_mini_perror("exit", NULL, "too many arguments", 1);
 	if (exit_flag == 2)
 		ft_mini_perror("exit", str, "numeric argument required", 1);
-	if (exit_flag != 1)
-		ft_free_exit(msh);
 	if (!msh->pipe_flag && exit_flag != 1)
+	{
+		ft_free_exit(msh);
 		exit(code);
+	}
 	else
 		g_exit_status = code;
 }

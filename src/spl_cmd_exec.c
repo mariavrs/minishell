@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 19:37:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 02:33:14 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 	if (pid == -1)
 	{
 		g_exit_status = ERR_FORK;
-		perror("minishell");
+		perror("minishell: fork exec");
 	}
 	else if (pid == 0)
 	{
@@ -44,28 +44,27 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 		g_exit_status = waitpid_collect_status(pid);
 }
 
-static char	*bin_get_full_name(t_msh *msh, char *path, char *argv, int name_len)
+static char	*bin_get_full_name(t_msh *msh, t_path *pb, char *path, char *argv)
 {
 	int			path_len;
 	char		*full_name;
 	struct stat	statbuf;
 
 	path_len = ft_strlen(path);
-	full_name = ft_malloc_str(path_len + name_len + 2);
+	full_name = ft_malloc_str(path_len + pb->name_len + 2);
 	if (full_name)
 	{
 		ft_strlcpy(full_name, path, path_len + 1);
 		full_name[path_len] = '/';
-		ft_strlcpy(&full_name[path_len + 1], argv, name_len + 1);
+		ft_strlcpy(&full_name[path_len + 1], argv, pb->name_len + 1);
 		if (stat(full_name, &statbuf))
 			ft_free_str(&full_name);
 	}
 	else
 	{
 		if (!msh->pipe_flag)
-			ft_putendl_fd("exit", 1);
-		ft_free_exit(msh);
-		exit(ERR_MALLOC);
+			ft_free_dbl_str(&pb->path_split);
+		ft_exit_error(0, NULL, msh, ERR_MALLOC);
 	}
 	return (full_name);
 }
@@ -77,19 +76,19 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 
 	i = -1;
 	if (env_get(&pb.path_val, "PATH", msh))
-		return (malloc_error(), 1);
+		return (ft_exit_error(0, NULL, msh, ERR_MALLOC), 1);
 	if (!pb.path_val)
 		return (cmd->error_msg = cmd_error_msg("minishell", *cmd->argv,
 				"No such file or directory", msh), g_exit_status = 127);
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
 	if (!pb.path_split)
-		return (malloc_error(), 1);
+		return (malloc_error(), ft_exit_error(0, NULL, msh, ERR_MALLOC), 1);
 	pb.full_name = NULL;
 	pb.name_len = ft_strlen(*cmd->argv);
-	while (pb.path_split[++i] && !pb.full_name)
-		pb.full_name = bin_get_full_name(msh, pb.path_split[i], *cmd->argv,
-				pb.name_len);
+	while (pb.path_split && pb.path_split[++i] && !pb.full_name)
+		pb.full_name = bin_get_full_name(msh, &pb,
+				pb.path_split[i], *cmd->argv);
 	ft_free_dbl_str(&pb.path_split);
 	if (pb.full_name)
 		return (run_bin(pb.full_name, msh, cmd),
@@ -125,8 +124,7 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 {
-	if (get_backup_stdio(msh, cmd))
-		return (ft_free_exit(msh), exit(ERR_IO));
+	get_backup_stdio(msh, cmd);
 	if (run_redir(msh, cmd))
 		return ;
 	if (!cmd->argv)
