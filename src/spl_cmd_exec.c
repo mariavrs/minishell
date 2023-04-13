@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 19:37:45 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 02:09:21 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,7 @@ static void	search_bin(t_msh *msh, t_cmd *cmd)
 
 void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 {
-	if (get_backup_stdio(msh, cmd))
-		return (ft_free_exit(msh), exit(ERR_IO));
+	get_backup_stdio(msh, cmd);
 	if (run_redir(msh, cmd))
 		return ;
 	if (!cmd->argv)

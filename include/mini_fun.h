@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 00:09:21 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 02:09:08 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,32 @@
 # include "../lib/libft/libft.h"
 # include "mini_struct.h"
 
+// Main
+int				msh_prep(t_msh *msh, char **envp);
+int				syntax_check(char *line, char *eline);
+
 // Signals
 void			signal_manager(int mode);
 void			ctrl_c_heredoc_handler(int sig);
 
-// Parse & Execute
-int				msh_prep(t_msh *msh, char **envp);
-int				syntax_check(char *line, char *eline);
+// Parsing
 t_block			*parse_list(char *line, char *eline, t_msh *msh, char mode);
 t_cmd			*parse_pipe(char *line, char *eline, t_msh *msh);
-void			run_pipe(t_msh *msh, t_cmd *cmd);
-
 t_cmd			*parse_simple_cmd(char *line, char *eline, t_msh *msh);
+t_redir			*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag);
+int				redir_heredoc(t_msh *msh, t_redir *rdr);
 int				var_declar_fraction_ln(char *line);
 int				lcl_var_declaration(t_msh *msh, char *line);
-
-t_redir			*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag);
-int				run_redir(t_msh *msh, t_cmd *cmd);
-int				redir_heredoc(t_msh *msh, t_redir *rdr);
-int				get_backup_stdio(t_msh *msh, t_cmd *cmd);
-void			put_backup_stdio(t_msh *msh, t_cmd *cmd);
 int				parse_cmd_argv(t_cmd *cmd, char *line, int argc);
-void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
 
-// Parse & Execute Utils
+// Execution
+void			run_pipe(t_msh *msh, t_cmd *cmd);
+int				run_redir(t_msh *msh, t_cmd *cmd);
+void				get_backup_stdio(t_msh *msh, t_cmd *cmd);
+void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
+void			put_backup_stdio(t_msh *msh, t_cmd *cmd);
+
+// Parsing & Execution Utils
 char			*get_next_word(char *src, int *src_i, int dest_i, int quo_flag);
 int				is_in_str(char c, char *str);
 int				brackets_check(char *line, char *eline);
