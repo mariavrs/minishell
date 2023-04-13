@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 15:22:46 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:40:26 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*cd_get_value(t_msh *msh, char *var)
 		return (NULL);
 	if (!value)
 	{
-		value = ft_strdup("\0"); // OK
+		value = ft_strdup("\0");
 		if (!value)
 			return (malloc_error(), NULL);
 	}
