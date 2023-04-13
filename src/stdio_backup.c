@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 01:53:16 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 02:05:57 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 23:20:09 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void	put_backup_stdio(t_msh *msh, t_cmd *cmd)
 	status = 0;
 	if (msh->pipe_flag)
 		return ;
-	if (cmd->rdr_in_flag)
+	if (cmd->rdr_in_flag && !isatty(STDIN_FILENO))
 		status += backup_dup_back(cmd->stdin_backup, STDIN_FILENO, 0);
-	if (cmd->rdr_out_flag)
+	if (cmd->rdr_out_flag && !isatty(STDOUT_FILENO))
 		status += backup_dup_back(cmd->stdout_backup, STDOUT_FILENO, 1);
 	if (status > 0)
 	{
