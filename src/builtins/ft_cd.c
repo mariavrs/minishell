@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 15:40:26 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 18:24:47 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,34 +53,39 @@ static int	fill_dir(char **argv, char **dir, char **home)
 	return (0);
 }
 
-int	ft_cd(t_msh *msh, char **argv)
+typedef struct s_ft_cd
 {
 	char	current_dir[PATH_MAX];
 	char	*dir;
 	char	*home;
 	char	*error;
+}	t_ft_cd;
 
-	home = cd_get_value(msh, "HOME");
-	if (!home)
+int	ft_cd(t_msh *msh, char **argv)
+{
+	t_ft_cd	cd;
+
+	cd.home = cd_get_value(msh, "HOME");
+	if (!cd.home)
 		return (ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
-	if (error_cd(msh, argv, home))
-		return (ft_free_str(&home), 1);
-	if (home[0] == '\0' && !argv[1])
-		return (ft_free_str(&home), 0);
-	if (fill_dir(argv, &dir, &home))
+	if (error_cd(msh, argv, cd.home))
+		return (ft_free_str(&cd.home), 1);
+	if (cd.home[0] == '\0' && !argv[1])
+		return (ft_free_str(&cd.home), 0);
+	if (fill_dir(argv, &cd.dir, &cd.home))
 		return (1);
-	if (chdir(dir) == 0)
+	if (chdir(cd.dir) == 0)
 	{
-		if (!getcwd(current_dir, PATH_MAX))
-			return (perror("minishell: cd"), ft_free_str(&home), 1);
-		if (cd_fill_env(msh, current_dir))
-			return (ft_free_str(&home),
+		if (!getcwd(cd.current_dir, PATH_MAX))
+			return (perror("minishell: cd"), ft_free_str(&cd.home), 1);
+		if (cd_fill_env(msh, cd.current_dir))
+			return (ft_free_str(&cd.home),
 				ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
-		return (ft_free_str(&home), 0);
+		return (ft_free_str(&cd.home), 0);
 	}
-	error = NULL;
-	if (!error)
-		return (malloc_error(), ft_free_str(&home), ft_exit_error(0, NULL,
+	cd.error = ft_strjoin("minishell: cd: ", cd.dir);
+	if (!cd.error)
+		return (malloc_error(), ft_free_str(&cd.home), ft_exit_error(0, NULL,
 				msh, ERR_MALLOC), ERR_MALLOC);
-	return (perror(error), ft_free_str(&error), ft_free_str(&home), 1);
+	return (perror(cd.error), ft_free_str(&cd.error), ft_free_str(&cd.home), 1);
 }
