@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 20:09:29 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 19:58:31 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:56:49 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	env_add(t_env env, t_msh *msh, char **envp, int env_flag)
 		env.i++;
 	envp_tmp = ft_malloc_dbl_str(env.i + 2);
 	if (!envp_tmp)
-		return (1);
+		return (ERR_MALLOC);
 	env.i = -1;
 	while (envp[++env.i])
 		envp_tmp[env.i] = envp[env.i];

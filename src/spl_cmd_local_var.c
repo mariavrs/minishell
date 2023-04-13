@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 15:36:29 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:57:27 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	env_var_declaration(t_msh *msh, t_env *env, char *line)
 	ft_free_str(&env->value);
 	get_env_dest(env);
 	if (put_env_var(env, msh))
-		return (ft_free_str(&env->full_var), 1);
+		return (ft_free_str(&env->full_var), ERR_MALLOC);
 	return (0);
 }
 
