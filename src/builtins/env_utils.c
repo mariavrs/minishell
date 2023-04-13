@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:23:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 20:08:37 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 02:12:12 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	env_get(char **value, char *name, t_msh *msh)
 		env.value++;
 	*value = ft_strdup(env.value);
 	if (!(*value))
-		return (1);
+		return (malloc_error(), 1);
 	return (0);
 }
 

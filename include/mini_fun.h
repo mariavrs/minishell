@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 02:09:08 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 02:29:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int				parse_cmd_argv(t_cmd *cmd, char *line, int argc);
 // Execution
 void			run_pipe(t_msh *msh, t_cmd *cmd);
 int				run_redir(t_msh *msh, t_cmd *cmd);
-void				get_backup_stdio(t_msh *msh, t_cmd *cmd);
+void			get_backup_stdio(t_msh *msh, t_cmd *cmd);
 void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
 void			put_backup_stdio(t_msh *msh, t_cmd *cmd);
 
