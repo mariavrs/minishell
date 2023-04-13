@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/11 21:06:19 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/13 19:26:36 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,20 @@ static int	final_line_len(char *line, t_msh *msh, int quo_flag)
 	return (len);
 }
 
-static int	put_exit_status(char *str, char **line)
+static int	put_exit_status(char *str, int *i, char **line)
 {
 	char	*num;
 	int		ln;
 
 	num = ft_itoa(g_exit_status);
 	if (!num)
-		return (malloc_error(), 0);
+		return (malloc_error(), ERR_MALLOC);
 	ln = ft_strlen(num);
 	ft_strlcpy(str, num, ln + 1);
 	ft_free_str(&num);
 	*line += 2;
-	return (ln);
+	*i += ln;
+	return (0);
 }
 
 char	*param_expansion(char *line, t_msh *msh, int quo_flag, int unquote)
@@ -122,11 +123,12 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag, int unquote)
 			quo_flag = quo_check(*(++line), quo_flag);
 		}
 		if (*line && *(line + 1) == '?')
-			i += put_exit_status(&str[i], &line);
+		{
+			if (put_exit_status(&str[i], &i, &line))
+				return (ft_free_str(&str), NULL);
+		}
 		else if (*line)
 			line += var_value(line + 1, str, &i, msh) + 1;
-		if (g_exit_status == ERR_MALLOC)
-			return (ft_free_str(&str), NULL);
 	}
 	return (str);
 }
