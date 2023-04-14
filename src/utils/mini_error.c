@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/14 00:41:15 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:32:51 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ int	error_cd(t_msh *msh, char **argv, char *home)
 	if (!argv)
 		return (1);
 	if (dbl_str_size(argv) > 2)
-		return (ft_mini_perror("cd", NULL, "too many arguments", 1), 1);
+		return (ft_mini_perror("cd", NULL, "too many arguments", 2), 1);
 	if (if_not_exist(msh, "HOME", ENV_EXP)
 		&&if_not_exist(msh, "HOME", ENV_LCL) && !argv[1])
-		return (ft_mini_perror("cd", NULL, "HOME not set", 1), 1);
+		return (ft_mini_perror("cd", NULL, "HOME not set", 2), 1);
 	return (0);
 }
 
