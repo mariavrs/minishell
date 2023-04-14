@@ -6,11 +6,20 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 18:24:47 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:23:55 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/mini_fun.h"
+
+typedef struct s_ft_cd
+{
+	char	current_dir[PATH_MAX];
+	char	*dir;
+	char	*home;
+	char	*error;
+	int		return_err;
+}	t_ft_cd;
 
 char	*cd_get_value(t_msh *msh, char *var)
 {
@@ -53,13 +62,23 @@ static int	fill_dir(char **argv, char **dir, char **home)
 	return (0);
 }
 
-typedef struct s_ft_cd
+static int	get_current_pwd(t_ft_cd *cd, t_msh *msh, char *argv)
 {
-	char	current_dir[PATH_MAX];
-	char	*dir;
-	char	*home;
-	char	*error;
-}	t_ft_cd;
+	if (!getcwd(cd->current_dir, PATH_MAX))
+	{
+		perror("minishell: cd");
+		if (!ft_strncmp(argv, "..", 3) || !ft_strncmp(argv, "../", 4))
+		{
+			if (build_pwd(cd->current_dir, msh, argv))
+				return (ft_free_str(&cd->home),
+					ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
+			return (0);
+		}
+		else
+			return (1);
+	}
+	return (0);
+}
 
 int	ft_cd(t_msh *msh, char **argv)
 {
@@ -76,12 +95,12 @@ int	ft_cd(t_msh *msh, char **argv)
 		return (1);
 	if (chdir(cd.dir) == 0)
 	{
-		if (!getcwd(cd.current_dir, PATH_MAX))
-			return (perror("minishell: cd"), ft_free_str(&cd.home), 1);
-		if (cd_fill_env(msh, cd.current_dir))
-			return (ft_free_str(&cd.home),
-				ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
-		return (ft_free_str(&cd.home), 0);
+		cd.return_err = get_current_pwd(&cd, msh, argv[1]);
+		if (cd.return_err)
+			return (cd.return_err);
+		if (cd_fill_env(msh, cd.current_dir, &cd.home))
+			return (ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
+		return (0);
 	}
 	cd.error = ft_strjoin("minishell: cd: ", cd.dir);
 	if (!cd.error)
