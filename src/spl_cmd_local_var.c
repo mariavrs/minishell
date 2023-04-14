@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:02:11 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 21:57:27 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/14 00:48:31 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ static int	parse_var(t_msh *msh, char *line)
 	while (line[++env.name_ln] && line[env.name_ln] != '+'
 		&& line[env.name_ln] != '=')
 	{
-		if (is_in_str(line[++env.name_ln], "+="))
-			return (env_var_declaration(msh, &env, line));
+		if (is_in_str(line[env.name_ln + 1], "+="))
+			return (++env.name_ln, env_var_declaration(msh, &env, line));
 	}
 	return (0);
 }

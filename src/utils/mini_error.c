@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 23:45:04 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/12 19:32:23 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/14 00:41:15 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*cmd_error_msg(char *s1, char *s2, char *err_msg, t_msh *msh)
 	if (s2)
 	{
 		ft_strlcpy(&msg[len], s2, ft_strlen(s2) + 1);
-		len += ft_strlen(s1) + 2;
+		len += ft_strlen(s2) + 2;
 		ft_strlcpy(&msg[len - 2], ": ", 3);
 	}
 	ft_strlcpy(&msg[len], err_msg, ft_strlen(err_msg) + 1);
