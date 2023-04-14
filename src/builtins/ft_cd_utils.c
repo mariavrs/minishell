@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 13:46:17 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 15:10:58 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:19:50 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	set_env(t_msh *msh, t_env *env, char *name, char *full_var_str)
 	return (0);
 }
 
-int	cd_fill_env(t_msh *msh, char *path)
+int	cd_fill_env(t_msh *msh, char *path, char **home)
 {
 	t_env	env;
 
@@ -93,20 +93,20 @@ int	cd_fill_env(t_msh *msh, char *path)
 		return (1);
 	env.value = cd_get_value(msh, "PWD");
 	if (!env.value)
-		return (1);
+		return (ft_free_str(home), 1);
 	if (!ft_strlen(env.value) && !check_if_pwd_equal_envp(msh, "PWD"))
 	{
 		if (if_pwd_is_empty_case(msh))
-			return (ft_free_str(&env.value), 1);
+			return (ft_free_str(&env.value), ft_free_str(home), 1);
 		if (fill_env_pwd(msh, path))
-			return (ft_free_str(&env.value), 1);
+			return (ft_free_str(&env.value), ft_free_str(home), 1);
 	}
 	else
 	{
 		if (set_env(msh, &env, "OLDPWD", ft_strjoin("OLDPWD=", env.value)))
-			return (ft_free_str(&env.value), 1);
+			return (ft_free_str(&env.value), ft_free_str(home), 1);
 		if (set_env(msh, &env, "PWD", ft_strjoin("PWD=", path)))
-			return (ft_free_str(&env.value), 1);
+			return (ft_free_str(&env.value), ft_free_str(home), 1);
 	}
-	return (ft_free_str(&env.value), 0);
+	return (ft_free_str(&env.value), ft_free_str(home), 0);
 }
