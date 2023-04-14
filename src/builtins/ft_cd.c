@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/14 14:23:55 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:40:49 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	get_current_pwd(t_ft_cd *cd, t_msh *msh, char *argv)
 {
 	if (!getcwd(cd->current_dir, PATH_MAX))
 	{
-		perror("minishell: cd");
+		perror("cd: error retrieving current directory");
 		if (!ft_strncmp(argv, "..", 3) || !ft_strncmp(argv, "../", 4))
 		{
 			if (build_pwd(cd->current_dir, msh, argv))
