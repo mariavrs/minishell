@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/14 14:30:40 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/16 19:43:51 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_pwd(t_msh *msh)
 	{
 		env_get(&pwd, "PWD", msh);
 		if (!pwd)
-			return (ft_putendl_fd("minishell: getcwd error and PWD is unset",
+			return (ft_putendl_fd("pwd: cannot access current directory",
 					2), 1);
 		else
 		{
