@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 23:19:07 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/14 11:39:09 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	run_cmd_exec(t_msh *msh, t_cmd *cmd)
 	else if (!ft_strncmp(*cmd->argv, "export", 7))
 		g_exit_status = ft_export(msh, cmd->argv);
 	else if (!ft_strncmp(*cmd->argv, "pwd", 4))
-		g_exit_status = ft_pwd();
+		g_exit_status = ft_pwd(msh);
 	else if (!ft_strncmp(*cmd->argv, "unset", 6))
 		g_exit_status = ft_unset(msh, cmd->argv);
 	else

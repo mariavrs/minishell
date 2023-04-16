@@ -6,7 +6,7 @@
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 15:17:50 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/13 18:28:59 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,34 +75,39 @@ static int	export_env_print(t_msh *msh)
 	return (0);
 }
 
-int	ft_export(t_msh *msh, char **argv)
+typedef struct s_ft_export
 {
 	t_env	env;
 	int		err_flag;
 	int		i;
 	int		status;
+}	t_ft_export;
 
-	env.name_ln = -1;
-	err_flag = 0;
-	i = 0;
+int	ft_export(t_msh *msh, char **argv)
+{
+	t_ft_export	exp;
+
+	exp.env.name_ln = -1;
+	exp.err_flag = 0;
+	exp.i = 0;
 	if (!argv[1])
 	{
 		if (export_env_print(msh))
 			return (ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
 		return (0);
 	}
-	while (argv[++i])
+	while (argv[++exp.i])
 	{
-		if (argv[i][0] == '=' || argv[i][0] == '\0')
-			error_export(argv[i], &err_flag);
+		if (argv[exp.i][0] == '=' || argv[exp.i][0] == '\0')
+			error_export(argv[exp.i], &exp.err_flag);
 		else
 		{
-			status = get_and_put_var(&env, msh, argv[i]);
-			if (status == -1)
-				error_export(argv[i], &err_flag);
-			else if (status == 1)
+			exp.status = get_and_put_var(&exp.env, msh, argv[exp.i]);
+			if (exp.status == -1)
+				error_export(argv[exp.i], &exp.err_flag);
+			else if (exp.status == 1)
 				return (ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
 		}
 	}
-	return (err_flag);
+	return (exp.err_flag);
 }
