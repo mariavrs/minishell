@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 19:02:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/17 17:53:15 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ typedef struct s_msh
 typedef struct s_heredoc
 {
 	int			fd;
+	int			expand_flag;
 	char		*eof;
 	char		*line_in;
 	char		*line_out;
-	char		*hdoc;
 	char		*hdoc_id;
 	int			status;
 	struct stat	statbuf;

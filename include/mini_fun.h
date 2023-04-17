@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fun.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/14 14:23:50 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/17 17:55:36 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_block			*parse_list(char *line, char *eline, t_msh *msh, char mode);
 t_cmd			*parse_pipe(char *line, char *eline, t_msh *msh);
 t_cmd			*parse_simple_cmd(char *line, char *eline, t_msh *msh);
 t_redir			*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag);
-int				redir_heredoc(t_msh *msh, t_redir *rdr);
+int				redir_heredoc(t_msh *msh, t_cmd *cmd, int *i, t_redir *rdr);
 int				var_declar_fraction_ln(char *line);
 int				lcl_var_declaration(t_msh *msh, char *line);
 int				parse_cmd_argv(t_cmd *cmd, char *line, int argc);
