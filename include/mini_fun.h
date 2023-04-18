@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:40:48 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/17 17:55:36 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/18 17:05:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,12 @@ t_cmd			*parse_pipe(char *line, char *eline, t_msh *msh);
 t_cmd			*parse_simple_cmd(char *line, char *eline, t_msh *msh);
 t_redir			*parse_redir(t_msh *msh, t_cmd *cmd, int i, int quo_flag);
 int				redir_heredoc(t_msh *msh, t_cmd *cmd, int *i, t_redir *rdr);
-int				var_declar_fraction_ln(char *line);
 int				lcl_var_declaration(t_msh *msh, char *line);
 int				parse_cmd_argv(t_cmd *cmd, char *line, int argc);
 
-// Execution
-void			run_pipe(t_msh *msh, t_cmd *cmd);
-int				run_redir(t_msh *msh, t_cmd *cmd);
-void			get_backup_stdio(t_msh *msh, t_cmd *cmd);
-void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
-void			put_backup_stdio(t_msh *msh, t_cmd *cmd);
-
-// Parsing & Execution Utils
+// Parsing utils
+int				var_declar_fraction_ln(char *line);
+char			*get_redir_filename(t_msh *msh, t_cmd *cmd, int *i);
 char			*get_next_word(char *src, int *src_i, int dest_i, int quo_flag);
 int				is_in_str(char c, char *str);
 int				brackets_check(char *line, char *eline);
@@ -55,6 +49,13 @@ char			*param_expansion(char *line, t_msh *msh,
 int				get_var_name_len(char *line);
 int				is_valid_varname(char c);
 int				check_if_varname(char *line, int quo_flag);
+
+// Execution
+int				run_pipe(t_msh *msh, t_cmd *cmd);
+int				run_redir(t_msh *msh, t_cmd *cmd);
+void			get_backup_stdio(t_msh *msh, t_cmd *cmd);
+void			run_cmd_exec(t_msh *msh, t_cmd *cmd);
+void			put_backup_stdio(t_msh *msh, t_cmd *cmd);
 
 // Environment Add/Replace
 int				get_full_var_str(char *line, t_env *env, t_msh *msh);
@@ -97,7 +98,7 @@ int				ft_unset(t_msh *msh, char **argv);
 int				ft_exit(t_msh *msh, char **argv);
 int				ft_env(t_msh *msh, char **argv, int mode);
 
-// env, export, unset: extra functions
+// env, export, unset utils
 int				if_not_exist(t_msh *msh, char *var, int src);
 int				env_edit(t_msh *msh, char *var, char *value, int flag);
 int				env_remove_line(t_msh *msh, t_env env, char **envp);
@@ -107,7 +108,7 @@ int				env_val_start_pos(char *str);
 int				dbl_str_size(char **env);
 void			ft_exit_error(int exit_flag, char *str, t_msh *msh, int code);
 
-// cd: utils
+// cd utils
 int				cd_fill_env(t_msh *msh, char *path, char **home);
 char			*cd_get_value(t_msh *msh, char *var);
 int				check_if_pwd_equal_envp(t_msh *msh, char *var);

@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/13 16:50:22 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:46:03 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ static void	exec_pipeline(t_msh *msh)
 		msh->pipe_flag = 1;
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		run_pipe(msh, msh->cmd_list->pipeline);
-		exit(g_exit_status);
+		exit(run_pipe(msh, msh->cmd_list->pipeline));
 	}
 	if (pid == -1)
 		return (g_exit_status = ERR_PIPE, perror("minishell: fork pipe"));

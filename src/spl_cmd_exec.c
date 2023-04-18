@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spl_cmd_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 23:25:09 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/14 11:39:09 by ede-smet         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:33:48 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	run_bin(char *full_name, t_msh *msh, t_cmd *cmd)
 		g_exit_status = waitpid_collect_status(pid);
 }
 
-static char	*bin_get_full_name(t_msh *msh, t_path *pb, char *path, char *argv)
+static char	*get_full_name(t_msh *msh, t_path *pb, char *path, char *argv)
 {
 	int			path_len;
 	char		*full_name;
@@ -83,12 +83,12 @@ static int	search_in_path(t_msh *msh, t_cmd *cmd)
 	pb.path_split = ft_split(pb.path_val, ':');
 	ft_free_str(&pb.path_val);
 	if (!pb.path_split)
-		return (malloc_error(), ft_exit_error(0, NULL, msh, ERR_MALLOC), ERR_MALLOC);
+		return (malloc_error(), ft_exit_error(0, NULL, msh, ERR_MALLOC),
+			ERR_MALLOC);
 	pb.full_name = NULL;
 	pb.name_len = ft_strlen(*cmd->argv);
 	while (pb.path_split && pb.path_split[++i] && !pb.full_name)
-		pb.full_name = bin_get_full_name(msh, &pb,
-				pb.path_split[i], *cmd->argv);
+		pb.full_name = get_full_name(msh, &pb, pb.path_split[i], *cmd->argv);
 	if (!pb.full_name && !pb.path_split)
 		return (ERR_MALLOC);
 	ft_free_dbl_str(&pb.path_split);

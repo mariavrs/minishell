@@ -6,13 +6,25 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/17 18:23:58 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:14:07 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_fun.h"
 
 extern int	g_exit_status;
+
+typedef struct s_heredoc
+{
+	int			fd;
+	int			expand_flag;
+	char		*eof;
+	char		*line_in;
+	char		*line_out;
+	char		*hdoc_id;
+	int			status;
+	struct stat	statbuf;
+}	t_heredoc;
 
 static void	write_to_heredoc(t_msh *msh, t_heredoc *hd, char *filename)
 {
