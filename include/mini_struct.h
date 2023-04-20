@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 00:38:32 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/12 19:02:39 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:13:58 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,6 @@ typedef struct s_msh
 	int		pipe_flag;
 	t_block	*cmd_list;
 }	t_msh;
-
-typedef struct s_heredoc
-{
-	int			fd;
-	char		*eof;
-	char		*line_in;
-	char		*line_out;
-	char		*hdoc;
-	char		*hdoc_id;
-	int			status;
-	struct stat	statbuf;
-}	t_heredoc;
 
 typedef struct s_env
 {
