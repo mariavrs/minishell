@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/22 01:33:08 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/22 02:44:33 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ static int	final_line_len(char *line, t_msh *msh, int quo_flag, int unquote)
 	{
 		while (*line && !check_if_varname(line, quo_flag))
 		{
-			if (!unquote || !((*line == '\'' && quo_flag != 2)
-					|| (*line == '\"' && quo_flag != 1)))
+			if (!unquote || (!quo_flag && !is_in_str(*line, STR_QUOTE))
+				|| (quo_flag == 1 && *line != '\'')
+				|| (quo_flag == 2 && *line != '\"'))
 				len++;
 			quo_flag = quo_check(*(++line), quo_flag);
 		}
@@ -119,8 +120,9 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag, int unquote)
 	{
 		while (*line && !check_if_varname(line, quo_flag))
 		{
-			if (!unquote || !((*line == '\'' && quo_flag != 2)
-					|| (*line == '\"' && quo_flag != 1)))
+			if (!unquote || (!quo_flag && !is_in_str(*line, STR_QUOTE))
+				|| (quo_flag == 1 && *line != '\'')
+				|| (quo_flag == 2 && *line != '\"'))
 				str[i++] = *line;
 			quo_flag = quo_check(*(++line), quo_flag);
 		}

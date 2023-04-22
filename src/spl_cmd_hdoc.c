@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 19:04:40 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/18 16:14:07 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/22 02:37:40 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ static void	write_to_heredoc(t_msh *msh, t_heredoc *hd, char *filename)
 	if (!hd->expand_flag)
 		return (ft_putendl_fd(hd->line_in, hd->fd), ft_free_str(&hd->line_in));
 	hd->line_out = NULL;
-	hd->line_out = param_expansion(hd->line_in, msh,
-			quo_check(*hd->line_in, 0), 1);
+	hd->line_out = param_expansion(hd->line_in, msh, -1, 0);
 	if (!hd->line_out)
 		return (hd->status = ERR_MALLOC, unlink(filename),
 			ft_free_str(&hd->line_in));
