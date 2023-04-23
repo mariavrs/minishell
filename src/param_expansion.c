@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:18:59 by mvorslov          #+#    #+#             */
-/*   Updated: 2023/04/13 19:26:36 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/04/22 02:44:33 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static int	var_len(char *line, int *len, t_msh *msh)
 
 	pos = 0;
 	ln = get_var_name_len(line);
-	*len -= ln;
 	while (msh->envp_lcl[pos] && (ft_strncmp(msh->envp_lcl[pos], line, ln)
 			|| msh->envp_lcl[pos][ln] != '='))
 		pos++;
@@ -65,25 +64,29 @@ static int	var_len(char *line, int *len, t_msh *msh)
 	return (ln);
 }
 
-static int	final_line_len(char *line, t_msh *msh, int quo_flag)
+static int	final_line_len(char *line, t_msh *msh, int quo_flag, int unquote)
 {
 	int	len;
 
-	len = ft_strlen(line);
+	len = 0;
 	while (*line)
 	{
 		while (*line && !check_if_varname(line, quo_flag))
+		{
+			if (!unquote || (!quo_flag && !is_in_str(*line, STR_QUOTE))
+				|| (quo_flag == 1 && *line != '\'')
+				|| (quo_flag == 2 && *line != '\"'))
+				len++;
 			quo_flag = quo_check(*(++line), quo_flag);
+		}
 		if (*line && *(line + 1) == '?')
 		{
 			len += 3;
 			line += 2;
 		}
 		else if (*line)
-		{
-			len--;
 			line += var_len(line + 1, &len, msh) + 1;
-		}
+		quo_flag = quo_check(*line, quo_flag);
 	}
 	return (len);
 }
@@ -110,25 +113,24 @@ char	*param_expansion(char *line, t_msh *msh, int quo_flag, int unquote)
 	int		i;
 
 	i = 0;
-	str = ft_malloc_str(final_line_len(line, msh, quo_flag) + 1);
+	str = ft_malloc_str(final_line_len(line, msh, quo_flag, unquote) + 1);
 	if (!str)
 		return (NULL);
 	while (*line)
 	{
 		while (*line && !check_if_varname(line, quo_flag))
 		{
-			if (!unquote || !((*line == '\'' && quo_flag != 2)
-					|| (*line == '\"' && quo_flag != 1)))
+			if (!unquote || (!quo_flag && !is_in_str(*line, STR_QUOTE))
+				|| (quo_flag == 1 && *line != '\'')
+				|| (quo_flag == 2 && *line != '\"'))
 				str[i++] = *line;
 			quo_flag = quo_check(*(++line), quo_flag);
 		}
-		if (*line && *(line + 1) == '?')
-		{
-			if (put_exit_status(&str[i], &i, &line))
-				return (ft_free_str(&str), NULL);
-		}
-		else if (*line)
+		if (*line && *(line + 1) == '?' && put_exit_status(&str[i], &i, &line))
+			return (ft_free_str(&str), NULL);
+		else if (*line && *(line + 1) != '?')
 			line += var_value(line + 1, str, &i, msh) + 1;
+		quo_flag = quo_check(*line, quo_flag);
 	}
 	return (str);
 }
