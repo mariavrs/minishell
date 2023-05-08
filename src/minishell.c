@@ -6,7 +6,7 @@
 /*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 22:28:07 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/04/18 16:46:03 by mvorslov         ###   ########.fr       */
+/*   Updated: 2023/05/08 20:43:50 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,14 @@ static void	parse_exec_prep(t_msh *msh)
 
 	line = msh->sline;
 	eline = line + ft_strlen(line);
-	if (trim_whitespaces(&line, &eline))
-		return ;
-	if (!is_in_str(*msh->sline, STR_WHSPACE)
-		&& ft_strncmp(msh->sline, msh->ex_sline, sline_cmp_len(msh)))
+	if (ft_strncmp(msh->sline, msh->ex_sline, sline_cmp_len(msh)))
 	{
 		add_history(msh->sline);
 		ft_free_str(&msh->ex_sline);
 		msh->ex_sline = ft_strdup(msh->sline);
 	}
+	if (trim_whitespaces(&line, &eline))
+		return ;
 	if (!syntax_check(line, eline))
 	{
 		msh->cmd_list = parse_list(line, eline, msh, 0);
