@@ -16,6 +16,9 @@ then
 ||__|||__|||__|||__|||__|||__||
 |/__\|/__\|/__\|/__\|/__\|/__\|
 '
+else
+	echo -ne '\x1b[33;1mPlease add one of these parameters:\n\x1b[0m'
+	echo -ne '\x1b[33;1mall, cd, echo, env, expand, export, unset, heredoc, pipe, redir, extra, bonus, clean.\n\x1b[0m'
 fi
 
 if [[ $1 == "cd" ]] || [[ $1 == "all" ]]
