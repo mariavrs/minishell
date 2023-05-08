@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   waitpid_collect_status.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
+/*   By: mvorslov <mvorslov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/10 15:08:02 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/24 23:45:01 by ede-smet         ###   ########.fr       */
+/*   Created: 2023/04/12 00:32:20 by mvorslov          #+#    #+#             */
+/*   Updated: 2023/04/12 18:27:17 by mvorslov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(int c)
+#include "../../include/mini_fun.h"
+
+int	waitpid_collect_status(pid_t pid)
 {
-	if ((c >= '0' && c <= '9'))
-		return (1);
+	int	stat;
+
+	waitpid(pid, &stat, 0);
+	if (WIFEXITED(stat))
+		return (WEXITSTATUS(stat));
+	else if (WIFSIGNALED(stat))
+		return (128 + WTERMSIG(stat));
 	return (0);
 }

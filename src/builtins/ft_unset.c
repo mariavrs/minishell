@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-smet <ede-smet@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/10 15:08:02 by ede-smet          #+#    #+#             */
-/*   Updated: 2023/02/24 23:45:01 by ede-smet         ###   ########.fr       */
+/*   Created: 2023/01/22 16:54:40 by ede-smet          #+#    #+#             */
+/*   Updated: 2023/04/05 15:09:22 by ede-smet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(int c)
+#include "../../include/mini_fun.h"
+
+int	ft_unset(t_msh *msh, char **argv)
 {
-	if ((c >= '0' && c <= '9'))
-		return (1);
+	int		i;
+
+	i = 0;
+	while (argv[++i])
+	{
+		if (!(ft_strlen(argv[i]) == 1 && argv[i][0] == '_'))
+		{
+			if (env_del(msh, argv[i]))
+				return (1);
+		}
+	}
 	return (0);
 }
