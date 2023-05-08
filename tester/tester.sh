@@ -1,13 +1,16 @@
-#!/usr/bin/bash 
-rm -rf tester/result/bash/*
-rm -rf tester/result/minishell/*
-rm -rf tester/result/diff/*
+#!/usr/bin/bash
+rm -rf tester/result
 
 if [[ $1 == "clean" ]]
 then
 	echo -ne '\x1b[33;1mResults removed !\n\x1b[0m'
 	exit
 fi
+
+mkdir tester/result
+mkdir tester/result/bash
+mkdir tester/result/minishell
+mkdir tester/result/diff
 
 if [[ $1 ]]
 then
